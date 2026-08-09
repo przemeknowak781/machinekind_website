@@ -136,19 +136,21 @@ około 2 sekund:
 
 | Czas | Co się dzieje |
 | --- | --- |
-| 0 – 0,75 s | dłonie zjeżdżają z przeciwnych narożników w powiększeniu 1,9× |
-| 0,75 – 0,85 s | opuszki stykają się i zatrzymują |
-| 0,85 – 1,5 s | powiększenie schodzi do jedynki, kompozycja siada na miejscu |
+| 0 – 0,75 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
+| 0,75 – 0,85 s | opuszki stykają się na wspólnej osi, na środku szerokości ekranu |
+| 0,85 – 1,5 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe |
 | 1,4 – 2,1 s | wchodzi nawigacja, nagłówek, tekst i pasek pod nim |
 
-Dłonie dojeżdżają odrobinę dalej, niż wynosi ich pozycja docelowa, bo przy
-powiększeniu 1,9× docelowa przerwa też rośnie 1,9× i nie byłoby żadnego
-zetknięcia. Rozchodzą się do właściwego odstępu dopiero razem z oddalaniem.
+Zetknięcie i pozycja docelowa to dwa różne miejsca: w chwili styku bryła stoi
+wyśrodkowana (`--shift-meet`), a po złożeniu przesuwa się w prawo
+(`--shift-final`), żeby zrobić miejsce nagłówkowi i akapitowi. W układzie
+pionowym dłonie leżą pod tekstem, więc oba ustawienia są tam takie same.
 
-Powiększeniem steruje bryła, a dojazdem każdy obrazek z osobna. Ten podział
-jest konieczny: `rotate` dłoni i `translate` przewijania siedzą na `.hand`,
-więc animacja wejścia musi działać na innym elemencie, żeby się z nimi nie
-biła.
+Obrót jest animowany od zera, a nie tylko ustawiony statycznie. Wymusza to
+`animation-fill-mode: backwards` na dłoniach: po animacji `translate` musi
+wrócić pod kontrolę przewijania, a `rotate` do kąta z układu. Przy `both`
+obie własności zostałyby zamrożone na ostatniej klatce i paralaksa
+przestałaby działać.
 
 Sekwencja jest krótka także dlatego, że w dłuższej wersji detektor łapał
 stronę w trakcie przenikania tekstu i zgłaszał kontrast liczony na częściowej
