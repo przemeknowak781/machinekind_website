@@ -146,7 +146,19 @@ około 2 sekund:
 | 0 – 0,75 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
 | 0,75 – 0,85 s | opuszki stykają się na wspólnej osi, na środku szerokości ekranu |
 | 0,85 – 1,5 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe |
-| 1,4 – 2,1 s | wchodzi nawigacja, nagłówek, tekst i pasek pod nim |
+| 1,2 – 1,45 s | pojawia się nawigacja i sygnatura |
+| 1,45 – 2,1 s | sygnatura przesypuje litery i układa się w słowo |
+| 1,55 – 2,25 s | wchodzi akapit, przyciski i pasek pod nimi |
+
+Przesypywanie sygnatury to jedyny efekt na stronie wymagający skryptu.
+Losuje wyłącznie ze zbioru liter samego słowa, więc szerokości zostają
+w tym samym zakresie, a napis nie zamienia się w przypadkowy szum. Każda
+litera siedzi w kratce o szerokości zablokowanej po wczytaniu krojów —
+bez tego podmiana glifów rozjeżdżałaby napis w poziomie.
+
+Bez skryptu w nagłówku stoi po prostu gotowe słowo. Nazwa dostępnościowa
+siedzi w `aria-label`, więc czytnik ekranu nigdy nie przeczyta
+przesypywanych liter.
 
 Zetknięcie i pozycja docelowa to dwa różne miejsca: w chwili styku bryła stoi
 wyśrodkowana (`--shift-meet`), a po złożeniu przesuwa się w prawo

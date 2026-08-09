@@ -44,6 +44,10 @@ const domains = [
   },
 ];
 
+// Sygnatura rozbita na litery, żeby każda mogła mieć zablokowaną szerokość.
+// Bez tego podmiana glifów przy przesypywaniu rozjeżdżałaby napis w poziomie.
+const WORDMARK = 'Machinekind'.split('');
+
 const facts = [
   { label: 'Zespół', value: `${machinekindCount + pwrCount} osób w dwóch zespołach` },
   { label: 'Trening', value: '300 mln kroków w symulacji' },
@@ -62,9 +66,15 @@ const facts = [
       <HeroHands />
 
       <div class="wrap hero__grid">
-        <div class="hero__text after-hands">
-          <h1 class="h-display hero__title">Machinekind</h1>
-          <p class="lead">
+        <div class="hero__text">
+          <h1
+            class="h-display hero__title after-hands after-hands--wordmark"
+            aria-label="Machinekind"
+            data-scramble
+          >
+            {WORDMARK.map((ch) => <span class="ch">{ch}</span>)}
+          </h1>
+          <p class="lead after-hands">
             Uczymy maszyny poruszać się w świecie ludzi. Kolektyw inżynierów
             uczenia maszynowego, robotyków i projektantów. Budujemy warstwę
             inteligencji razem ze sprzętem, na którym da się ją uruchomić.
@@ -284,6 +294,72 @@ const facts = [
 </Base>
 
 <script>
+  // Sygnatura przesypuje litery, zanim ułoży się w słowo. Litery losowane są
+  // wyłącznie ze zbioru liter samego słowa, więc szerokości zostają w tym
+  // samym zakresie, a napis nie zamienia się w przypadkowy szum.
+  //
+  // Bez skryptu w nagłówku stoi po prostu gotowe słowo — efekt jest dodatkiem,
+  // nie warunkiem czytelności. Nazwa dostępnościowa siedzi w aria-label, więc
+  // czytnik ekranu nigdy nie przeczyta przesypywanych liter.
+  const wordmark = document.querySelector<HTMLElement>('[data-scramble]');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (wordmark && !calm) {
+    const cells = [...wordmark.querySelectorAll<HTMLElement>('.ch')];
+    const target = cells.map((c) => c.textContent ?? '');
+    const pool = [...new Set(target.map((c) => c.toUpperCase()))];
+
+    const BEGIN = 1450; // rusza, gdy sygnatura jest już w pełni widoczna
+    const STEP = 58; // co tyle zatrzaskuje się kolejna litera
+    const TICK = 45; // co tyle podmienia się glif
+
+    // Czas liczony jest osią nawigacji, którą podaje requestAnimationFrame,
+    // a nie od momentu startu skryptu. Inaczej opóźnienie wczytywania
+    // przesuwałoby efekt i napis przesypywałby się już po odsłonięciu.
+    let started = false;
+    let lastTick = 0;
+
+    const frame = (now: number) => {
+      if (now < BEGIN) {
+        requestAnimationFrame(frame);
+        return;
+      }
+
+      if (!started) {
+        // Kroje muszą być wczytane, bo blokujemy szerokości liter. Gdyby nie
+        // były, zamroziłyby się wymiary kroju zastępczego — wtedy lepiej
+        // odpuścić efekt niż rozjechać napis.
+        if (document.fonts.status !== 'loaded') return;
+        cells.forEach((c) => {
+          c.style.width = `${c.getBoundingClientRect().width}px`;
+        });
+        started = true;
+      }
+
+      const locked = Math.floor((now - BEGIN) / STEP);
+      if (locked >= cells.length) {
+        cells.forEach((c, i) => (c.textContent = target[i]));
+        return;
+      }
+
+      if (now - lastTick >= TICK) {
+        lastTick = now;
+        cells.forEach((c, i) => {
+          if (i < locked) {
+            if (c.textContent !== target[i]) {
+              c.textContent = target[i];
+              c.classList.add('ch--lock');
+            }
+          } else {
+            c.textContent = pool[(Math.random() * pool.length) | 0];
+          }
+        });
+      }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+
   // Film w karcie projektu rusza dopiero w kadrze i tylko wtedy, gdy widz
   // nie prosił o ograniczenie ruchu. Do tego czasu leży plakat, więc bez
   // skryptu strona nadal jest kompletna.
@@ -333,7 +409,7 @@ const facts = [
     flex-direction: column;
     justify-content: space-between;
     gap: clamp(2.5rem, 8vw, 7rem);
-    min-height: max(26rem, calc(60 * var(--hand-u)));
+    min-height: max(26rem, calc(54 * var(--hand-u)));
   }
 
   /* Ułożenie pionowe. Bryła ma twardy sufit w rem, bo przy 700px sama
@@ -355,6 +431,36 @@ const facts = [
 
   .hero__title {
     margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+    white-space: nowrap;
+  }
+
+  /* Litera w kratce o zablokowanej szerokości: glif może się zmieniać,
+     a napis stoi w miejscu. Przed zablokowaniem szerokości kratka zachowuje
+     się jak zwykły tekst, więc bez skryptu nic się nie zmienia. */
+  .ch {
+    display: inline-block;
+    text-align: center;
+  }
+
+  .ch--lock {
+    animation: ch-lock 0.3s var(--ease);
+  }
+
+  @keyframes ch-lock {
+    from {
+      opacity: 0.5;
+      translate: 0 0.05em;
+    }
+    to {
+      opacity: 1;
+      translate: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ch--lock {
+      animation: none;
+    }
   }
 
   .hero__text .lead {

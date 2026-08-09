@@ -405,11 +405,19 @@ h4 {
    skryptu treść i tak się pojawia — animacja ma `both`, nie klasę
    dokładaną przez JS. */
 .after-hands {
-  animation: after-hands 0.55s var(--ease) 1.42s both;
+  animation: after-hands 0.55s var(--ease) 1.55s both;
 }
 
 .after-hands--late {
-  animation-delay: 1.54s;
+  animation-delay: 1.68s;
+}
+
+/* Sygnatura wchodzi wcześniej i krócej, bo jej właściwym wejściem jest
+   przesypywanie liter. Gdyby przenikała tak długo jak reszta, najciekawsza
+   faza efektu lecałaby przy niepełnym kryciu i przepadała. */
+.after-hands--wordmark {
+  animation-duration: 0.25s;
+  animation-delay: 1.2s;
 }
 
 @keyframes after-hands {
