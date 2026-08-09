@@ -41,6 +41,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://machinekind
     <meta property="og:locale" content="pl_PL" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
+
+    <script is:inline>
+      // Po odświeżeniu przeglądarka przywraca poprzednie przewinięcie. Skoro
+      // pozycja dłoni jest funkcją przewinięcia, scena startowała wtedy już
+      // zjechana w dół, a wejście grało do złej pozycji. Strona zaczyna się
+      // od góry — musi być inline w <head>, bo skrypt odroczony biegnie po
+      // przywróceniu pozycji.
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">Przejdź do treści</a>

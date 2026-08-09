@@ -34,11 +34,14 @@ import human from '../assets/hand-human-ink.png';
   /* Cała przekątna to jedna sztywna bryła o stałych proporcjach. Skaluje ją
      jedna jednostka, która patrzy i na szerokość, i na wysokość okna —
      przez samo `vw` na szerokim, niskim ekranie dłoń wychodziła poza kadr. */
+  /* Bryłę kotwiczy punkt styku opuszków (53% / 55% jej kadru), a nie
+     krawędź. Dzięki temu zetknięcie wypada dokładnie na środku szerokości
+     sceny — przy kotwiczeniu do prawej lądowało na ok. 60%. */
   .hands__group {
     position: absolute;
-    right: calc(-4 * var(--hand-u));
+    left: 50%;
     top: 50%;
-    translate: 0 -50%;
+    translate: -53% -55%;
     width: calc(96 * var(--hand-u));
     aspect-ratio: 88 / 54;
   }
@@ -74,7 +77,6 @@ import human from '../assets/hand-human-ink.png';
      zostawia miejsce na tekst nad nią i przyciski pod nią. */
   @media (max-width: 779px) {
     .hands__group {
-      right: calc(-14 * var(--hand-u));
       top: 62%;
       width: var(--hand-w);
     }
