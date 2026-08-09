@@ -507,7 +507,7 @@ const facts = [
 
   .project__code {
     font-family: var(--mono);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     letter-spacing: 0.06em;
     color: var(--ink-3);
     text-transform: none;
@@ -525,7 +525,7 @@ const facts = [
   .project__facts li {
     display: flex;
     gap: 1rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--ink);
   }
 
@@ -611,12 +611,12 @@ const facts = [
     font-family: var(--mono);
     font-size: 0.85rem;
     color: var(--ink);
-    min-width: 8rem;
+    min-width: 6rem;
   }
 
   .partner__facts dd {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--ink-2);
   }
 
@@ -624,10 +624,12 @@ const facts = [
     margin: 0;
   }
 
+  /* Kadr kwadratowy: przy 4/5 zdjęcie było dwa razy wyższe od kolumny
+     tekstu i przechylało całą sekcję. */
   .partner__media :global(img) {
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
   }
 

@@ -222,12 +222,14 @@ h4 {
   color: var(--red);
 }
 
-/* ---------- Nagłówek sekcji ---------- */
+/* ---------- Nagłówek sekcji ----------
+   Obie kolumny startują od góry. Wyrównanie do dołu wpychało pustkę nad
+   krótszą kolumną — po usunięciu nadlinii sięgała 180px. */
 .head {
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
   grid-template-columns: 1fr;
-  align-items: end;
+  align-items: start;
   margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
@@ -235,6 +237,12 @@ h4 {
   .head {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
     gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  /* Tekst poboczny schodzi do wysokości pierwszego wiersza nagłówka,
+     zamiast wisieć przy jego górnej krawędzi. */
+  .head > :nth-child(2) {
+    padding-top: 0.6em;
   }
 }
 
