@@ -404,29 +404,25 @@ h4 {
    gdy kompozycja siądzie na swoim miejscu. Całość w CSS, więc bez
    skryptu treść i tak się pojawia — animacja ma `both`, nie klasę
    dokładaną przez JS. */
+/* Odsłonięcie idzie odsłoną kadru, nie przenikaniem. Tekst w połowie
+   przenikania ma kontrast liczony na częściowej przezroczystości i wypada
+   poniżej progu — wystarczy, że pomiar trafi w te pół sekundy. Przy odsłonie
+   litera albo stoi w pełnym atramencie, albo jej jeszcze nie widać. */
 .after-hands {
-  animation: after-hands 0.55s var(--ease) 1.55s both;
+  animation: after-hands 0.55s var(--ease) 1.68s both;
 }
 
 .after-hands--late {
-  animation-delay: 1.68s;
-}
-
-/* Sygnatura wchodzi wcześniej i krócej, bo jej właściwym wejściem jest
-   przesypywanie liter. Gdyby przenikała tak długo jak reszta, najciekawsza
-   faza efektu lecałaby przy niepełnym kryciu i przepadała. */
-.after-hands--wordmark {
-  animation-duration: 0.25s;
-  animation-delay: 1.2s;
+  animation-delay: 1.8s;
 }
 
 @keyframes after-hands {
   from {
-    opacity: 0;
+    clip-path: inset(0 0 100% 0);
     transform: translateY(14px);
   }
   to {
-    opacity: 1;
+    clip-path: inset(0 0 0 0);
     transform: none;
   }
 }
@@ -434,7 +430,7 @@ h4 {
 @media (prefers-reduced-motion: reduce) {
   .after-hands {
     animation: none;
-    opacity: 1;
+    clip-path: none;
     transform: none;
   }
 }

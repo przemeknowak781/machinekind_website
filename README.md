@@ -146,9 +146,22 @@ około 2 sekund:
 | 0 – 0,75 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
 | 0,75 – 0,85 s | opuszki stykają się na wspólnej osi, na środku szerokości ekranu |
 | 0,85 – 1,5 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe |
-| 1,2 – 1,45 s | pojawia się nawigacja i sygnatura |
-| 1,45 – 2,1 s | sygnatura przesypuje litery i układa się w słowo |
-| 1,55 – 2,25 s | wchodzi akapit, przyciski i pasek pod nimi |
+| 0,87 s | sygnatura zapala się dokładnie w punkcie styku, na środku ekranu |
+| 0,9 – 1,47 s | sygnatura przesypuje litery i układa się w słowo |
+| 1,08 – 1,64 s | sygnatura zjeżdża ze środka na swoje miejsce w kolumnie tekstu |
+| 1,68 – 2,35 s | odsłania się nawigacja, akapit, przyciski i pasek pod nimi |
+
+Sygnatura rodzi się tam, gdzie dłonie się stykają, więc nie ma przenikania:
+w chwili zetknięcia po prostu jest. Wyłanianie niesie przesypywanie liter.
+Droga na miejsce docelowe liczy się z układu (`--title-x` to odległość od lewej
+krawędzi kolumny tekstu do środka okna), więc wyśrodkowanie wychodzi samo na
+każdej szerokości. W układzie pionowym kolumna zajmuje całą szerokość i napis
+i tak stoi na środku, więc przejazdu nie ma.
+
+Tekst wchodzi odsłoną kadru (`clip-path`), a nie przenikaniem. Przenikanie
+zostawiało pół sekundy, w której litera stoi na częściowej przezroczystości —
+detektor łapał tam kontrast 1,1:1. Przy odsłonie litera albo stoi w pełnym
+atramencie, albo jej jeszcze nie widać.
 
 Przesypywanie sygnatury to jedyny efekt na stronie wymagający skryptu.
 Losuje wyłącznie ze zbioru liter samego słowa, więc szerokości zostają

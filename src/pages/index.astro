@@ -68,7 +68,7 @@ const facts = [
       <div class="wrap hero__grid">
         <div class="hero__text">
           <h1
-            class="h-display hero__title after-hands after-hands--wordmark"
+            class="h-display hero__title"
             aria-label="Machinekind"
             data-scramble
           >
@@ -309,8 +309,8 @@ const facts = [
     const target = cells.map((c) => c.textContent ?? '');
     const pool = [...new Set(target.map((c) => c.toUpperCase()))];
 
-    const BEGIN = 1450; // rusza, gdy sygnatura jest już w pełni widoczna
-    const STEP = 58; // co tyle zatrzaskuje się kolejna litera
+    const BEGIN = 900; // rusza, gdy napis pojawia się w punkcie styku
+    const STEP = 52; // co tyle zatrzaskuje się kolejna litera
     const TICK = 45; // co tyle podmienia się glif
 
     // Czas liczony jest osią nawigacji, którą podaje requestAnimationFrame,
@@ -429,9 +429,64 @@ const facts = [
     max-width: 46rem;
   }
 
+  /* Sygnatura rodzi się w punkcie styku dłoni, na środku ekranu, i dopiero
+     potem jedzie na swoje miejsce w układzie.
+
+     `--title-x` to droga od lewej krawędzi kolumny tekstu do środka okna:
+     połowa okna, minus połowa własnej szerokości, minus to, o ile kolumna
+     jest odsunięta od krawędzi strony. Dzięki temu wyśrodkowanie wychodzi
+     samo na każdej szerokości, bez liczby wpisanej na sztywno. */
   .hero__title {
+    --title-x: calc(
+      50vw - 50% - max(0px, (100vw - var(--wrap)) / 2) - var(--gutter)
+    );
+    --title-y: -5vh;
     margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
     white-space: nowrap;
+    animation: title-travel 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.74s both;
+  }
+
+  /* Napis zapala się w chwili zetknięcia opuszków, bez przenikania: jego
+     wyłanianie niesie przesypywanie liter, a nie krycie. Przenikanie
+     dawałoby moment, w którym tekst stoi na częściowej przezroczystości. */
+  @keyframes title-travel {
+    0% {
+      translate: var(--title-x) var(--title-y);
+      visibility: hidden;
+    }
+    13.9% {
+      translate: var(--title-x) var(--title-y);
+      visibility: hidden;
+    }
+    14% {
+      translate: var(--title-x) var(--title-y);
+      visibility: visible;
+    }
+    38% {
+      translate: var(--title-x) var(--title-y);
+      visibility: visible;
+    }
+    100% {
+      translate: 0 0;
+      visibility: visible;
+    }
+  }
+
+  /* W układzie pionowym kolumna tekstu zajmuje całą szerokość, więc napis
+     i tak stoi na środku. Zostaje samo pojawienie się, bez przejazdu. */
+  @media (max-width: 779px) {
+    .hero__title {
+      --title-x: 0px;
+      --title-y: 0px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__title {
+      animation: none;
+      translate: none;
+      visibility: visible;
+    }
   }
 
   /* Litera w kratce o zablokowanej szerokości: glif może się zmieniać,
