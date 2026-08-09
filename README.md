@@ -62,15 +62,47 @@ Dłonie wracają jako tło sekcji (`HandsBackdrop`), w różnym stopniu skadrowa
 z paralaksą sterowaną przewijaniem tam, gdzie przeglądarka to obsługuje, i
 powolnym dryfem tam, gdzie nie.
 
+## Nagłówek strony
+
+`HeroHands` układa dwie dłonie na przekątnej: maszyna wchodzi z dołu po lewej,
+człowiek schodzi z góry po prawej, opuszki mijają się w prawej połowie kadru.
+Położenia są liczone z geometrii obrazów — dla każdej dłoni znany jest
+położenie opuszka w kadrze i kąt obrotu, więc `left` i `top` wynikają z tego,
+gdzie opuszek ma wypaść po obrocie. Wszystko w `vw`, żeby kompozycja skalowała
+się sztywno. Trzy zakresy: przekątna obok tekstu powyżej 900px, ta sama
+przekątna niżej opuszczona w zakresie 761–899px, a poniżej 760px dłonie schodzą
+pod tekst, bo wąski kadr ich obok nie pomieści.
+
+Obrót siedzi w osobnej własności `rotate`, dzięki czemu przewijanie może
+animować `translate` bez deptania kąta.
+
 ## Ruch i zależność od skryptu
 
-Strona nie ma wejścia sekcji w kadr. Jedyny autorski moment ruchu to scena
-dłoni w nagłówku: obraz osiada, potem raz zapala się iskra. Całość leci w CSS,
-więc **żadna treść nie zależy od JavaScriptu** — przy wyłączonym skrypcie strona
-jest kompletna. Jedyny skrypt na stronie uruchamia film w karcie projektu po
-wejściu w kadr; bez niego zostaje plakat.
+Strona nie ma wejścia sekcji w kadr. Ruch jest w dwóch miejscach: dłonie
+osiadają raz przy wczytaniu i rozsuwają się w miarę przewijania pierwszego
+ekranu. Steruje tym jedna dziedziczona liczba `--p` od 0 do 1, którą wypełnia
+oś czasu przewijania (`scroll()`); tam gdzie przeglądarka jej nie zna, ustawia
+ją kilkanaście linii skryptu zapasowego w `Base.astro`.
+
+**Żadna treść nie zależy od JavaScriptu** — przy wyłączonym skrypcie strona
+jest kompletna, a dłonie po prostu stoją. Drugi skrypt uruchamia film w karcie
+projektu po wejściu w kadr; bez niego zostaje plakat.
 
 Ruch wygasza się przy `prefers-reduced-motion`.
+
+## Kontrola jakości
+
+Projekt przechodzi detektor [impeccable](https://impeccable.style/slop/) na zero
+trafień, statycznie i w przeglądarce, na 1440 i 390px:
+
+```bash
+node <ścieżka>/impeccable/skill/scripts/detect.mjs dist/index.html dist/_astro/*.css
+node <ścieżka>/impeccable/skill/scripts/detect.mjs http://localhost:4321/
+```
+
+`.impeccable/config.json` wycisza jedną regułę, `clipped-overflow-container`,
+wraz z uzasadnieniem: warstwa dłoni w nagłówku ma się przycinać, bo dłonie mają
+wychodzić poza kadr sekcji. To jedyne odstępstwo.
 
 ## Projekt Wojtek
 

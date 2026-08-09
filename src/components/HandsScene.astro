@@ -5,17 +5,11 @@ import handsPaper from '../assets/hands-paper.png';
 
 interface Props {
   variant?: 'ink' | 'paper';
-  /** Iskra w punkcie styku. */
-  spark?: boolean;
   class?: string;
 }
 
-const { variant = 'ink', spark = true, class: className = '' } = Astro.props;
+const { variant = 'ink', class: className = '' } = Astro.props;
 const src = variant === 'paper' ? handsPaper : handsInk;
-
-// Punkt styku wyznaczony przy składaniu sceny (scripts/brand.mjs).
-const MEET_X = 50;
-const MEET_Y = 31.31;
 ---
 
 <figure class={`scene scene--${variant} ${className}`}>
@@ -26,18 +20,8 @@ const MEET_Y = 31.31;
       alt="Dłoń maszyny i dłoń człowieka wyciągnięte ku sobie, palce wskazujące niemal się stykają"
       widths={[900, 1400, 1980, 2600]}
       sizes="(min-width: 1400px) 1320px, 100vw"
-      loading="eager"
-      fetchpriority="high"
+      loading="lazy"
     />
-
-    {
-      spark && (
-        <span class="scene__spark" style={`--mx:${MEET_X}%; --my:${MEET_Y}%`} aria-hidden="true">
-          <span class="scene__pulse" />
-          <span class="scene__dot" />
-        </span>
-      )
-    }
   </div>
 </figure>
 
@@ -48,7 +32,6 @@ const MEET_Y = 31.31;
 
   .scene__frame {
     position: relative;
-    isolation: isolate;
   }
 
   .scene__img {
@@ -68,93 +51,6 @@ const MEET_Y = 31.31;
       width: 178%;
       max-width: none;
       margin-inline: -39%;
-    }
-  }
-
-  /* Jedyny autorski moment ruchu na stronie: dłonie osiadają, potem
-     zapala się iskra. Animacja startuje sama, bez skryptu — treść nigdy
-     nie zależy od JS. */
-  .scene :global(.scene__img) {
-    animation: settle 1.5s var(--ease) both;
-  }
-
-  @keyframes settle {
-    from {
-      opacity: 0;
-      transform: scale(1.035);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  .scene__spark {
-    position: absolute;
-    left: var(--mx);
-    top: var(--my);
-    width: 0;
-    height: 0;
-    display: grid;
-    place-items: center;
-    animation: ignite 0.9s var(--ease) 0.85s both;
-  }
-
-  @keyframes ignite {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  .scene__dot,
-  .scene__pulse {
-    position: absolute;
-    border-radius: 50%;
-    background: var(--red);
-  }
-
-  .scene__dot {
-    width: clamp(6px, 0.62vw, 11px);
-    height: clamp(6px, 0.62vw, 11px);
-    box-shadow: 0 0 0 clamp(3px, 0.3vw, 5px) color-mix(in srgb, var(--red) 22%, transparent);
-  }
-
-  /* Pierścień rozchodzi się raz, przy zapłonie, i znika. Stały puls
-     udawałby żywy wskaźnik stanu tam, gdzie nic się nie dzieje. */
-  .scene__pulse {
-    width: clamp(6px, 0.62vw, 11px);
-    height: clamp(6px, 0.62vw, 11px);
-    animation: spark 1.4s var(--ease) 0.95s both;
-  }
-
-  .scene--paper .scene__dot,
-  .scene--paper .scene__pulse {
-    background: var(--red-soft);
-  }
-
-  @keyframes spark {
-    from {
-      transform: scale(1);
-      opacity: 0.55;
-    }
-    to {
-      transform: scale(4.6);
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .scene__pulse {
-      animation: none;
-    }
-    .scene :global(.scene__img),
-    .scene__spark {
-      animation: none;
-      opacity: 1;
-      transform: none;
     }
   }
 </style>

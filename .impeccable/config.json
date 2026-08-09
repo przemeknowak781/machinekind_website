@@ -1,0 +1,8 @@
+{
+  "detector": {
+    "ignoreRules": ["clipped-overflow-container"],
+    "_ignoreRulesReason": {
+      "clipped-overflow-container": "Reguła celuje w kontenery, które ucinają dymki i menu. W scenie dłoni w nagłówku (.hands) przycięcie jest treścią kompozycji: obie dłonie mają wychodzić poza kadr sekcji, a bez clipu rozlewałyby się na sekcję poniżej. Warstwa jest czysto dekoracyjna, ma pointer-events: none i nie zawiera żadnej treści ani elementu interaktywnego."
+    }
+  }
+}

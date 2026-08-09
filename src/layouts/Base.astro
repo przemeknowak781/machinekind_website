@@ -48,5 +48,34 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://machinekind
       <slot />
     </main>
     <Footer />
+
+    <script>
+      // Zapas dla przeglądarek bez osi czasu przewijania. Ustawia to samo
+      // `--p`, którym w CSS steruje scroll(). Wyłącznie dekoracja: bez tego
+      // skryptu scena po prostu stoi.
+      const scene = document.querySelector<HTMLElement>('.scroll-scene');
+      const native = CSS.supports('animation-timeline', 'scroll()');
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (scene && !native && !still) {
+        let ticking = false;
+        const update = () => {
+          const p = Math.min(1, Math.max(0, window.scrollY / window.innerHeight));
+          scene.style.setProperty('--p', String(p));
+          ticking = false;
+        };
+        addEventListener(
+          'scroll',
+          () => {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(update);
+            }
+          },
+          { passive: true }
+        );
+        update();
+      }
+    </script>
   </body>
 </html>

@@ -365,8 +365,41 @@ h4 {
   z-index: 1;
 }
 
-/* Strona nie ma wejścia sekcji. Jedyny autorski moment ruchu to scena
-   dłoni w nagłówku — czysto w CSS, więc nic nie zależy od skryptu. */
+/* ---------- Postęp przewijania ----------
+   `--p` biegnie od 0 do 1 na przestrzeni pierwszego ekranu i dziedziczy
+   się w dół, więc scena dłoni czyta jedną liczbę zamiast własnej logiki.
+   Wypełnia ją oś czasu przewijania, a gdy przeglądarka jej nie zna,
+   krótki skrypt zapasowy. Nic tu nie decyduje o widoczności treści. */
+@property --p {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-scene {
+    animation: scroll-progress linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 100vh;
+  }
+
+  @keyframes scroll-progress {
+    from {
+      --p: 0;
+    }
+    to {
+      --p: 1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-scene {
+    animation: none;
+  }
+}
+
+/* Poza sceną dłoni strona nie ma wejścia sekcji w kadr. */
 
 .skip {
   position: absolute;

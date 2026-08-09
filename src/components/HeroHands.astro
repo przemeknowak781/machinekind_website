@@ -1,0 +1,136 @@
+---
+import { Image } from 'astro:assets';
+import robot from '../assets/hand-robot-ink.png';
+import human from '../assets/hand-human-ink.png';
+---
+
+<div class="hands">
+  <div class="hand hand--robot">
+    <Image
+      src={robot}
+      alt="Dłoń maszyny i dłoń człowieka wyciągnięte ku sobie"
+      widths={[700, 1200, 1800]}
+      sizes="60vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+  <div class="hand hand--human">
+    <Image src={human} alt="" widths={[600, 1000, 1500]} sizes="50vw" loading="eager" />
+  </div>
+</div>
+
+<style>
+  .hands {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hand {
+    position: absolute;
+  }
+
+  .hand :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Maszyna wchodzi z dołu po lewej, człowiek schodzi z góry po prawej.
+     `rotate` jest osobną własnością, więc przewijanie może animować
+     `translate` bez deptania obrotu. */
+  /* Położenia liczone tak, żeby po obrocie opuszki wypadły na przekątnej:
+     maszyna sięga do ok. 53/70 sceny, człowiek schodzi do 62/62.
+     Wszystko w `vw`, więc kompozycja skaluje się sztywno z szerokością. */
+  .hand--robot {
+    width: 46vw;
+    left: 8.7vw;
+    top: 35vw;
+    rotate: -24deg;
+  }
+
+  .hand--human {
+    width: 38vw;
+    left: 58.2vw;
+    top: 11vw;
+    rotate: -33deg;
+  }
+
+  /* Zakres pośredni: przekątna zostaje obok tekstu, ale maszyna schodzi
+     niżej, bo akapit zajmuje tu więcej wysokości niż na szerokim ekranie. */
+  @media (min-width: 761px) and (max-width: 899px) {
+    .hand--robot {
+      width: 52vw;
+      left: 0vw;
+      top: 44vw;
+    }
+
+    .hand--human {
+      width: 44vw;
+      left: 54vw;
+      top: 18vw;
+    }
+  }
+
+  /* Wąski kadr nie pomieści przekątnej obok tekstu, więc dłonie schodzą
+     pod niego. Przeliczone tak, żeby opuszki nadal się mijały o włos. */
+  @media (max-width: 760px) {
+    .hand--robot {
+      width: 78vw;
+      left: -26vw;
+      top: 100vw;
+      rotate: -22deg;
+    }
+
+    .hand--human {
+      width: 66vw;
+      left: 58vw;
+      top: 70vw;
+      rotate: -30deg;
+    }
+  }
+
+  /* Wejście: dłonie osiadają raz, przy wczytaniu. */
+  .hand :global(img) {
+    animation: settle 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hand--human :global(img) {
+    animation-delay: 0.12s;
+  }
+
+  @keyframes settle {
+    from {
+      opacity: 0;
+      scale: 1.06;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  /* Przewijanie rozsuwa dłonie. `--p` biegnie od 0 do 1 na przestrzeni
+     pierwszego ekranu; ustawia je oś czasu przewijania, a tam gdzie jej
+     nie ma, skrypt zapasowy w Base. */
+  .hand--robot {
+    translate: calc(var(--p, 0) * -9%) calc(var(--p, 0) * 13%);
+  }
+
+  .hand--human {
+    translate: calc(var(--p, 0) * 9%) calc(var(--p, 0) * -13%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hand :global(img) {
+      animation: none;
+    }
+
+    .hand {
+      translate: none;
+    }
+  }
+</style>

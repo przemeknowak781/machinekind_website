@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import HandsScene from '../components/HandsScene.astro';
+import HeroHands from '../components/HeroHands.astro';
 import HandsBackdrop from '../components/HandsBackdrop.astro';
 import TeamGrid from '../components/TeamGrid.astro';
 import { Image } from 'astro:assets';
@@ -55,16 +56,20 @@ const facts = [
   description="Machinekind to kolektyw inżynierów uczenia maszynowego, robotyków i projektantów. Budujemy warstwę inteligencji dla maszyn działających w fizycznym świecie. Pierwsza maszyna: czworonóg W01-TEK."
 >
   <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="wrap">
-      <h1 class="h-display hero__title">Machinekind</h1>
+  <section class="hero scroll-scene">
+    <div class="hero__stage">
+      <HeroHands />
 
-      <div class="hero__intro">
-        <p class="lead">
-          Uczymy maszyny poruszać się w świecie ludzi. Kolektyw inżynierów
-          uczenia maszynowego, robotyków i projektantów. Budujemy warstwę
-          inteligencji razem ze sprzętem, na którym da się ją uruchomić.
-        </p>
+      <div class="wrap hero__grid">
+        <div class="hero__text">
+          <h1 class="h-display hero__title">Machinekind</h1>
+          <p class="lead">
+            Uczymy maszyny poruszać się w świecie ludzi. Kolektyw inżynierów
+            uczenia maszynowego, robotyków i projektantów. Budujemy warstwę
+            inteligencji razem ze sprzętem, na którym da się ją uruchomić.
+          </p>
+        </div>
+
         <div class="hero__actions">
           <a class="btn" href={WOJTEK_URL}>
             Projekt Wojtek
@@ -75,10 +80,6 @@ const facts = [
           <a class="btn btn--ghost" href="#kontakt">Kontakt</a>
         </div>
       </div>
-    </div>
-
-    <div class="wrap hero__scene">
-      <HandsScene />
     </div>
 
     <div class="wrap">
@@ -274,7 +275,7 @@ const facts = [
           </svg>
         </a>
       </div>
-      <HandsScene variant="paper" class="contact__scene" spark={false} />
+      <HandsScene variant="paper" class="contact__scene" />
     </div>
   </section>
 </Base>
@@ -307,26 +308,50 @@ const facts = [
 <style>
   /* ---------- hero ---------- */
   .hero {
-    padding-top: clamp(3rem, 7vw, 6rem);
-    padding-bottom: clamp(3rem, 6vw, 5rem);
+    padding-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .hero__stage {
+    position: relative;
+    isolation: isolate;
+    padding-top: clamp(2.5rem, 6vw, 5rem);
+    padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  /* Tekst i przyciski rozchodzą się na przeciwne rogi sceny, żeby
+     przekątna dłoni miała przez co przejść. */
+  .hero__grid {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(2.5rem, 8vw, 7rem);
+    min-height: clamp(26rem, 46vw, 42rem);
+  }
+
+  @media (min-width: 761px) and (max-width: 899px) {
+    .hero__grid {
+      min-height: 64vw;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .hero__grid {
+      min-height: 145vw;
+    }
+  }
+
+  .hero__text {
+    max-width: 46rem;
   }
 
   .hero__title {
-    margin-bottom: clamp(1.75rem, 4vw, 3rem);
+    margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
   }
 
-  .hero__intro {
-    display: grid;
-    gap: 2rem;
-    align-items: start;
-  }
-
-  @media (min-width: 900px) {
-    .hero__intro {
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 3rem;
-      align-items: end;
-    }
+  .hero__text .lead {
+    max-width: 34ch;
   }
 
   .hero__actions {
@@ -335,8 +360,10 @@ const facts = [
     gap: 0.75rem;
   }
 
-  .hero__scene {
-    margin-top: clamp(2.5rem, 6vw, 5rem);
+  @media (min-width: 900px) {
+    .hero__actions {
+      align-self: flex-end;
+    }
   }
 
   .hero__meta {
