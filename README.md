@@ -51,14 +51,26 @@ Biel jako tło podstawowe, czerń jako druga powierzchnia, czerwień `#bd3e3e`
 wprost z logotypu — jako akcent i jako tło całych sekcji (`.red`).
 
 Krój wyświetlany to Big Shoulders Display, dobrany do sygnatury z logotypu:
-wąski, wysoki, płaskie zakończenia. Tekst czytany składa Geist, dane techniczne
-Geist Mono. Wszystkie trzy z podzbiorem `latin-ext`, więc polskie znaki się
+wąski, wysoki, płaskie zakończenia. Tekst czytany składa IBM Plex Sans, pomiar
+IBM Plex Mono. Wszystkie trzy z podzbiorem `latin-ext`, więc polskie znaki się
 zaciągają.
 
-Dłonie wracają jako animowane tło sekcji (`HandsBackdrop`) — w różnym stopniu
-skadrowane, z paralaksą sterowaną przewijaniem tam, gdzie przeglądarka to
-obsługuje, i powolnym dryfem tam, gdzie nie. Ruch wyłącza się przy
-`prefers-reduced-motion`.
+Monospace niesie wyłącznie pomiar: współrzędne, takty, liczności, oznaczenia.
+Nie służy za kostium „technicznego" pod zwykłe etykiety.
+
+Dłonie wracają jako tło sekcji (`HandsBackdrop`), w różnym stopniu skadrowane,
+z paralaksą sterowaną przewijaniem tam, gdzie przeglądarka to obsługuje, i
+powolnym dryfem tam, gdzie nie.
+
+## Ruch i zależność od skryptu
+
+Strona nie ma wejścia sekcji w kadr. Jedyny autorski moment ruchu to scena
+dłoni w nagłówku: obraz osiada, potem raz zapala się iskra. Całość leci w CSS,
+więc **żadna treść nie zależy od JavaScriptu** — przy wyłączonym skrypcie strona
+jest kompletna. Jedyny skrypt na stronie uruchamia film w karcie projektu po
+wejściu w kadr; bez niego zostaje plakat.
+
+Ruch wygasza się przy `prefers-reduced-motion`.
 
 ## Projekt Wojtek
 

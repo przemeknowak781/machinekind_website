@@ -52,9 +52,7 @@ const {
     position: sticky;
     top: 0;
     z-index: 60;
-    background: rgba(255, 255, 255, 0.82);
-    backdrop-filter: saturate(1.6) blur(14px);
-    -webkit-backdrop-filter: saturate(1.6) blur(14px);
+    background: var(--paper);
     border-bottom: 1px solid var(--line);
   }
 
@@ -69,6 +67,7 @@ const {
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
+    min-height: 2.75rem;
     margin-right: auto;
   }
 
@@ -97,7 +96,9 @@ const {
   .nav__links a {
     color: var(--ink-2);
     position: relative;
-    padding-block: 0.35rem;
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
     transition: color 0.25s var(--ease);
   }
 
@@ -106,7 +107,7 @@ const {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 0.7rem;
     height: 1px;
     background: var(--red);
     transform: scaleX(0);
@@ -124,12 +125,14 @@ const {
 
   .nav__cta {
     display: none;
+    align-items: center;
+    min-height: 2.75rem;
     font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
+    font-size: var(--micro);
+    letter-spacing: 0.03em;
     color: var(--ink-2);
     border: 1px solid var(--line-2);
-    padding: 0.5rem 0.9rem;
+    padding: 0.5rem 0.95rem;
     border-radius: 999px;
     transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
   }
@@ -140,11 +143,11 @@ const {
   }
 
   .nav__toggle {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
     display: grid;
     place-items: center;
-    margin-right: -0.5rem;
+    margin-right: -0.6rem;
   }
 
   .nav__toggle-bars,

@@ -48,26 +48,5 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://machinekind
       <slot />
     </main>
     <Footer />
-
-    <script>
-      // Delikatne wejście sekcji w kadr.
-      const targets = document.querySelectorAll<HTMLElement>('[data-observe]');
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-in');
-                io.unobserve(entry.target);
-              }
-            }
-          },
-          { rootMargin: '0px 0px -12% 0px', threshold: 0.06 }
-        );
-        targets.forEach((el) => io.observe(el));
-      } else {
-        targets.forEach((el) => el.classList.add('is-in'));
-      }
-    </script>
   </body>
 </html>

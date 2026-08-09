@@ -21,8 +21,18 @@ const year = new Date().getFullYear();
 
     <nav class="foot__col" aria-label="Projekty">
       <h2 class="foot__label">Projekty</h2>
-      <a href="https://machinekind.ai">Wojtek — W01-TEK ↗</a>
-      <a href="https://pwr.edu.pl" rel="noopener noreferrer" target="_blank">Politechnika Wrocławska ↗</a>
+      <a class="foot__out" href="https://machinekind.ai">
+        Wojtek, W01-TEK
+        <svg width="11" height="11" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a class="foot__out" href="https://pwr.edu.pl" rel="noopener noreferrer" target="_blank">
+        Politechnika Wrocławska
+        <svg width="11" height="11" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </nav>
 
     <div class="foot__col">
@@ -73,8 +83,8 @@ const year = new Date().getFullYear();
   }
 
   .foot__claim {
-    color: rgba(255, 255, 255, 0.62);
-    max-width: 30ch;
+    color: var(--on-dark-2);
+    max-width: 34ch;
     font-size: 0.95rem;
     line-height: 1.55;
   }
@@ -82,21 +92,24 @@ const year = new Date().getFullYear();
   .foot__col {
     display: grid;
     align-content: start;
-    gap: 0.7rem;
   }
 
   .foot__label {
-    font-family: var(--mono);
-    font-size: 0.68rem;
+    font-family: var(--display);
+    font-size: 1rem;
     font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.42);
-    margin-bottom: 0.35rem;
+    letter-spacing: 0.06em;
+    color: var(--on-dark-3);
+    margin-bottom: 0.5rem;
   }
 
+  /* Wysokość 44px robi cel dotykowy, nie tylko odstęp. */
   .foot__col a {
-    color: rgba(255, 255, 255, 0.82);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    color: var(--on-dark-1);
     font-size: 0.95rem;
     width: fit-content;
     transition: color 0.25s var(--ease);
@@ -106,12 +119,17 @@ const year = new Date().getFullYear();
     color: var(--red-soft);
   }
 
+  .foot__out svg {
+    flex: none;
+    opacity: 0.6;
+  }
+
   .foot__where {
     font-family: var(--mono);
-    font-size: 0.72rem;
+    font-size: var(--micro);
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.42);
-    margin-top: 0.4rem;
+    color: var(--on-dark-3);
+    margin-top: 0.6rem;
   }
 
   .foot__base {
@@ -120,11 +138,8 @@ const year = new Date().getFullYear();
     gap: 0.75rem 2rem;
     justify-content: space-between;
     padding-block: 1.5rem 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.38);
+    border-top: 1px solid var(--on-dark-line);
+    font-size: var(--micro);
+    color: var(--on-dark-3);
   }
 </style>

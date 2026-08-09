@@ -1,6 +1,6 @@
 @import '@fontsource-variable/big-shoulders-display';
-@import '@fontsource-variable/geist';
-@import '@fontsource-variable/geist-mono';
+@import '@fontsource-variable/ibm-plex-sans';
+@import '@fontsource/ibm-plex-mono';
 
 /* ============================================================
    Machinekind — system wizualny
@@ -17,10 +17,19 @@
   --line: #e4e7e8;
   --line-2: #d2d7d9;
 
-  /* Atrament */
+  /* Atrament — --ink-3 trzyma 4,8:1 na bieli, więc niesie drobny tekst */
   --ink: #0d0f10;
   --ink-2: #4e5558;
-  --ink-3: #868d90;
+  --ink-3: #6b7376;
+
+  /* Tekst na ciemnym i na czerwieni — wartości dobrane pod próg 4,5:1 */
+  --on-dark-1: rgba(255, 255, 255, 0.92);
+  --on-dark-2: rgba(255, 255, 255, 0.72);
+  --on-dark-3: rgba(255, 255, 255, 0.55);
+  --on-dark-line: rgba(255, 255, 255, 0.16);
+  --on-red-1: #ffffff;
+  --on-red-2: rgba(255, 255, 255, 0.9);
+  --on-red-line: rgba(255, 255, 255, 0.34);
 
   /* Akcent — czerwień z logotypu */
   --red: #bd3e3e;
@@ -31,8 +40,11 @@
   /* Typografia — krój wyświetlany dobrany do sygnatury z logotypu */
   --display: 'Big Shoulders Display Variable', 'Big Shoulders Display', 'Oswald',
     'Arial Narrow', system-ui, sans-serif;
-  --body: 'Geist Variable', 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --body: 'IBM Plex Sans Variable', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Próg czytelności drobnego tekstu: 11px przy korzeniu 16px. */
+  --micro: 0.72rem;
 
   /* Miara */
   --wrap: 1320px;
@@ -140,30 +152,6 @@ button {
 }
 
 /* ---------- Typografia ---------- */
-.eyebrow {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-
-.eyebrow::before {
-  content: '';
-  width: 1.6rem;
-  height: 1px;
-  background: var(--red);
-  flex: none;
-}
-
-.eyebrow--plain::before {
-  display: none;
-}
-
 h1,
 h2,
 h3,
@@ -207,25 +195,27 @@ h4 {
 }
 
 .lead {
-  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  font-size: clamp(1.05rem, 1.5vw, 1.32rem);
   line-height: 1.5;
   color: var(--ink-2);
-  max-width: 46ch;
+  max-width: 52ch;
   text-wrap: pretty;
 }
 
 .body {
   color: var(--ink-2);
-  max-width: 60ch;
+  max-width: 68ch;
   text-wrap: pretty;
 }
 
+/* Monospace niesie pomiar: współrzędne, takty, liczności, oznaczenia.
+   Nie służy za kostium „technicznego" pod zwykłe etykiety. */
 .mono {
   font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: var(--micro);
+  letter-spacing: 0.04em;
   color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
 }
 
 .accent {
@@ -248,10 +238,6 @@ h4 {
   }
 }
 
-.head__meta {
-  margin-bottom: 1.15rem;
-}
-
 /* ---------- Przycisk ---------- */
 .btn {
   --btn-bg: var(--ink);
@@ -267,7 +253,6 @@ h4 {
   font-weight: 500;
   letter-spacing: -0.01em;
   transition: transform 0.4s var(--ease), background-color 0.3s var(--ease);
-  will-change: transform;
 }
 
 .btn:hover {
@@ -302,16 +287,15 @@ h4 {
 
 .dark .lead,
 .dark .body {
-  color: rgba(255, 255, 255, 0.66);
+  color: var(--on-dark-2);
 }
 
-.dark .eyebrow,
 .dark .mono {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--on-dark-3);
 }
 
 .dark .rule {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--on-dark-line);
 }
 
 .dark .btn {
@@ -337,21 +321,13 @@ h4 {
 }
 
 .red .lead,
-.red .body {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.red .eyebrow,
+.red .body,
 .red .mono {
-  color: rgba(255, 255, 255, 0.66);
-}
-
-.red .eyebrow::before {
-  background: #fff;
+  color: var(--on-red-2);
 }
 
 .red .rule {
-  background: rgba(255, 255, 255, 0.24);
+  background: var(--on-red-line);
 }
 
 .red .btn {
@@ -381,38 +357,8 @@ h4 {
   z-index: 1;
 }
 
-/* ---------- Wejście w kadr ---------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-}
-
-.is-in .reveal,
-.reveal.is-in {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
-}
-
-.reveal-d1 {
-  transition-delay: 0.07s;
-}
-.reveal-d2 {
-  transition-delay: 0.14s;
-}
-.reveal-d3 {
-  transition-delay: 0.21s;
-}
-.reveal-d4 {
-  transition-delay: 0.28s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
-}
+/* Strona nie ma wejścia sekcji. Jedyny autorski moment ruchu to scena
+   dłoni w nagłówku — czysto w CSS, więc nic nie zależy od skryptu. */
 
 .skip {
   position: absolute;
