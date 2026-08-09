@@ -1,19 +1,21 @@
 /**
- * Wyciąga czystą sylwetkę z wektorów w korzeniu repozytorium.
+ * Buduje czystą sylwetkę z wektorów w korzeniu repozytorium.
  *
  *   node scripts/hands-vector.mjs
  *
- * Pliki hand_*.svg to obrys bitmapy: około 485 ścieżek, z czego jedna ma
- * pełne krycie i niesie kształt, a reszta odtwarza antyaliasing półprzezro-
- * czystymi warstwami. Bierzemy tę jedną, przycinamy kadr do samej kreski
- * i zapisujemy z `fill="currentColor"`, żeby kolor szedł z CSS.
+ * Źródła to obrysy bitmapy i żaden nie nadaje się do użycia wprost:
+ * niosą płytę tła, stopnie antyaliasingu jako osobne ścieżki i kolor
+ * wpisany na sztywno. Skrypt zostawia same ścieżki rysujące kształt,
+ * przycina kadr do kreski i zapisuje z `fill="currentColor"`, żeby kolor
+ * szedł z CSS.
  *
- * Kadr musi być przycięty tak samo jak bitmapy, bo układ nagłówka stoi na
- * dwóch liczbach: proporcji dłoni i pionowym położeniu opuszka. Skrypt je
- * wypisuje i porównuje z tymi, których używa HeroHands.
+ * Kadr musi być przycięty tak samo jak w poprzednim potoku, bo układ
+ * nagłówka stoi na dwóch liczbach: proporcji dłoni i pionowym położeniu
+ * opuszka. Skrypt je wypisuje i porównuje z tymi, których używa HeroHands —
+ * po podmianie źródeł trzeba sprawdzić, czy się nie rozjechały.
  */
 import sharp from 'sharp';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
@@ -21,18 +23,51 @@ const p = (rel) => fileURLToPath(new URL(rel, root));
 
 mkdirSync(p('src/assets'), { recursive: true });
 
-/** Wartości, na których stoi układ nagłówka (z bitmapowego potoku). */
-const EXPECTED = {
-  robot: { aspect: 3.89, tip: 0.3503, side: 'right' },
-  human: { aspect: 3.202, tip: 0.3029, side: 'left' },
+/** Wartości, na których stoi układ nagłówka. */
+const HANDS = {
+  robot: { sources: ['robot_better.svg', 'hand_robot.svg'], aspect: 3.89, tip: 0.3503, side: 'right' },
+  human: { sources: ['human_better.svg', 'hand_human.svg'], aspect: 3.202, tip: 0.3029, side: 'left' },
 };
 
-/** Ścieżka o pełnym kryciu, czyli sama sylwetka. */
-function silhouette(svg) {
-  const paths = [...svg.matchAll(/<path([^>]*?)d="([^"]*)"/g)].map((m) => ({
+const luminance = (hex) => {
+  const v = hex.length === 4
+    ? [1, 2, 3].map((i) => parseInt(hex[i] + hex[i], 16))
+    : [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return (0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]) / 255;
+};
+
+/**
+ * Próg jasności oddzielający kształt od cieniowania.
+ *
+ * Obrys ma trzy pasma: kształt poniżej 0,3, stopnie cieniowania między 0,3
+ * a 0,5 i tło powyżej. Pasmo środkowe nie wnosi kształtu, a zalane na czarno
+ * postrzępia kontur — bez niego krawędzie są gładsze, a pliki o połowę lżejsze.
+ */
+const SHAPE_BELOW = 0.3;
+
+/**
+ * Ścieżki rysujące kształt.
+ *
+ * Nowsze obrysy malują kształt ciemnymi wypełnieniami na białej płycie, więc
+ * bierzemy ciemne. Starsze obrysowywały białą kreskę półprzezroczystymi
+ * warstwami i tam liczy się jedna ścieżka o pełnym kryciu.
+ */
+function shapePaths(svg) {
+  const paths = [...svg.matchAll(/<path([^>]*?)d="([\s\S]*?)"/g)].map((m) => ({
     attrs: m[1],
     d: m[2],
   }));
+
+  const fillOf = (attrs) => {
+    const m = /fill="(#[0-9a-fA-F]{3,6})"/.exec(attrs);
+    return m ? m[1] : null;
+  };
+
+  const dark = paths.filter((x) => {
+    const f = fillOf(x.attrs);
+    return f && luminance(f) < SHAPE_BELOW;
+  });
+  if (dark.length) return { ds: dark.map((x) => x.d), kind: `ciemne ścieżki (${dark.length} z ${paths.length})` };
 
   const solid = paths
     .filter((x) => {
@@ -40,22 +75,25 @@ function silhouette(svg) {
       return !o || parseFloat(o[1]) >= 0.999;
     })
     .sort((a, b) => b.d.length - a.d.length);
+  if (solid.length) return { ds: [solid[0].d], kind: 'ścieżka o pełnym kryciu' };
 
-  if (!solid.length) throw new Error('Brak ścieżki o pełnym kryciu');
-  return solid[0].d;
+  throw new Error('Nie znaleziono ścieżek rysujących kształt');
 }
 
-function viewBoxOf(svg) {
+const viewBoxOf = (svg) => {
   const m = /viewBox="([\d.\-\s]+)"/.exec(svg);
   if (!m) throw new Error('Brak viewBox');
   return m[1].trim().split(/\s+/).map(Number);
-}
+};
 
 /** Prostokąt kreski w jednostkach viewBox, liczony z rastra próbnego. */
-async function inkBox(d, [vx, vy, vw, vh]) {
+async function inkBox(ds, [vx, vy, vw, vh]) {
   const W = 1600;
   const H = Math.round((W * vh) / vw);
-  const probe = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vx} ${vy} ${vw} ${vh}" width="${W}" height="${H}"><path d="${d}" fill="#000"/></svg>`;
+  const probe =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vx} ${vy} ${vw} ${vh}" width="${W}" height="${H}">` +
+    ds.map((d) => `<path d="${d}" fill="#000"/>`).join('') +
+    '</svg>';
 
   const { data, info } = await sharp(Buffer.from(probe))
     .ensureAlpha()
@@ -82,13 +120,13 @@ async function inkBox(d, [vx, vy, vw, vh]) {
     y: vy + minY * sy,
     w: (maxX - minX + 1) * sx,
     h: (maxY - minY + 1) * sy,
-    px: { minX, maxX, minY, maxY, W: info.width, H: info.height, data },
+    px: { data, W: info.width, minX, maxX, minY, maxY },
   };
 }
 
 /** Pionowe położenie opuszka: skrajna kolumna od strony wskazywania. */
-function tipFraction(box, side) {
-  const { data, W, minX, maxX, minY, maxY } = box.px;
+function tipFraction({ px }, side) {
+  const { data, W, minX, maxX, minY, maxY } = px;
   const col = side === 'right' ? maxX : minX;
   for (let y = minY; y <= maxY; y++) {
     if (data[y * W + col] > 40) return (y - minY) / (maxY - minY + 1);
@@ -96,23 +134,28 @@ function tipFraction(box, side) {
   return 0.5;
 }
 
-for (const [name, want] of Object.entries(EXPECTED)) {
-  const src = readFileSync(p(`hand_${name === 'robot' ? 'robot' : 'human'}.svg`), 'utf8');
-  const d = silhouette(src);
-  const box = await inkBox(d, viewBoxOf(src));
+for (const [name, cfg] of Object.entries(HANDS)) {
+  const source = cfg.sources.find((f) => existsSync(p(f)));
+  if (!source) throw new Error(`Brak źródła dla ${name}`);
+
+  const svg = readFileSync(p(source), 'utf8');
+  const { ds, kind } = shapePaths(svg);
+  const box = await inkBox(ds, viewBoxOf(svg));
 
   const aspect = box.w / box.h;
-  const tip = tipFraction(box, want.side);
+  const tip = tipFraction(box, cfg.side);
 
-  const out = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.x.toFixed(2)} ${box.y.toFixed(2)} ${box.w.toFixed(2)} ${box.h.toFixed(2)}" fill="currentColor"><path d="${d}"/></svg>\n`;
+  const out =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.x.toFixed(2)} ${box.y.toFixed(2)} ${box.w.toFixed(2)} ${box.h.toFixed(2)}" fill="currentColor">` +
+    ds.map((d) => `<path d="${d.replace(/\s+/g, ' ').trim()}"/>`).join('') +
+    '</svg>\n';
+
   const file = `src/assets/hand-${name}.svg`;
   writeFileSync(p(file), out);
 
-  const dAsp = ((aspect / want.aspect - 1) * 100).toFixed(2);
-  const dTip = ((tip - want.tip) * 100).toFixed(2);
   console.log(
-    `${file}  ${(out.length / 1024).toFixed(0)} kB\n` +
-      `   proporcja ${aspect.toFixed(3)} (bitmapa ${want.aspect}, różnica ${dAsp}%)\n` +
-      `   opuszek na ${(tip * 100).toFixed(2)}% wysokości (bitmapa ${(want.tip * 100).toFixed(2)}%, różnica ${dTip} pkt proc.)`
+    `${file}  ${(out.length / 1024).toFixed(0)} kB  ← ${source}, ${kind}\n` +
+      `   proporcja ${aspect.toFixed(3)} (układ zakłada ${cfg.aspect}, różnica ${((aspect / cfg.aspect - 1) * 100).toFixed(2)}%)\n` +
+      `   opuszek na ${(tip * 100).toFixed(2)}% wysokości (układ zakłada ${(cfg.tip * 100).toFixed(2)}%, różnica ${((tip - cfg.tip) * 100).toFixed(2)} pkt proc.)`
   );
 }

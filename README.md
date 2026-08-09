@@ -58,23 +58,30 @@ public/media/           wideo
 
 ## Sylwetki wektorowe
 
-`hand_human.svg` i `hand_robot.svg` to obrys bitmapy: około 485 ścieżek każdy,
-z czego jedna niesie kształt przy pełnym kryciu, a reszta odtwarza antyaliasing
-półprzezroczystymi warstwami. Surowo ważą 1,5 MB i na białym tle są niewidoczne,
-bo obrysowano białą kreskę.
+Obowiązują `robot_better.svg` i `human_better.svg`; starsze `hand_*.svg` zostają
+jako zapas i skrypt sięga po nie, gdy nowszych nie ma. Żaden z nich nie nadaje
+się do użycia wprost — to obrysy bitmapy, które niosą płytę tła, stopnie
+cieniowania jako osobne ścieżki i kolor wpisany na sztywno.
 
-`scripts/hands-vector.mjs` wyciąga tę jedną ścieżkę, przycina kadr do samej
-kreski i zapisuje z `fill="currentColor"`:
+`scripts/hands-vector.mjs` zostawia same ścieżki rysujące kształt, przycina
+kadr do kreski i zapisuje z `fill="currentColor"`:
 
 ```bash
 node scripts/hands-vector.mjs
 ```
 
-Wynik to `src/assets/hand-robot.svg` i `hand-human.svg`, 87 i 71 kB (32 i 26 kB
+Obrys ma trzy pasma jasności: kształt poniżej 0,3, stopnie cieniowania między
+0,3 a 0,5 i tło powyżej. Liczy się tylko pierwsze — pasmo środkowe nie wnosi
+kształtu, a zalane na czarno postrzępia kontur, więc `SHAPE_BELOW` odcina je
+przy 0,3. Bez niego pliki są o połowę lżejsze, a krawędzie gładsze. Z 843 i 741
+ścieżek zostaje 41 i 26.
+
+Wynik to `src/assets/hand-robot.svg` i `hand-human.svg`, 74 i 87 kB (34 i 41 kB
 po spakowaniu). Skrypt wypisuje proporcję dłoni i pionowe położenie opuszka
 i porównuje je z wartościami, na których stoi układ nagłówka — po podmianie
 plików źródłowych trzeba sprawdzić, czy się nie rozjechały. Przy obecnych
-różnica to około 1%, więc stałe w `HeroHands` zostały bez zmian.
+różnice to poniżej 1% na proporcji i 0,1 punktu procentowego na opuszku, więc
+stałe w `HeroHands` zostały bez zmian.
 
 Nagłówek strony używa tych wektorów wstawionych w treść: kolor bierze z CSS,
 a scena nie czeka na osobne żądanie, bo animacja wejścia startuje w zerowej
