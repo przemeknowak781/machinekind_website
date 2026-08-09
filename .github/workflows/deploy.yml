@@ -30,9 +30,15 @@ jobs:
       # Zwraca base_path i origin: przy własnej domenie `/`, przy adresie
       # projektowym `/machinekind_website`. Dzięki temu ta sama konfiguracja
       # działa w obu przypadkach.
+      #
+      # enablement włącza Pages przez API, jeśli nie było jeszcze włączone,
+      # i ustawia źródło na GitHub Actions. Bez tego pierwszy przebieg pada
+      # na "Get Pages site failed".
       - name: Ustal adres Pages
         id: pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - run: npm ci
 
