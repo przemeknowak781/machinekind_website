@@ -5,18 +5,20 @@ import human from '../assets/hand-human-ink.png';
 ---
 
 <div class="hands">
-  <div class="hand hand--robot">
-    <Image
-      src={robot}
-      alt="Dłoń maszyny i dłoń człowieka wyciągnięte ku sobie"
-      widths={[700, 1200, 1800]}
-      sizes="60vw"
-      loading="eager"
-      fetchpriority="high"
-    />
-  </div>
-  <div class="hand hand--human">
-    <Image src={human} alt="" widths={[600, 1000, 1500]} sizes="50vw" loading="eager" />
+  <div class="hands__group">
+    <div class="hand hand--robot">
+      <Image
+        src={robot}
+        alt="Dłoń maszyny i dłoń człowieka wyciągnięte ku sobie"
+        widths={[800, 1400, 2000]}
+        sizes="60vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hand hand--human">
+      <Image src={human} alt="" widths={[700, 1200, 1700]} sizes="50vw" loading="eager" />
+    </div>
   </div>
 </div>
 
@@ -29,6 +31,18 @@ import human from '../assets/hand-human-ink.png';
     overflow: hidden;
   }
 
+  /* Cała przekątna to jedna sztywna bryła o stałych proporcjach. Skaluje ją
+     jedna jednostka, która patrzy i na szerokość, i na wysokość okna —
+     przez samo `vw` na szerokim, niskim ekranie dłoń wychodziła poza kadr. */
+  .hands__group {
+    position: absolute;
+    right: calc(-4 * var(--hand-u));
+    top: 50%;
+    translate: 0 -50%;
+    width: calc(96 * var(--hand-u));
+    aspect-ratio: 88 / 54;
+  }
+
   .hand {
     position: absolute;
   }
@@ -39,57 +53,30 @@ import human from '../assets/hand-human-ink.png';
     display: block;
   }
 
-  /* Maszyna wchodzi z dołu po lewej, człowiek schodzi z góry po prawej.
-     `rotate` jest osobną własnością, więc przewijanie może animować
-     `translate` bez deptania obrotu. */
-  /* Położenia liczone tak, żeby po obrocie opuszki wypadły na przekątnej:
-     maszyna sięga do ok. 53/70 sceny, człowiek schodzi do 62/62.
-     Wszystko w `vw`, więc kompozycja skaluje się sztywno z szerokością. */
+  /* Udziały wewnątrz bryły. Skoro bryła ma stałe proporcje, procenty
+     w obu osiach skalują się razem i opuszki nie rozjeżdżają się nigdy. */
   .hand--robot {
-    width: 46vw;
-    left: 8.7vw;
-    top: 35vw;
+    width: 52.3%;
+    left: 0;
+    top: 61.8%;
     rotate: -24deg;
   }
 
   .hand--human {
-    width: 38vw;
-    left: 58.2vw;
-    top: 11vw;
+    width: 43.2%;
+    left: 56.3%;
+    top: 17.4%;
     rotate: -33deg;
   }
 
-  /* Zakres pośredni: przekątna zostaje obok tekstu, ale maszyna schodzi
-     niżej, bo akapit zajmuje tu więcej wysokości niż na szerokim ekranie. */
-  @media (min-width: 761px) and (max-width: 899px) {
-    .hand--robot {
-      width: 52vw;
-      left: 0vw;
-      top: 44vw;
-    }
-
-    .hand--human {
-      width: 44vw;
-      left: 54vw;
-      top: 18vw;
-    }
-  }
-
-  /* Wąski kadr nie pomieści przekątnej obok tekstu, więc dłonie schodzą
-     pod niego. Przeliczone tak, żeby opuszki nadal się mijały o włos. */
-  @media (max-width: 760px) {
-    .hand--robot {
-      width: 78vw;
-      left: -26vw;
-      top: 100vw;
-      rotate: -22deg;
-    }
-
-    .hand--human {
-      width: 66vw;
-      left: 58vw;
-      top: 70vw;
-      rotate: -30deg;
+  /* Wąski kadr nie pomieści przekątnej obok tekstu, więc bryła schodzi pod
+     niego i wychodzi poza obie krawędzie. Środek na 62% wysokości sceny
+     zostawia miejsce na tekst nad nią i przyciski pod nią. */
+  @media (max-width: 779px) {
+    .hands__group {
+      right: calc(-14 * var(--hand-u));
+      top: 62%;
+      width: var(--hand-w);
     }
   }
 

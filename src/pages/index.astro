@@ -86,8 +86,10 @@ const facts = [
     <div class="wrap">
       <p class="hero__meta mono">
         <span>Kolektyw, Wrocław</span>
-        <span>51.1079° N / 17.0385° E</span>
-        <span>Est. 2025</span>
+        <span class="hero__meta-pair">
+          <span>51.1079° N / 17.0385° E</span>
+          <span>Est. 2025</span>
+        </span>
       </p>
     </div>
   </section>
@@ -312,7 +314,10 @@ const facts = [
     padding-bottom: clamp(2rem, 4vw, 3rem);
   }
 
+  /* Jednostka kompozycji dłoni. Bierze mniejszą z miar okna, więc na
+     szerokim i niskim ekranie scena kurczy się zamiast wyjeżdżać poza kadr. */
   .hero__stage {
+    --hand-u: min(1vw, 1.55vh);
     position: relative;
     isolation: isolate;
     padding-top: clamp(2.5rem, 6vw, 5rem);
@@ -328,18 +333,19 @@ const facts = [
     flex-direction: column;
     justify-content: space-between;
     gap: clamp(2.5rem, 8vw, 7rem);
-    min-height: clamp(26rem, 46vw, 42rem);
+    min-height: max(26rem, calc(60 * var(--hand-u)));
   }
 
-  @media (min-width: 761px) and (max-width: 899px) {
-    .hero__grid {
-      min-height: 64vw;
+  /* Ułożenie pionowe. Bryła ma twardy sufit w rem, bo przy 700px sama
+     proporcja do szerokości robiła z niej kolos na dwa ekrany. Wysokość
+     sceny liczy się z tej samej szerokości, więc nic się nie przycina. */
+  @media (max-width: 779px) {
+    .hero__stage {
+      --hand-w: min(calc(126 * var(--hand-u)), 34rem);
     }
-  }
 
-  @media (max-width: 760px) {
     .hero__grid {
-      min-height: 145vw;
+      min-height: calc(var(--hand-w) / 1.63 + 21rem);
     }
   }
 
@@ -367,18 +373,26 @@ const facts = [
     }
   }
 
+  /* Ten sam podział kolumn co nagłówki sekcji niżej, żeby pasek pod
+     nagłówkiem strony siadał w rytmie strony, a nie rozjeżdżał się sam. */
   .hero__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem 2.25rem;
+    display: grid;
+    gap: 0.45rem clamp(2rem, 6vw, 5rem);
     margin-top: clamp(1.5rem, 3vw, 2.25rem);
     padding-top: 1.1rem;
     border-top: 1px solid var(--line);
   }
 
-  @media (min-width: 700px) {
+  .hero__meta-pair {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 2rem;
+    justify-content: space-between;
+  }
+
+  @media (min-width: 900px) {
     .hero__meta {
-      justify-content: space-between;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
     }
   }
 
