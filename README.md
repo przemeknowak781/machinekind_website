@@ -56,6 +56,31 @@ src/
 public/media/           wideo
 ```
 
+## Sylwetki wektorowe
+
+`hand_human.svg` i `hand_robot.svg` to obrys bitmapy: około 485 ścieżek każdy,
+z czego jedna niesie kształt przy pełnym kryciu, a reszta odtwarza antyaliasing
+półprzezroczystymi warstwami. Surowo ważą 1,5 MB i na białym tle są niewidoczne,
+bo obrysowano białą kreskę.
+
+`scripts/hands-vector.mjs` wyciąga tę jedną ścieżkę, przycina kadr do samej
+kreski i zapisuje z `fill="currentColor"`:
+
+```bash
+node scripts/hands-vector.mjs
+```
+
+Wynik to `src/assets/hand-robot.svg` i `hand-human.svg`, 87 i 71 kB (32 i 26 kB
+po spakowaniu). Skrypt wypisuje proporcję dłoni i pionowe położenie opuszka
+i porównuje je z wartościami, na których stoi układ nagłówka — po podmianie
+plików źródłowych trzeba sprawdzić, czy się nie rozjechały. Przy obecnych
+różnica to około 1%, więc stałe w `HeroHands` zostały bez zmian.
+
+Nagłówek strony używa tych wektorów wstawionych w treść: kolor bierze z CSS,
+a scena nie czeka na osobne żądanie, bo animacja wejścia startuje w zerowej
+sekundzie. Tła sekcji i znak wodny w kontakcie zostają na bitmapach — przy
+kryciu 4–8% wektor niczego nie wnosi, a byłby cięższy.
+
 ## Materiały marki
 
 `scripts/brand.mjs` składa z dwóch plików źródłowych scenę „Stworzenia" — dłoń

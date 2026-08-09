@@ -1,24 +1,21 @@
 ---
-import { Image } from 'astro:assets';
-import robot from '../assets/hand-robot-ink.png';
-import human from '../assets/hand-human-ink.png';
+// Sylwetki wektorowe wstawiane w treść strony, a nie przez <img>. Powód jest
+// podwójny: kolor bierze się z CSS przez `currentColor`, a scena nie czeka na
+// osobne żądanie — animacja wejścia startuje w zerowej sekundzie, więc dłonie
+// muszą być na miejscu od razu.
+import robot from '../assets/hand-robot.svg?raw';
+import human from '../assets/hand-human.svg?raw';
 ---
 
 <div class="hands">
   <div class="hands__group">
-    <div class="hand hand--robot">
-      <Image
-        src={robot}
-        alt="Dłoń maszyny i dłoń człowieka wyciągnięte ku sobie"
-        widths={[800, 1400, 2000]}
-        sizes="60vw"
-        loading="eager"
-        fetchpriority="high"
-      />
-    </div>
-    <div class="hand hand--human">
-      <Image src={human} alt="" widths={[700, 1200, 1700]} sizes="50vw" loading="eager" />
-    </div>
+    <div
+      class="hand hand--robot"
+      role="img"
+      aria-label="Dłoń maszyny i dłoń człowieka wyciągnięte ku sobie"
+      set:html={robot}
+    />
+    <div class="hand hand--human" aria-hidden="true" set:html={human} />
   </div>
 </div>
 
@@ -48,9 +45,10 @@ import human from '../assets/hand-human-ink.png';
 
   .hand {
     position: absolute;
+    color: var(--ink);
   }
 
-  .hand :global(img) {
+  .hand :global(svg) {
     width: 100%;
     height: auto;
     display: block;
@@ -109,11 +107,11 @@ import human from '../assets/hand-human-ink.png';
   /* Dłonie dojeżdżają odrobinę dalej, niż wynosi ich miejsce docelowe,
      żeby opuszki naprawdę się zetknęły. Rozchodzą się do właściwego
      odstępu dopiero razem z oddalaniem kadru. */
-  .hand--robot :global(img) {
+  .hand--robot :global(svg) {
     animation: enter-robot 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  .hand--human :global(img) {
+  .hand--human :global(svg) {
     animation: enter-human 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
@@ -169,10 +167,16 @@ import human from '../assets/hand-human-ink.png';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hands__group,
-    .hand :global(img) {
+    /* Bryła traci animację, ale nie `translate` — to jej kotwiczenie na
+       punkcie styku, czyli układ, a nie ruch. Wyzerowane odrzucało
+       zetknięcie na skraj ekranu. */
+    .hands__group {
       animation: none;
       scale: none;
+    }
+
+    .hand :global(svg) {
+      animation: none;
       translate: none;
       opacity: 1;
     }
