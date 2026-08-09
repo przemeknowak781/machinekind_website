@@ -138,25 +138,27 @@ animować `translate` bez deptania kąta.
 
 ## Wejście na stronę
 
-Strona zaczyna się od bieli i samych dłoni. Sekwencja ma trzy takty i trwa
-około 2 sekund:
+Strona zaczyna się od bieli, samych dłoni i przesypującej się sygnatury.
+Sekwencja ma trzy takty i trwa niecałe 3 sekundy:
 
 | Czas | Co się dzieje |
 | --- | --- |
-| 0 – 0,75 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
-| 0,75 – 0,85 s | opuszki stykają się na wspólnej osi, na środku szerokości ekranu |
-| 0,85 – 1,5 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe |
-| 0,87 s | sygnatura zapala się dokładnie w punkcie styku, na środku ekranu |
-| 0,9 – 1,47 s | sygnatura przesypuje litery i układa się w słowo |
-| 1,08 – 1,64 s | sygnatura zjeżdża ze środka na swoje miejsce w kolumnie tekstu |
-| 1,68 – 2,35 s | odsłania się nawigacja, akapit, przyciski i pasek pod nimi |
+| 0 – 1,1 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
+| 0 – 1,1 s | sygnatura stoi na środku i przez cały ten lot składa się z liter |
+| 1,1 – 1,25 s | opuszki stykają się na wspólnej osi, na środku szerokości ekranu, słowo jest już gotowe |
+| 1,25 – 2,2 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe — sygnatura jedzie razem z dłońmi |
+| 2,24 – 2,91 s | odsłania się nawigacja, akapit, przyciski i pasek pod nimi |
 
-Sygnatura rodzi się tam, gdzie dłonie się stykają, więc nie ma przenikania:
-w chwili zetknięcia po prostu jest. Wyłanianie niesie przesypywanie liter.
+Sygnatura formuje się od zerowej sekundy, w tym samym czasie, w którym dłonie
+lecą ku sobie, i rusza z miejsca dopiero przy zetknięciu opuszków — czyli
+dokładnie tam, gdzie zaczyna się obrót dłoni. Krycia nie ma w ogóle: napis
+albo stoi w pełnym atramencie, albo nie ma w nim jeszcze liter.
+
 Droga na miejsce docelowe liczy się z układu (`--title-x` to odległość od lewej
 krawędzi kolumny tekstu do środka okna), więc wyśrodkowanie wychodzi samo na
 każdej szerokości. W układzie pionowym kolumna zajmuje całą szerokość i napis
-i tak stoi na środku, więc przejazdu nie ma.
+i tak stoi na środku, więc przejazdu nie ma — słowo po prostu składa się
+w miejscu.
 
 Tekst wchodzi odsłoną kadru (`clip-path`), a nie przenikaniem. Przenikanie
 zostawiało pół sekundy, w której litera stoi na częściowej przezroczystości —
@@ -167,7 +169,9 @@ Przesypywanie sygnatury to jedyny efekt na stronie wymagający skryptu.
 Losuje wyłącznie ze zbioru liter samego słowa, więc szerokości zostają
 w tym samym zakresie, a napis nie zamienia się w przypadkowy szum. Każda
 litera siedzi w kratce o szerokości zablokowanej po wczytaniu krojów —
-bez tego podmiana glifów rozjeżdżałaby napis w poziomie.
+bez tego podmiana glifów rozjeżdżałaby napis w poziomie. Szerokość mierzy
+się na literze docelowej, nie na losowej. Zanim kroje dojadą, litery już się
+przesypują, tylko bez blokady — dzięki temu gotowe słowo nie mignie na starcie.
 
 Bez skryptu w nagłówku stoi po prostu gotowe słowo. Nazwa dostępnościowa
 siedzi w `aria-label`, więc czytnik ekranu nigdy nie przeczyta

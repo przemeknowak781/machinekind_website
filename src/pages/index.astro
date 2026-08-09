@@ -309,34 +309,39 @@ const facts = [
     const target = cells.map((c) => c.textContent ?? '');
     const pool = [...new Set(target.map((c) => c.toUpperCase()))];
 
-    const BEGIN = 900; // rusza, gdy napis pojawia się w punkcie styku
-    const STEP = 52; // co tyle zatrzaskuje się kolejna litera
+    const STEP = 88; // co tyle zatrzaskuje się kolejna litera: jedenaście
+    // liter składa się w niespełna sekundę, czyli do chwili zetknięcia opuszków
     const TICK = 45; // co tyle podmienia się glif
 
-    // Czas liczony jest osią nawigacji, którą podaje requestAnimationFrame,
-    // a nie od momentu startu skryptu. Inaczej opóźnienie wczytywania
-    // przesuwałoby efekt i napis przesypywałby się już po odsłonięciu.
-    let started = false;
+    // Przesypywanie rusza w pierwszej klatce, razem z dłońmi, a nie po
+    // opóźnieniu — słowo formuje się przez cały ich lot. Punktem zerowym jest
+    // pierwsza klatka, w której kroje są już wczytane: dopiero wtedy można
+    // zablokować szerokości kratek, a bez blokady napis skakałby w poziomie.
+    // Do tego czasu litery już się przesypują, więc gotowe słowo nie mignie.
+    let origin = 0;
     let lastTick = 0;
 
     const frame = (now: number) => {
-      if (now < BEGIN) {
-        requestAnimationFrame(frame);
-        return;
-      }
-
-      if (!started) {
-        // Kroje muszą być wczytane, bo blokujemy szerokości liter. Gdyby nie
-        // były, zamroziłyby się wymiary kroju zastępczego — wtedy lepiej
-        // odpuścić efekt niż rozjechać napis.
-        if (document.fonts.status !== 'loaded') return;
-        cells.forEach((c) => {
+      if (!origin) {
+        if (document.fonts.status !== 'loaded') {
+          // Kroju jeszcze nie ma, więc szerokości mierzyć nie ma z czego.
+          // Litery już się przesypują — napis stoi w kratkach zwykłego tekstu
+          // i może drgnąć, ale nie mignie gotowym słowem.
+          cells.forEach((c) => {
+            c.textContent = pool[(Math.random() * pool.length) | 0];
+          });
+          requestAnimationFrame(frame);
+          return;
+        }
+        // Szerokość kratki bierze się z docelowej litery, nie z losowej.
+        cells.forEach((c, i) => {
+          c.textContent = target[i];
           c.style.width = `${c.getBoundingClientRect().width}px`;
         });
-        started = true;
+        origin = now;
       }
 
-      const locked = Math.floor((now - BEGIN) / STEP);
+      const locked = Math.floor((now - origin) / STEP);
       if (locked >= cells.length) {
         cells.forEach((c, i) => (c.textContent = target[i]));
         return;
@@ -443,32 +448,23 @@ const facts = [
     --title-y: -5vh;
     margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
     white-space: nowrap;
-    animation: title-travel 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.74s both;
+    animation: title-travel 2.2s cubic-bezier(0.65, 0, 0.35, 1) both;
   }
 
-  /* Napis zapala się w chwili zetknięcia opuszków, bez przenikania: jego
-     wyłanianie niesie przesypywanie liter, a nie krycie. Przenikanie
-     dawałoby moment, w którym tekst stoi na częściowej przezroczystości. */
+  /* Napis stoi na środku od zerowej sekundy i składa się z liter w tym
+     samym czasie, w którym dłonie lecą ku sobie. Rusza z miejsca dopiero
+     przy zetknięciu opuszków — w 56,8% biegu, czyli tam, gdzie zaczyna się
+     obrót dłoni — i dojeżdża razem z nimi. Krycia nie ma w ogóle: napis
+     albo stoi w pełnym atramencie, albo jeszcze nie ma w nim liter. */
   @keyframes title-travel {
     0% {
       translate: var(--title-x) var(--title-y);
-      visibility: hidden;
     }
-    13.9% {
+    56.8% {
       translate: var(--title-x) var(--title-y);
-      visibility: hidden;
-    }
-    14% {
-      translate: var(--title-x) var(--title-y);
-      visibility: visible;
-    }
-    38% {
-      translate: var(--title-x) var(--title-y);
-      visibility: visible;
     }
     100% {
       translate: 0 0;
-      visibility: visible;
     }
   }
 
