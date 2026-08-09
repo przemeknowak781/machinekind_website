@@ -1,4 +1,6 @@
 ---
+import { asset, link } from '../lib/paths';
+
 interface Props {
   links?: { href: string; label: string }[];
   label?: string;
@@ -7,21 +9,21 @@ interface Props {
 
 const {
   links = [
-    { href: '/#kolektyw', label: 'Kolektyw' },
-    { href: '/#domeny', label: 'Domeny' },
-    { href: '/#projekty', label: 'Projekty' },
-    { href: '/#zespol', label: 'Zespół' },
-    { href: '/#kontakt', label: 'Kontakt' },
+    { href: link('#kolektyw'), label: 'Kolektyw' },
+    { href: link('#domeny'), label: 'Domeny' },
+    { href: link('#projekty'), label: 'Projekty' },
+    { href: link('#zespol'), label: 'Zespół' },
+    { href: link('#kontakt'), label: 'Kontakt' },
   ],
   label = 'Machinekind',
-  href = '/',
+  href = link(),
 } = Astro.props;
 ---
 
 <header class="nav" id="top">
   <div class="nav__inner wrap">
     <a class="brand" href={href} aria-label={`${label} — strona główna`}>
-      <img class="brand__mark" src="/mark.svg" alt="" width="40" height="30" />
+      <img class="brand__mark" src={asset('mark.svg')} alt="" width="40" height="30" />
       <span class="brand__word">{label}</span>
     </a>
 

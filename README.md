@@ -11,6 +11,34 @@ npm run build    # wynik do dist/
 npm run preview  # podgląd zbudowanej strony
 ```
 
+## Wdrożenie
+
+`.github/workflows/deploy.yml` buduje i publikuje stronę na GitHub Pages przy
+każdym pchnięciu na `main`. W ustawieniach repozytorium **Settings → Pages →
+Source** musi być ustawione **GitHub Actions** (nie „Deploy from a branch").
+
+Adres i bazę podaje `actions/configure-pages`, a nie kod:
+
+| Gdzie stoi | `PAGES_ORIGIN` | `BASE_PATH` |
+| --- | --- | --- |
+| Własna domena | `https://machinekind.ai` | `/` |
+| Adres projektowy | `https://przemeknowak781.github.io` | `/machinekind_website` |
+
+Dzięki temu ta sama konfiguracja obsługuje oba przypadki i przełączenie na
+własną domenę nie wymaga zmiany w kodzie — wystarczy wpisać ją w ustawieniach
+Pages. Bez zmiennych (czyli lokalnie) budują się adresy docelowej domeny.
+
+Ponieważ baza nie jest znana przy pisaniu kodu, **żadna ścieżka w źródłach nie
+może zaczynać się od twardego `/`**. Pliki z `public/` i odsyłacze na stronie
+głównej przechodzą przez `asset()` i `link()` z `src/lib/paths.ts`.
+
+Próba lokalna adresu projektowego:
+
+```bash
+BASE_PATH=/machinekind_website PAGES_ORIGIN=https://przemeknowak781.github.io npm run build
+BASE_PATH=/machinekind_website npm run preview   # → /machinekind_website/
+```
+
 ## Struktura
 
 ```

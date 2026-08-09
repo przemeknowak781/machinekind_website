@@ -1,11 +1,13 @@
 ---
+import { asset, link } from '../lib/paths';
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="foot">
   <div class="wrap foot__inner">
     <div class="foot__brand">
-      <img src="/mark.svg" alt="" width="72" height="54" />
+      <img src={asset('mark.svg')} alt="" width="72" height="54" />
       <p class="foot__claim">
         Kolektyw inżynierów uczących maszyny&nbsp;poruszać się w fizycznym świecie.
       </p>
@@ -13,10 +15,10 @@ const year = new Date().getFullYear();
 
     <nav class="foot__col" aria-label="Strona">
       <h2 class="foot__label">Strona</h2>
-      <a href="/#kolektyw">Kolektyw</a>
-      <a href="/#domeny">Domeny</a>
-      <a href="/#projekty">Projekty</a>
-      <a href="/#zespol">Zespół</a>
+      <a href={link('#kolektyw')}>Kolektyw</a>
+      <a href={link('#domeny')}>Domeny</a>
+      <a href={link('#projekty')}>Projekty</a>
+      <a href={link('#zespol')}>Zespół</a>
     </nav>
 
     <nav class="foot__col" aria-label="Projekty">

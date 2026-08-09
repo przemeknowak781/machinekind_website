@@ -6,6 +6,7 @@ import HandsBackdrop from '../components/HandsBackdrop.astro';
 import TeamGrid from '../components/TeamGrid.astro';
 import { Image } from 'astro:assets';
 import { machinekind, pwr, machinekindCount, pwrCount } from '../data/team';
+import { asset } from '../lib/paths';
 import korpus from '../assets/korpus.webp';
 import naped from '../assets/naped-bezposredni.webp';
 
@@ -175,7 +176,7 @@ const facts = [
       <a class="project" href={WOJTEK_URL}>
         <div class="project__media">
           <video
-            src="/media/render-korpus.mp4"
+            src={asset('media/render-korpus.mp4')}
             poster={korpus.src}
             muted
             loop

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import { asset, link } from '../lib/paths';
 
 interface Props {
   title: string;
@@ -16,7 +17,7 @@ const {
   description,
   links,
   navLabel = 'Machinekind',
-  navHref = '/',
+  navHref = link(),
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://machinekind.ai');
@@ -30,7 +31,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://machinekind
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical.href} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
     <meta name="theme-color" content="#bd3e3e" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Machinekind" />
