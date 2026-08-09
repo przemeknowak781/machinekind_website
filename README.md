@@ -104,11 +104,35 @@ pod tekst, bo wąski kadr ich obok nie pomieści.
 Obrót siedzi w osobnej własności `rotate`, dzięki czemu przewijanie może
 animować `translate` bez deptania kąta.
 
+## Wejście na stronę
+
+Strona zaczyna się od bieli i samych dłoni. Sekwencja ma trzy takty i trwa
+około 2 sekund:
+
+| Czas | Co się dzieje |
+| --- | --- |
+| 0 – 0,75 s | dłonie zjeżdżają z przeciwnych narożników w powiększeniu 1,9× |
+| 0,75 – 0,85 s | opuszki stykają się i zatrzymują |
+| 0,85 – 1,5 s | powiększenie schodzi do jedynki, kompozycja siada na miejscu |
+| 1,4 – 2,1 s | wchodzi nawigacja, nagłówek, tekst i pasek pod nim |
+
+Dłonie dojeżdżają odrobinę dalej, niż wynosi ich pozycja docelowa, bo przy
+powiększeniu 1,9× docelowa przerwa też rośnie 1,9× i nie byłoby żadnego
+zetknięcia. Rozchodzą się do właściwego odstępu dopiero razem z oddalaniem.
+
+Powiększeniem steruje bryła, a dojazdem każdy obrazek z osobna. Ten podział
+jest konieczny: `rotate` dłoni i `translate` przewijania siedzą na `.hand`,
+więc animacja wejścia musi działać na innym elemencie, żeby się z nimi nie
+biła.
+
+Sekwencja jest krótka także dlatego, że w dłuższej wersji detektor łapał
+stronę w trakcie przenikania tekstu i zgłaszał kontrast liczony na częściowej
+przezroczystości.
+
 ## Ruch i zależność od skryptu
 
-Strona nie ma wejścia sekcji w kadr. Ruch jest w dwóch miejscach: dłonie
-osiadają raz przy wczytaniu i rozsuwają się w miarę przewijania pierwszego
-ekranu. Steruje tym jedna dziedziczona liczba `--p` od 0 do 1, którą wypełnia
+Poza wejściem strona nie ma animacji sekcji w kadrze. Drugi ruch to rozsuwanie
+dłoni w miarę przewijania pierwszego ekranu. Steruje tym jedna dziedziczona liczba `--p` od 0 do 1, którą wypełnia
 oś czasu przewijania (`scroll()`); tam gdzie przeglądarka jej nie zna, ustawia
 ją kilkanaście linii skryptu zapasowego w `Base.astro`.
 
