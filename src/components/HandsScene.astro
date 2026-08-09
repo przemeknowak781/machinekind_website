@@ -1,0 +1,148 @@
+---
+import { Image } from 'astro:assets';
+import handsInk from '../assets/hands-ink.png';
+import handsPaper from '../assets/hands-paper.png';
+
+interface Props {
+  variant?: 'ink' | 'paper';
+  /** Iskra w punkcie styku. */
+  spark?: boolean;
+  class?: string;
+}
+
+const { variant = 'ink', spark = true, class: className = '' } = Astro.props;
+const src = variant === 'paper' ? handsPaper : handsInk;
+
+// Punkt styku wyznaczony przy składaniu sceny (scripts/brand.mjs).
+const MEET_X = 50;
+const MEET_Y = 31.31;
+---
+
+<figure class={`scene scene--${variant} ${className}`} data-observe>
+  <div class="scene__frame">
+    <Image
+      class="scene__img"
+      src={src}
+      alt="Dłoń maszyny i dłoń człowieka wyciągnięte ku sobie, palce wskazujące niemal się stykają"
+      widths={[900, 1400, 1980, 2600]}
+      sizes="(min-width: 1400px) 1320px, 100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+
+    {
+      spark && (
+        <span class="scene__spark" style={`--mx:${MEET_X}%; --my:${MEET_Y}%`} aria-hidden="true">
+          <span class="scene__pulse" />
+          <span class="scene__dot" />
+        </span>
+      )
+    }
+  </div>
+</figure>
+
+<style>
+  .scene {
+    margin: 0;
+  }
+
+  .scene__frame {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .scene__img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Na wąskich ekranach cała scena spada do paska kilkudziesięciu pikseli,
+     więc powiększamy ją i kadrujemy na punkcie styku — obraz jest symetryczny,
+     więc środek kadru nadal wypada dokładnie między opuszkami. */
+  @media (max-width: 760px) {
+    .scene__frame {
+      overflow: hidden;
+    }
+
+    .scene :global(.scene__img) {
+      width: 178%;
+      max-width: none;
+      margin-inline: -39%;
+    }
+  }
+
+  /* Dłonie zbliżają się do siebie przy wejściu w kadr. */
+  .scene :global(.scene__img) {
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 1.1s var(--ease), transform 1.4s var(--ease);
+  }
+
+  .scene.is-in :global(.scene__img) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .scene__spark {
+    position: absolute;
+    left: var(--mx);
+    top: var(--my);
+    width: 0;
+    height: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition: opacity 0.8s var(--ease) 0.7s;
+  }
+
+  .scene.is-in .scene__spark {
+    opacity: 1;
+  }
+
+  .scene__dot,
+  .scene__pulse {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  .scene__dot {
+    width: clamp(6px, 0.62vw, 11px);
+    height: clamp(6px, 0.62vw, 11px);
+    box-shadow: 0 0 0 clamp(3px, 0.3vw, 5px) color-mix(in srgb, var(--red) 22%, transparent);
+  }
+
+  .scene__pulse {
+    width: clamp(6px, 0.62vw, 11px);
+    height: clamp(6px, 0.62vw, 11px);
+    animation: spark 3.6s var(--ease) infinite;
+  }
+
+  .scene--paper .scene__dot,
+  .scene--paper .scene__pulse {
+    background: var(--red-soft);
+  }
+
+  @keyframes spark {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(4.2);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene__pulse {
+      animation: none;
+    }
+    .scene :global(.scene__img),
+    .scene__spark {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

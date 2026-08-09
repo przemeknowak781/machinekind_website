@@ -1,0 +1,249 @@
+---
+interface Props {
+  links?: { href: string; label: string }[];
+  label?: string;
+  href?: string;
+}
+
+const {
+  links = [
+    { href: '/#kolektyw', label: 'Kolektyw' },
+    { href: '/#domeny', label: 'Domeny' },
+    { href: '/#projekty', label: 'Projekty' },
+    { href: '/#zespol', label: 'Zespół' },
+    { href: '/#kontakt', label: 'Kontakt' },
+  ],
+  label = 'Machinekind',
+  href = '/',
+} = Astro.props;
+---
+
+<header class="nav" id="top">
+  <div class="nav__inner wrap">
+    <a class="brand" href={href} aria-label={`${label} — strona główna`}>
+      <img class="brand__mark" src="/mark.svg" alt="" width="40" height="30" />
+      <span class="brand__word">{label}</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Nawigacja główna">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <a class="nav__cta" href="mailto:hello@wo1.tech">
+      hello@wo1.tech
+    </a>
+
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-drawer">
+      <span class="nav__toggle-bars" aria-hidden="true"></span>
+      <span class="sr">Menu</span>
+    </button>
+  </div>
+
+  <div class="nav__drawer" id="nav-drawer" hidden>
+    <div class="wrap">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a class="nav__drawer-mail" href="mailto:hello@wo1.tech">hello@wo1.tech</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(1.6) blur(14px);
+    -webkit-backdrop-filter: saturate(1.6) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 4.5rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-right: auto;
+  }
+
+  .brand__mark {
+    width: 2.1rem;
+    height: auto;
+    border-radius: 3px;
+  }
+
+  .brand__word {
+    font-family: var(--display);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 1.22rem;
+    line-height: 1;
+    padding-top: 0.1em;
+  }
+
+  .nav__links {
+    display: none;
+    gap: 1.9rem;
+    font-size: 0.9rem;
+  }
+
+  .nav__links a {
+    color: var(--ink-2);
+    position: relative;
+    padding-block: 0.35rem;
+    transition: color 0.25s var(--ease);
+  }
+
+  .nav__links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease);
+  }
+
+  .nav__links a:hover {
+    color: var(--ink);
+  }
+
+  .nav__links a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .nav__cta {
+    display: none;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    border: 1px solid var(--line-2);
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+
+  .nav__cta:hover {
+    color: var(--red);
+    border-color: var(--red);
+  }
+
+  .nav__toggle {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    margin-right: -0.5rem;
+  }
+
+  .nav__toggle-bars,
+  .nav__toggle-bars::before,
+  .nav__toggle-bars::after {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.3s var(--ease), opacity 0.2s linear;
+  }
+
+  .nav__toggle-bars::before,
+  .nav__toggle-bars::after {
+    content: '';
+    position: absolute;
+  }
+
+  .nav__toggle-bars::before {
+    transform: translateY(-6px);
+  }
+
+  .nav__toggle-bars::after {
+    transform: translateY(6px);
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__toggle-bars {
+    background: transparent;
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__toggle-bars::before {
+    transform: rotate(45deg);
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__toggle-bars::after {
+    transform: rotate(-45deg);
+  }
+
+  .nav__drawer {
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+  }
+
+  .nav__drawer .wrap {
+    display: grid;
+    padding-block: 1rem 1.75rem;
+  }
+
+  .nav__drawer a {
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .nav__drawer-mail {
+    font-family: var(--mono);
+    font-size: 0.85rem !important;
+    color: var(--red);
+    border-bottom: 0 !important;
+  }
+
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  @media (min-width: 900px) {
+    .nav__links,
+    .nav__cta {
+      display: flex;
+    }
+
+    .nav__toggle,
+    .nav__drawer {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav__toggle');
+  const drawer = document.querySelector<HTMLElement>('.nav__drawer');
+
+  if (toggle && drawer) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      drawer.hidden = open;
+    });
+
+    drawer.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).tagName === 'A') {
+        toggle.setAttribute('aria-expanded', 'false');
+        drawer.hidden = true;
+      }
+    });
+  }
+</script>

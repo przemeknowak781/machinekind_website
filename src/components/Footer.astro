@@ -1,0 +1,130 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <div class="foot__brand">
+      <img src="/mark.svg" alt="" width="72" height="54" />
+      <p class="foot__claim">
+        Kolektyw inżynierów uczących maszyny&nbsp;poruszać się w fizycznym świecie.
+      </p>
+    </div>
+
+    <nav class="foot__col" aria-label="Strona">
+      <h2 class="foot__label">Strona</h2>
+      <a href="/#kolektyw">Kolektyw</a>
+      <a href="/#domeny">Domeny</a>
+      <a href="/#projekty">Projekty</a>
+      <a href="/#zespol">Zespół</a>
+    </nav>
+
+    <nav class="foot__col" aria-label="Projekty">
+      <h2 class="foot__label">Projekty</h2>
+      <a href="https://machinekind.ai">Wojtek — W01-TEK ↗</a>
+      <a href="https://pwr.edu.pl" rel="noopener noreferrer" target="_blank">Politechnika Wrocławska ↗</a>
+    </nav>
+
+    <div class="foot__col">
+      <h2 class="foot__label">Kontakt</h2>
+      <a href="mailto:hello@wo1.tech">hello@wo1.tech</a>
+      <p class="foot__where">Wrocław, Polska<br />51.1079° N / 17.0385° E</p>
+    </div>
+  </div>
+
+  <div class="wrap foot__base">
+    <p>© {year} Machinekind</p>
+    <p class="foot__note">Maszyna W01-TEK jest własnością Politechniki Wrocławskiej.</p>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    background: var(--ink);
+    color: #fff;
+    padding-top: clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .foot__inner {
+    display: grid;
+    gap: clamp(2.25rem, 5vw, 3rem);
+    grid-template-columns: 1fr;
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  @media (min-width: 760px) {
+    .foot__inner {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1060px) {
+    .foot__inner {
+      grid-template-columns: 1.6fr repeat(3, 1fr);
+      gap: 3rem;
+    }
+  }
+
+  .foot__brand img {
+    width: 3.4rem;
+    height: auto;
+    border-radius: 3px;
+    margin-bottom: 1.25rem;
+  }
+
+  .foot__claim {
+    color: rgba(255, 255, 255, 0.62);
+    max-width: 30ch;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .foot__col {
+    display: grid;
+    align-content: start;
+    gap: 0.7rem;
+  }
+
+  .foot__label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.42);
+    margin-bottom: 0.35rem;
+  }
+
+  .foot__col a {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.95rem;
+    width: fit-content;
+    transition: color 0.25s var(--ease);
+  }
+
+  .foot__col a:hover {
+    color: var(--red-soft);
+  }
+
+  .foot__where {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.42);
+    margin-top: 0.4rem;
+  }
+
+  .foot__base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    justify-content: space-between;
+    padding-block: 1.5rem 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import robotInk from '../assets/hand-robot-ink.png';
+import robotPaper from '../assets/hand-robot-paper.png';
+import humanInk from '../assets/hand-human-ink.png';
+import humanPaper from '../assets/hand-human-paper.png';
+
+interface Props {
+  /** Która dłoń. */
+  hand: 'robot' | 'human';
+  /** Kolor kreski — `paper` pod ciemne i czerwone tła. */
+  tone?: 'ink' | 'paper';
+  /** Z której krawędzi wychodzi. */
+  side?: 'left' | 'right';
+  /** Szerokość względem sekcji; wartości powyżej 100% mocno kadrują. */
+  size?: string;
+  /** Pionowe położenie środka dłoni. */
+  top?: string;
+  /** Wysunięcie poza krawędź — im więcej, tym ciaśniejszy kadr. */
+  bleed?: string;
+  opacity?: number;
+  /** Czas pełnego cyklu dryfu. */
+  duration?: string;
+}
+
+const {
+  hand,
+  tone = 'ink',
+  side = 'right',
+  size = '80%',
+  top = '50%',
+  bleed = '-18%',
+  opacity = 0.06,
+  duration = '26s',
+} = Astro.props;
+
+const sources = {
+  robot: { ink: robotInk, paper: robotPaper },
+  human: { ink: humanInk, paper: humanPaper },
+};
+
+const src = sources[hand][tone];
+---
+
+<div
+  class={`backdrop backdrop--${side}`}
+  style={`--size:${size}; --top:${top}; --bleed:${bleed}; --op:${opacity}; --dur:${duration}`}
+  aria-hidden="true"
+>
+  <Image
+    class="backdrop__img"
+    src={src}
+    alt=""
+    widths={[900, 1600, 2400]}
+    sizes="120vw"
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+<style>
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .backdrop :global(.backdrop__img) {
+    position: absolute;
+    top: var(--top);
+    width: var(--size);
+    max-width: none;
+    height: auto;
+    opacity: var(--op);
+    will-change: transform;
+    animation: drift var(--dur) ease-in-out infinite alternate;
+  }
+
+  .backdrop--right :global(.backdrop__img) {
+    right: var(--bleed);
+    translate: 0 -50%;
+  }
+
+  .backdrop--left :global(.backdrop__img) {
+    left: var(--bleed);
+    translate: 0 -50%;
+  }
+
+  @keyframes drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(-2.5%, 1.6%, 0) scale(1.06);
+    }
+  }
+
+  /* Tam, gdzie przeglądarka to potrafi, dryf zamieniamy na paralaksę
+     sterowaną przewijaniem — tło reaguje na ruch strony, nie na zegar. */
+  @supports (animation-timeline: view()) {
+    .backdrop :global(.backdrop__img) {
+      animation: parallax linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    @keyframes parallax {
+      from {
+        transform: translate3d(0, 7%, 0) scale(1.04);
+      }
+      to {
+        transform: translate3d(-3%, -7%, 0) scale(1.04);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .backdrop :global(.backdrop__img) {
+      animation: none;
+    }
+  }
+</style>

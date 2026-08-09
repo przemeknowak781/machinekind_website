@@ -1,0 +1,151 @@
+---
+import { Image } from 'astro:assets';
+import type { Group } from '../data/team';
+
+interface Props {
+  groups: Group[];
+  tone?: 'light' | 'dark';
+}
+
+const { groups, tone = 'light' } = Astro.props;
+
+let index = 0;
+---
+
+<div class={`team team--${tone}`}>
+  {
+    groups.map((group) => (
+      <section class="team__group">
+        <h3 class="team__label">{group.label}</h3>
+        <ul class="team__list">
+          {group.members.map((m) => {
+            index += 1;
+            const n = String(index).padStart(2, '0');
+            return (
+              <li class="member reveal" data-observe>
+                <div class="member__frame">
+                  {m.photo ? (
+                    <Image
+                      class="member__photo"
+                      src={m.photo}
+                      alt={m.name}
+                      widths={[220, 440]}
+                      sizes="(min-width: 900px) 220px, 45vw"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span class="member__initials" aria-hidden="true">
+                      {m.initials}
+                    </span>
+                  )}
+                  <span class="member__no">{n}</span>
+                </div>
+                <p class="member__name">{m.name}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .team {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  @media (min-width: 760px) {
+    .team {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(2.5rem, 4vw, 4rem) clamp(2rem, 4vw, 3.5rem);
+    }
+  }
+
+  .team__label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 1.5rem;
+  }
+
+  .team--dark .team__label {
+    color: rgba(255, 255, 255, 0.46);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .team__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.1rem, 2vw, 1.75rem);
+  }
+
+  .member__frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--paper-2);
+    border-radius: 2px;
+    display: grid;
+    place-items: center;
+  }
+
+  .team--dark .member__frame {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .member :global(.member__photo) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.04);
+    transition: filter 0.6s var(--ease), transform 0.8s var(--ease);
+  }
+
+  .member:hover :global(.member__photo) {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.035);
+  }
+
+  .member__initials {
+    font-family: var(--mono);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+  }
+
+  .team--dark .member__initials {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .member__no {
+    position: absolute;
+    top: 0.55rem;
+    left: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+
+  .member__name {
+    margin-top: 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .team--dark .member__name {
+    color: rgba(255, 255, 255, 0.92);
+  }
+</style>

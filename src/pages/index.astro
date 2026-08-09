@@ -1,0 +1,681 @@
+---
+import Base from '../layouts/Base.astro';
+import HandsScene from '../components/HandsScene.astro';
+import HandsBackdrop from '../components/HandsBackdrop.astro';
+import TeamGrid from '../components/TeamGrid.astro';
+import { Image } from 'astro:assets';
+import { machinekind, pwr, machinekindCount, pwrCount } from '../data/team';
+import korpus from '../assets/korpus.webp';
+import naped from '../assets/naped-bezposredni.webp';
+
+// Strona projektu Wojtek. Docelowo podstrona /wojtek — na razie osobny serwis.
+const WOJTEK_URL = 'https://machinekind.ai';
+
+const domains = [
+  {
+    no: '01',
+    label: 'Locomotion AI',
+    title: 'Ruch, którego nikt nie zaprogramował ręcznie.',
+    body:
+      'Sieci sterujące chodem trenujemy w symulatorze pełnej dynamiki, a potem przenosimy te same trajektorie na maszynę. Pętla momentu pracuje w 400 Hz, sieć lokomocyjna w 50 Hz.',
+    meta: ['300 mln kroków', 'sim-to-real'],
+  },
+  {
+    no: '02',
+    label: 'World Models & VLM',
+    title: 'Warstwa rozumienia przestrzeni.',
+    body:
+      'Modele świata i modele wizyjno-językowe dają maszynie kontekst: co widzi, gdzie może stanąć i co z tego wynika dla następnego kroku. Ta warstwa pracuje wolniej — w 1 Hz — i decyduje o zamiarze.',
+    meta: ['VLM', '1 Hz'],
+  },
+  {
+    no: '03',
+    label: 'Robotics Engineering',
+    title: 'Sprzęt, na którym da się to uruchomić.',
+    body:
+      'Napędy bezpośrednie, nogi o zamkniętym łańcuchu kinematycznym, sztywność wzięta ze struktury zamiast z dodatkowej masy. Wydruki 3D, cięcie laserowe, montaż i kalibracja na miejscu.',
+    meta: ['direct drive', 'closed-loop'],
+  },
+  {
+    no: '04',
+    label: 'Design & Program',
+    title: 'Prowadzenie projektu i forma.',
+    body:
+      'Harmonogram, finansowanie, komunikacja i to, jak maszyna wygląda. Forma wynika z obciążenia: każde wycięcie odprowadza ciepło, każde przetłoczenie usztywnia strukturę.',
+    meta: ['program', 'design'],
+  },
+];
+
+const stats = [
+  { value: String(machinekindCount + pwrCount), label: 'osób w dwóch zespołach' },
+  { value: '300 mln', label: 'kroków w symulacji' },
+  { value: '400/50/1', label: 'Hz — takt trzech warstw' },
+  { value: '2025', label: 'pierwszy krok maszyny' },
+];
+---
+
+<Base
+  title="Machinekind — kolektyw robotyki i AI z Wrocławia"
+  description="Machinekind to kolektyw inżynierów uczenia maszynowego, robotyków i projektantów. Budujemy warstwę inteligencji dla maszyn działających w fizycznym świecie. Pierwsza maszyna: czworonóg W01-TEK."
+>
+  <!-- ============ HERO ============ -->
+  <section class="hero" data-observe>
+    <div class="wrap">
+      <p class="eyebrow reveal">Kolektyw · Wrocław, Polska</p>
+
+      <h1 class="h-display hero__title reveal reveal-d1">Machinekind</h1>
+
+      <div class="hero__intro">
+        <p class="lead reveal reveal-d2">
+          Uczymy maszyny poruszać się w świecie ludzi. Kolektyw inżynierów uczenia
+          maszynowego, robotyków i projektantów — warstwa inteligencji i sprzęt,
+          na którym da się ją uruchomić.
+        </p>
+        <div class="hero__actions reveal reveal-d3">
+          <a class="btn" href={WOJTEK_URL}>
+            Projekt Wojtek
+            <svg class="btn__arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a class="btn btn--ghost" href="#kontakt">Kontakt</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap hero__scene">
+      <HandsScene />
+    </div>
+
+    <div class="wrap">
+      <div class="hero__meta reveal reveal-d4">
+        <span>Człowiek × maszyna</span>
+        <span>51.1079° N / 17.0385° E</span>
+        <span>Est. 2025</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KOLEKTYW ============ -->
+  <section class="section red has-backdrop" id="kolektyw" data-observe>
+    <HandsBackdrop hand="human" tone="paper" side="right" size="92%" top="80%" bleed="-22%" opacity={0.085} />
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow head__meta reveal">01 / Kolektyw</p>
+          <h2 class="h1 reveal reveal-d1">Punkt styku.</h2>
+        </div>
+        <div class="manifest reveal reveal-d2">
+          <p class="lead">
+            Nazwa bierze się z prostego założenia: maszyny nie są osobnym gatunkiem.
+            Są przedłużeniem tego, co ludzkie — a granica między jednym a drugim
+            przebiega dokładnie tam, gdzie stykają się dwie dłonie.
+          </p>
+          <p class="body">
+            Machinekind powstał wokół jednej maszyny i jednego pytania: co musi się
+            wydarzyć, żeby robot kroczący przestał być demonstracją, a stał się
+            narzędziem. Pracujemy w dwóch zespołach — po stronie Politechniki
+            Wrocławskiej konstrukcja, mechanika i wykonanie, po naszej warstwa AI,
+            inżynieria robotyki, design i prowadzenie projektu.
+          </p>
+        </div>
+      </div>
+
+      <dl class="stats">
+        {
+          stats.map((s, i) => (
+            <div class={`stat reveal reveal-d${(i % 4) + 1}`}>
+              <dt class="stat__value">{s.value}</dt>
+              <dd class="stat__label">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ DOMENY ============ -->
+  <section class="section has-backdrop" id="domeny" data-observe>
+    <HandsBackdrop hand="robot" tone="ink" side="left" size="72%" top="18%" bleed="-30%" opacity={0.045} duration="32s" />
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow head__meta reveal">02 / Domeny</p>
+          <h2 class="h1 reveal reveal-d1">Cztery warstwy<br />jednej maszyny.</h2>
+        </div>
+        <p class="lead reveal reveal-d2">
+          Nie dzielimy pracy na badania i wdrożenie. Każda z czterech domen kończy
+          się czymś, co można uruchomić na sprzęcie stojącym w laboratorium.
+        </p>
+      </div>
+
+      <div class="domains">
+        {
+          domains.map((d) => (
+            <article class="domain reveal" data-observe>
+              <p class="domain__no">{d.no}</p>
+              <div class="domain__main">
+                <p class="domain__label">{d.label}</p>
+                <h3 class="h3 domain__title">{d.title}</h3>
+                <p class="body domain__body">{d.body}</p>
+              </div>
+              <ul class="domain__meta">
+                {d.meta.map((m) => (
+                  <li>{m}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJEKTY ============ -->
+  <section class="section section--tight" id="projekty" data-observe>
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow head__meta reveal">03 / Projekty</p>
+          <h2 class="h1 reveal reveal-d1">Co stoi w laboratorium.</h2>
+        </div>
+        <p class="lead reveal reveal-d2">
+          Pierwsza maszyna platformy chodzi we Wrocławiu. Kolejne wersje powstają
+          na tej samej bazie.
+        </p>
+      </div>
+
+      <a class="project reveal" href={WOJTEK_URL} data-observe>
+        <div class="project__media">
+          <video
+            src="/media/render-korpus.mp4"
+            poster={korpus.src}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-hidden="true"></video>
+        </div>
+        <div class="project__body">
+          <p class="project__tag">Projekt 01 — aktywny</p>
+          <h3 class="h2 project__title">Wojtek<span class="project__code">W01-TEK</span></h3>
+          <p class="body">
+            Czworonóg zaprojektowany i zbudowany we Wrocławiu, na Politechnice
+            Wrocławskiej. Od szkicu do prototypu w rok, pierwszy krok w 2025,
+            pełne sterowanie AI od 2026. Imię odziedziczył po niedźwiedziu, który
+            dźwigał to, czego nie mógł unieść nikt inny.
+          </p>
+          <ul class="project__facts">
+            <li><span>Typ</span>robot kroczący</li>
+            <li><span>Budowa</span>12 miesięcy</li>
+            <li><span>Napęd</span>bezpośredni</li>
+          </ul>
+          <span class="project__go">
+            Zobacz projekt
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ ZESPÓŁ ============ -->
+  <section class="section dark has-backdrop" id="zespol" data-observe>
+    <HandsBackdrop hand="robot" tone="paper" side="right" size="64%" top="9%" bleed="-26%" opacity={0.055} duration="30s" />
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow head__meta reveal">04 / Zespół</p>
+          <h2 class="h1 reveal reveal-d1">Kto buduje maszynę.</h2>
+        </div>
+        <p class="lead reveal reveal-d2">
+          Dwanaście osób w dwóch zespołach. Po stronie uczelni konstrukcja,
+          mechanika i wykonanie. Po stronie Machinekind warstwa AI, inżynieria
+          robotyki, design i prowadzenie projektu.
+        </p>
+      </div>
+
+      <p class="team-head">Machinekind <span>×{String(machinekindCount).padStart(2, '0')}</span></p>
+      <TeamGrid groups={machinekind} tone="dark" />
+
+      <p class="team-head team-head--second">
+        PWr / Laboratorium Mechatroniki i Robotyki
+        <span>×{String(pwrCount).padStart(2, '0')}</span>
+      </p>
+      <TeamGrid groups={pwr} tone="dark" />
+    </div>
+  </section>
+
+  <!-- ============ PARTNER ============ -->
+  <section class="section section--tight" id="partner" data-observe>
+    <div class="wrap partner">
+      <div class="partner__text">
+        <p class="eyebrow head__meta reveal">05 / Zaplecze</p>
+        <h2 class="h2 reveal reveal-d1">Politechnika Wrocławska.</h2>
+        <p class="body reveal reveal-d2">
+          Maszyna powstała w Laboratorium Mechatroniki i Robotyki Katedry Podstaw
+          Konstrukcji Maszyn i Układów Mechatronicznych, z finansowaniem z projektu
+          zespołu prof. Radosława Zimroza. Czworonóg jest rozszerzeniem prowadzonej
+          tam linii robotów mobilnych i inspekcyjnych.
+        </p>
+        <ul class="partner__facts reveal reveal-d3">
+          <li><span>LMiR</span>miejsce budowy</li>
+          <li><span>KPKMiUM</span>katedra</li>
+          <li><span>AMICOS</span>projekt</li>
+        </ul>
+      </div>
+      <figure class="partner__media reveal reveal-d2">
+        <Image src={naped} alt="Napęd bezpośredni maszyny W01-TEK" widths={[520, 1040]} sizes="(min-width: 900px) 520px, 100vw" loading="lazy" />
+        <figcaption class="mono">Napęd bezpośredni — silnik sprzężony wprost z przegubem</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ KONTAKT ============ -->
+  <section class="section red contact" id="kontakt" data-observe>
+    <div class="wrap">
+      <p class="eyebrow reveal">06 / Kontakt</p>
+      <h2 class="h-display contact__title reveal reveal-d1">Zbudujmy<br />następny.</h2>
+      <div class="contact__row reveal reveal-d2">
+        <p class="lead">
+          Prototyp chodzi we Wrocławiu. Zapraszamy inwestorów, partnerów
+          przemysłowych i media na pokaz.
+        </p>
+        <a class="btn" href="mailto:hello@wo1.tech">
+          Umów pokaz
+          <svg class="btn__arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <HandsScene variant="paper" class="contact__scene" spark={false} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- hero ---------- */
+  .hero {
+    padding-top: clamp(3rem, 7vw, 6rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .hero__title {
+    margin-block: clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .hero__intro {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .hero__intro {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 3rem;
+      align-items: end;
+    }
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero__scene {
+    margin-top: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2.25rem;
+    justify-content: space-between;
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ---------- statystyki ---------- */
+  .manifest {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  /* Włosowe linie robi prześwit siatki, więc kafle biorą tło sekcji. */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.32);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+  }
+
+  @media (min-width: 860px) {
+    .stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .stat {
+    background: var(--red);
+    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.1rem, 2vw, 1.75rem);
+  }
+
+  .stat__value {
+    font-family: var(--display);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(2.2rem, 4.6vw, 3.9rem);
+    letter-spacing: 0.01em;
+    line-height: 0.88;
+    white-space: nowrap;
+  }
+
+  .stat__label {
+    margin: 0.7rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.5;
+  }
+
+  /* ---------- domeny ---------- */
+  .domains {
+    border-top: 1px solid var(--line);
+  }
+
+  .domain {
+    display: grid;
+    gap: 0.75rem 2rem;
+    padding-block: clamp(1.75rem, 3.5vw, 2.75rem);
+    border-bottom: 1px solid var(--line);
+    grid-template-columns: 1fr;
+    transition: background-color 0.4s var(--ease);
+  }
+
+  @media (min-width: 900px) {
+    .domain {
+      grid-template-columns: 4rem minmax(0, 1fr) 10rem;
+      gap: 2.5rem;
+      align-items: start;
+    }
+  }
+
+  .domain:hover {
+    background: var(--paper-2);
+  }
+
+  .domain__no {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    padding-top: 0.4rem;
+  }
+
+  .domain__label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.7rem;
+  }
+
+  .domain__title {
+    margin-bottom: 0.75rem;
+    max-width: 22ch;
+  }
+
+  .domain__body {
+    max-width: 62ch;
+  }
+
+  .domain__meta {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-content: start;
+  }
+
+  .domain__meta li {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    padding: 0.28rem 0.65rem;
+  }
+
+  /* ---------- projekt ---------- */
+  .project {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    border: 1px solid var(--line);
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    transition: border-color 0.4s var(--ease), transform 0.5s var(--ease);
+  }
+
+  @media (min-width: 980px) {
+    .project {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+
+  .project:hover {
+    border-color: var(--red);
+    transform: translateY(-3px);
+  }
+
+  .project__media {
+    background: var(--ink);
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+  }
+
+  .project__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project__body {
+    padding-right: clamp(0rem, 2vw, 2rem);
+  }
+
+  .project__tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1rem;
+  }
+
+  .project__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .project__code {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    text-transform: none;
+  }
+
+  .project__facts {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+    display: grid;
+    gap: 0.55rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.1rem;
+  }
+
+  .project__facts li {
+    display: flex;
+    gap: 1rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .project__facts span {
+    color: var(--ink-3);
+    min-width: 6rem;
+  }
+
+  .project__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--red);
+  }
+
+  .project:hover .project__go svg {
+    transform: translate(3px, -3px);
+  }
+
+  .project__go svg {
+    transition: transform 0.4s var(--ease);
+  }
+
+  /* ---------- zespół ---------- */
+  .team-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    padding-bottom: 1rem;
+    margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
+    border-bottom: 1px solid var(--red);
+  }
+
+  .team-head span {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .team-head--second {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  /* ---------- partner ---------- */
+  .partner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .partner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    }
+  }
+
+  .partner__facts {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.75rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .partner__facts li {
+    display: flex;
+    gap: 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border-top: 1px solid var(--line);
+    padding-top: 0.55rem;
+  }
+
+  .partner__facts span {
+    color: var(--ink);
+    min-width: 7rem;
+  }
+
+  .partner__text h2 {
+    margin-bottom: 1.1rem;
+  }
+
+  .partner__media {
+    margin: 0;
+  }
+
+  .partner__media :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .partner__media figcaption {
+    margin-top: 0.85rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---------- kontakt ---------- */
+  .contact {
+    overflow: hidden;
+  }
+
+  .contact__title {
+    margin-block: clamp(1.25rem, 3vw, 2rem) clamp(2rem, 4vw, 3rem);
+  }
+
+  .contact__row {
+    display: grid;
+    gap: 1.75rem;
+    align-items: end;
+  }
+
+  @media (min-width: 780px) {
+    .contact__row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 3rem;
+    }
+  }
+
+  /* Scena mieszka w komponencie, więc sięgamy po nią spod zakresu sekcji. */
+  .contact :global(.scene) {
+    margin-top: clamp(3.5rem, 8vw, 7rem);
+    opacity: 0.2;
+  }
+</style>
