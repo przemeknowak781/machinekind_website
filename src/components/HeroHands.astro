@@ -113,7 +113,7 @@ import human from '../assets/hand-human.svg?raw';
      jednocześnie oddala się i przesuwa na miejsce docelowe. */
   .hands__group {
     transform-origin: 53% 55%;
-    animation: hands-settle 0.95s cubic-bezier(0.65, 0, 0.35, 1) 1.25s both;
+    animation: hands-settle 1.3s cubic-bezier(0.65, 0, 0.35, 1) 1.71s both;
   }
 
   @keyframes hands-settle {
@@ -135,11 +135,11 @@ import human from '../assets/hand-human.svg?raw';
      musi wrócić pod kontrolę przewijania, a `rotate` do kąta z układu.
      Przy `both` obie własności zostałyby zamrożone na ostatniej klatce. */
   .hand--robot {
-    animation: enter-robot 2.2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation: enter-robot 3s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
   .hand--human {
-    animation: enter-human 2.2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation: enter-human 3s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
   @keyframes enter-robot {
@@ -152,11 +152,11 @@ import human from '../assets/hand-human.svg?raw';
       opacity: 1;
     }
     50% {
-      translate: 3.6% -66%;
+      translate: -0.9% -66%;
       rotate: 0deg;
     }
     57% {
-      translate: 3.6% -66%;
+      translate: -0.9% -66%;
       rotate: 0deg;
       animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     }
@@ -176,11 +176,11 @@ import human from '../assets/hand-human.svg?raw';
       opacity: 1;
     }
     50% {
-      translate: -13% 142%;
+      translate: -8.5% 142%;
       rotate: 0deg;
     }
     57% {
-      translate: -13% 142%;
+      translate: -8.5% 142%;
       rotate: 0deg;
       animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     }

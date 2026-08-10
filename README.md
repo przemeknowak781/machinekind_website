@@ -141,12 +141,12 @@ Szerokość bryły ma dwa ograniczenia i bierze mniejsze: `104 × --hand-u` rzą
 na dużym ekranie, a sufit `82vw` wchodzi tam, gdzie okno jest niskie albo
 wąskie. Bez sufitu bryła bywała szersza od kadru i z dłoni człowieka zostawały
 przy 1024px same opuszki.
-Położenia są liczone z geometrii obrazów — dla każdej dłoni znany jest
+Położenia są liczone z geometrii obrazów — dla każdej dłoni znane jest
 położenie opuszka w kadrze i kąt obrotu, więc `left` i `top` wynikają z tego,
-gdzie opuszek ma wypaść po obrocie. Wszystko w `vw`, żeby kompozycja skalowała
-się sztywno. Trzy zakresy: przekątna obok tekstu powyżej 900px, ta sama
-przekątna niżej opuszczona w zakresie 761–899px, a poniżej 760px dłonie schodzą
-pod tekst, bo wąski kadr ich obok nie pomieści.
+gdzie opuszek ma wypaść po obrocie. Wszystko w udziałach bryły, więc
+kompozycja skaluje się sztywno. Dwa zakresy: przekątna obok tekstu powyżej
+780px, a poniżej dłonie schodzą pod tekst, bo wąski kadr ich obok nie
+pomieści.
 
 Obrót siedzi w osobnej własności `rotate`, dzięki czemu przewijanie może
 animować `translate` bez deptania kąta.
@@ -154,15 +154,19 @@ animować `translate` bez deptania kąta.
 ## Wejście na stronę
 
 Strona zaczyna się od bieli, samych dłoni i przesypującej się sygnatury.
-Sekwencja ma trzy takty i trwa niecałe 3 sekundy:
+Sekwencja ma trzy takty i trwa niecałe 4 sekundy:
 
 | Czas | Co się dzieje |
 | --- | --- |
-| 0 – 1,1 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
-| 0 – 1,1 s | sygnatura stoi na środku i przez cały ten lot składa się z liter |
-| 1,1 – 1,25 s | opuszki stykają się na wspólnej osi, na środku szerokości ekranu, słowo jest już gotowe |
-| 1,25 – 2,2 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe — sygnatura jedzie razem z dłońmi |
-| 2,24 – 2,91 s | odsłania się nawigacja, akapit, przyciski i pasek pod nimi |
+| 0 – 1,5 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
+| 0 – 1,5 s | sygnatura stoi na środku i przez cały ten lot składa się z liter |
+| 1,5 – 1,71 s | opuszki zatrzymują się naprzeciw siebie, na środku szerokości ekranu, słowo jest już gotowe |
+| 1,71 – 3,0 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe — sygnatura jedzie razem z dłońmi |
+| 3,05 – 3,78 s | odsłania się nawigacja, akapit, przyciski i pasek pod nimi |
+
+Opuszki się nie stykają — zatrzymują się naprzeciw siebie z przerwą około
+1,8% szerokości bryły, czyli 10–26 px zależnie od kadru. Wcześniej wchodziły
+jedna w drugą na 30–76 px i zamiast zetknięcia wychodziło zlepienie.
 
 Sygnatura formuje się od zerowej sekundy, w tym samym czasie, w którym dłonie
 lecą ku sobie, i rusza z miejsca dopiero przy zetknięciu opuszków — czyli

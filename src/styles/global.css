@@ -410,11 +410,11 @@ h4 {
    poniżej progu — wystarczy, że pomiar trafi w te pół sekundy. Przy odsłonie
    litera albo stoi w pełnym atramencie, albo jej jeszcze nie widać. */
 .after-hands {
-  animation: after-hands 0.55s var(--ease) 2.24s both;
+  animation: after-hands 0.6s var(--ease) 3.05s both;
 }
 
 .after-hands--late {
-  animation-delay: 2.36s;
+  animation-delay: 3.18s;
 }
 
 @keyframes after-hands {

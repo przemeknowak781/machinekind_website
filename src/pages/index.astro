@@ -309,8 +309,8 @@ const facts = [
     const target = cells.map((c) => c.textContent ?? '');
     const pool = [...new Set(target.map((c) => c.toUpperCase()))];
 
-    const STEP = 88; // co tyle zatrzaskuje się kolejna litera: jedenaście
-    // liter składa się w niespełna sekundę, czyli do chwili zetknięcia opuszków
+    const STEP = 132; // co tyle zatrzaskuje się kolejna litera: jedenaście
+    // liter składa się w półtorej sekundy, czyli do chwili zetknięcia opuszków
     const TICK = 45; // co tyle podmienia się glif
 
     // Przesypywanie rusza w pierwszej klatce, razem z dłońmi, a nie po
@@ -448,7 +448,7 @@ const facts = [
     --title-y: -5vh;
     margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
     white-space: nowrap;
-    animation: title-travel 2.2s cubic-bezier(0.65, 0, 0.35, 1) both;
+    animation: title-travel 3s cubic-bezier(0.65, 0, 0.35, 1) both;
   }
 
   /* Napis stoi na środku od zerowej sekundy i składa się z liter w tym
@@ -460,7 +460,7 @@ const facts = [
     0% {
       translate: var(--title-x) var(--title-y);
     }
-    56.8% {
+    57% {
       translate: var(--title-x) var(--title-y);
     }
     100% {
