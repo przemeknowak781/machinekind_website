@@ -44,8 +44,10 @@ BASE_PATH=/machinekind_website npm run preview   # → /machinekind_website/
 ```
 hand_human.png          materiał źródłowy — dłoń człowieka (biała kreska, alfa)
 hand_robot.png          materiał źródłowy — dłoń maszyny
+logo.png                materiał źródłowy — znak marki
 machinekind_logo.svg    logotyp
 scripts/brand.mjs       generator materiałów pochodnych
+scripts/logo.mjs        znak marki: nawigacja, stopka, glifikon
 src/
   assets/               obrazy przechodzące przez optymalizację Astro
   components/           Nav, Footer, HandsScene, HandsBackdrop, TeamGrid
@@ -88,6 +90,29 @@ a scena nie czeka na osobne żądanie, bo animacja wejścia startuje w zerowej
 sekundzie. Tła sekcji i znak wodny w kontakcie zostają na bitmapach — przy
 kryciu 4–8% wektor niczego nie wnosi, a byłby cięższy.
 
+## Znak marki
+
+`logo.png` to zrzut z programu graficznego: znak leży na białym tle z siatką
+kropek, ma szerokie marginesy i waży ponad megabajt. `scripts/logo.mjs`
+przycina go do kreski, zdejmuje tło i zapisuje w rozmiarach, które strona
+faktycznie podaje:
+
+```bash
+node scripts/logo.mjs
+```
+
+Tło zdejmuje otoczka wypukła pikseli znaku, a nie zalewanie od krawędzi.
+Zalewanie przeciekłoby białymi szczelinami, które przecinają sześciokąt
+i dotykają jego obrysu — zżarłoby całą pętlę w środku. Otoczka zna granicę
+figury, więc biel w środku zostaje bielą i znak czyta się i na bieli,
+i na czerni stopki.
+
+Wynik to `src/assets/mark.png` (nawigacja i stopka, przez `astro:assets`,
+w wyjściu 4–12 kB WebP), `public/favicon.png` i `public/apple-touch-icon.png`.
+Glifikony idą w palecie, bo znak ma dwie barwy — w pełnym kolorze ważyły
+dziesięć razy więcej. Kafelek dla iOS jest na papierze, bo tam alfa wychodzi
+czarnym tłem.
+
 ## Materiały marki
 
 `scripts/brand.mjs` składa z dwóch plików źródłowych scenę „Stworzenia" — dłoń
@@ -102,8 +127,6 @@ node scripts/brand.mjs
 Wypisuje pozycję styku — jeśli się zmieni, trzeba zaktualizować `MEET_X` /
 `MEET_Y` w `src/components/HandsScene.astro`, bo tam siedzi iskra.
 
-Skrypt tworzy też `public/mark.svg` i `public/favicon.svg` — kadr logotypu bez
-sygnatury słownej.
 
 ## System wizualny
 

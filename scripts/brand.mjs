@@ -4,17 +4,15 @@
  *   node scripts/brand.mjs
  *
  * Źródła (białe kreski na przezroczystym tle):
- *   hand_human.png, hand_robot.png, machinekind_logo.svg
+ *   hand_human.png, hand_robot.png
  *
  * Wynik:
  *   src/assets/hands-ink.png    — scena "Stworzenie", czarna, pod jasne tło
  *   src/assets/hands-paper.png  — ta sama scena, biała, pod ciemne tło
  *   src/assets/hand-*-ink.png   — pojedyncze dłonie do użycia dekoracyjnego
- *   public/mark.svg             — sam znak (logo bez sygnatury słownej)
- *   public/favicon.svg          — favicon
  */
 import sharp from 'sharp';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
@@ -122,20 +120,3 @@ await tint(human, PAPER).toFile(p('src/assets/hand-human-paper.png'));
 console.log(
   `styk: x=${((HAND_W + GAP / 2) / sceneW * 100).toFixed(2)}%  y=${(meetY / sceneH * 100).toFixed(2)}%`
 );
-
-/* ---- znak z logotypu: kadr bez sygnatury słownej ---- */
-const logo = readFileSync(p('machinekind_logo.svg'), 'utf8');
-const mark = logo.replace(
-  /viewBox="[^"]*"\s*width="[^"]*"\s*height="[^"]*"/,
-  'viewBox="0 22 2496 1880" width="2496" height="1880"'
-);
-writeFileSync(p('public/mark.svg'), mark);
-// Favicon: kwadratowy kadr znaku.
-writeFileSync(
-  p('public/favicon.svg'),
-  logo.replace(
-    /viewBox="[^"]*"\s*width="[^"]*"\s*height="[^"]*"/,
-    'viewBox="0 22 2496 1880" width="512" height="512" preserveAspectRatio="xMidYMid slice"'
-  )
-);
-console.log('public/mark.svg, public/favicon.svg');

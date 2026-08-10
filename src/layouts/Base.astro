@@ -31,7 +31,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://machinekind
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical.href} />
-    <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={asset('favicon.png')} type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href={asset('apple-touch-icon.png')} />
     <meta name="theme-color" content="#bd3e3e" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Machinekind" />

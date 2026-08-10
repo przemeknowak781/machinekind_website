@@ -1,5 +1,7 @@
 ---
-import { asset, link } from '../lib/paths';
+import { Image } from 'astro:assets';
+import mark from '../assets/mark.png';
+import { link } from '../lib/paths';
 
 const year = new Date().getFullYear();
 ---
@@ -7,7 +9,7 @@ const year = new Date().getFullYear();
 <footer class="foot">
   <div class="wrap foot__inner">
     <div class="foot__brand">
-      <img src={asset('mark.svg')} alt="" width="72" height="54" />
+      <Image class="foot__mark" src={mark} alt="" width={132} densities={[1, 2]} />
       <p class="foot__claim">
         Kolektyw inżynierów uczących maszyny&nbsp;poruszać się w fizycznym świecie.
       </p>
