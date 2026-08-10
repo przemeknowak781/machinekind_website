@@ -34,15 +34,28 @@ import human from '../assets/hand-human.svg?raw';
   /* Bryłę kotwiczy punkt styku opuszków (53% / 55% jej kadru), a nie
      krawędź. `--shift` mówi, gdzie ten punkt ma stać: -53% to środek
      szerokości sceny, czyli pozycja na czas zetknięcia. Docelowo bryła
-     idzie w prawo, żeby zrobić miejsce nagłówkowi i akapitowi. */
+     idzie w prawo, żeby zrobić miejsce nagłówkowi i akapitowi.
+
+     Kadr jest szerszy niż okno i przedramię człowieka schodzi poza prawą
+     krawędź. Inaczej przekątna kończyła się dwieście pikseli przed nią,
+     a prawa dolna ćwiartka nagłówka stała pusta. Bryła rośnie względem
+     punktu styku, czyli w 55% w górę i 45% w dół, więc przy powiększeniu
+     nadgarstek maszyny nie schodzi pod dolną krawędź sceny.
+
+     Szerokość ma dwa ograniczenia i bierze mniejsze. Miara z `--hand-u`
+     rządzi na szerokim i wysokim ekranie. Sufit 82% szerokości okna
+     wchodzi tam, gdzie okno jest niskie albo wąskie — bez niego bryła
+     bywała szersza od kadru i z dłoni człowieka zostawały same opuszki
+     przy prawej krawędzi. */
   .hands__group {
     --shift-meet: -53%;
-    --shift-final: -30%;
+    --shift-final: -22%;
+    --anchor-y: -49%;
     position: absolute;
     left: 50%;
     top: 50%;
-    translate: var(--shift-final) -55%;
-    width: calc(84 * var(--hand-u));
+    translate: var(--shift-final) var(--anchor-y);
+    width: min(calc(104 * var(--hand-u)), 82vw);
     aspect-ratio: 88 / 54;
   }
 
@@ -81,10 +94,12 @@ import human from '../assets/hand-human.svg?raw';
   @media (max-width: 779px) {
     .hands__group {
       --shift-final: -53%;
+      --anchor-y: -55%;
       top: 62%;
       width: var(--hand-w);
     }
   }
+
 
   /* ---------- Wejście na stronę ----------
      Sekwencja w dwóch taktach. Najpierw dłonie zjeżdżają z przeciwnych
@@ -108,7 +123,7 @@ import human from '../assets/hand-human.svg?raw';
     }
     to {
       scale: 1;
-      translate: var(--shift-final) -55%;
+      translate: var(--shift-final) var(--anchor-y);
     }
   }
 

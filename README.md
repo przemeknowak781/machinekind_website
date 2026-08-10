@@ -118,6 +118,13 @@ zaciągają.
 Monospace niesie wyłącznie pomiar: współrzędne, takty, liczności, oznaczenia.
 Nie służy za kostium „technicznego" pod zwykłe etykiety.
 
+Atrament ma cztery stopnie. `--ink` niesie nagłówki, `--ink-1` podtytuł
+nagłówka strony, `--ink-2` tekst czytany, `--ink-3` drobny — ten ostatni trzyma
+4,8:1 na bieli, więc nie schodzi niżej. Podtytuł nagłówka stoi sam na bieli pod
+sygnaturą wysoką na kilkanaście centymetrów, więc idzie stopień wyżej niż
+zwykły `.lead`: ciemniejszy atrament, interlinia 1,45 i miara 38 znaków. Przy
+szarości, 1,5 i 34 znakach rozłaził się na pięć luźnych, krótkich wierszy.
+
 Dłonie wracają jako tło sekcji (`HandsBackdrop`), w różnym stopniu skadrowane,
 z paralaksą sterowaną przewijaniem tam, gdzie przeglądarka to obsługuje, i
 powolnym dryfem tam, gdzie nie.
@@ -126,6 +133,14 @@ powolnym dryfem tam, gdzie nie.
 
 `HeroHands` układa dwie dłonie na przekątnej: maszyna wchodzi z dołu po lewej,
 człowiek schodzi z góry po prawej, opuszki mijają się w prawej połowie kadru.
+Przekątna wychodzi poza prawą krawędź — przedramię człowieka jest ucięte
+kadrem. Bez tego kompozycja kończyła się dwieście pikseli przed krawędzią,
+a prawa dolna ćwiartka nagłówka stała pusta.
+
+Szerokość bryły ma dwa ograniczenia i bierze mniejsze: `104 × --hand-u` rządzi
+na dużym ekranie, a sufit `82vw` wchodzi tam, gdzie okno jest niskie albo
+wąskie. Bez sufitu bryła bywała szersza od kadru i z dłoni człowieka zostawały
+przy 1024px same opuszki.
 Położenia są liczone z geometrii obrazów — dla każdej dłoni znany jest
 położenie opuszka w kadrze i kąt obrotu, więc `left` i `top` wynikają z tego,
 gdzie opuszek ma wypaść po obrocie. Wszystko w `vw`, żeby kompozycja skalowała

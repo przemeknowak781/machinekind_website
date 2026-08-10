@@ -514,8 +514,18 @@ const facts = [
     }
   }
 
+  /* Podtytuł nagłówka czyta się inaczej niż akapit w środku strony: stoi
+     sam na bieli, pod sygnaturą wysoką na kilkanaście centymetrów, i to on
+     mówi, czym kolektyw jest. Dlatego stopień wyżej niż zwykły `.lead`,
+     atrament przygaszony zamiast szarego i interlinia ściągnięta do 1,45 —
+     przy 1,5 i szarości rozłaził się na pięć luźnych wierszy. Miara 38
+     znaków trzyma cztery wiersze o zbliżonej długości. */
   .hero__text .lead {
-    max-width: 34ch;
+    max-width: 38ch;
+    font-size: clamp(1.15rem, 0.92rem + 0.62vw, 1.5rem);
+    line-height: 1.45;
+    color: var(--ink-1);
+    letter-spacing: -0.005em;
   }
 
   .hero__actions {
