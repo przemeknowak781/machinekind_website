@@ -3,11 +3,22 @@
  *
  *   node scripts/hands-vector.mjs
  *
- * Źródła to obrysy bitmapy i żaden nie nadaje się do użycia wprost:
- * niosą płytę tła, stopnie antyaliasingu jako osobne ścieżki i kolor
- * wpisany na sztywno. Skrypt zostawia same ścieżki rysujące kształt,
- * przycina kadr do kreski i zapisuje z `fill="currentColor"`, żeby kolor
- * szedł z CSS.
+ * Źródła to obrysy bitmapy i żaden nie nadaje się do użycia wprost: niosą
+ * płytę tła, kolor wpisany na sztywno i — co najważniejsze — rozmytą
+ * krawędź rozłożoną na kilkaset osobnych ścieżek.
+ *
+ * Poprzednia wersja wybierała ścieżki po jasności wypełnienia: brała pasmo
+ * najciemniejsze, a resztę odrzucała. Pasmo najciemniejsze to jednak nie
+ * kształt, tylko jądro rozmytej krawędzi — obrys bitmapy na najciemniejszym
+ * poziomie jest z natury poszarpany, a otaczające go jaśniejsze ścieżki
+ * właśnie tę postrzępioną granicę wygładzały. Po ich odrzuceniu dłoń
+ * człowieka miała ząbkowany grzbiet palca i przedramię.
+ *
+ * Teraz kształt powstaje inaczej: źródło idzie na raster w dużej
+ * rozdzielczości, próg tnie w połowie rampy antyaliasingu — czyli tam, gdzie
+ * naprawdę biegnie krawędź — i dopiero ten kształt obrysowuje potrace jedną
+ * gładką ścieżką. Jasne wnętrza zostają dziurami, bo trasowanie prowadzi je
+ * w przeciwną stronę.
  *
  * Kadr musi być przycięty tak samo jak w poprzednim potoku, bo układ
  * nagłówka stoi na dwóch liczbach: proporcji dłoni i pionowym położeniu
@@ -15,7 +26,7 @@
  * po podmianie źródeł trzeba sprawdzić, czy się nie rozjechały.
  */
 import sharp from 'sharp';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
@@ -29,82 +40,52 @@ const HANDS = {
   human: { sources: ['human_better.svg', 'hand_human.svg'], aspect: 3.202, tip: 0.3029, side: 'left' },
 };
 
-const luminance = (hex) => {
-  const v = hex.length === 4
-    ? [1, 2, 3].map((i) => parseInt(hex[i] + hex[i], 16))
-    : [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-  return (0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]) / 255;
-};
+/** Szerokość rastra, z którego zdejmowany jest obrys. */
+const RASTER_W = 4000;
 
 /**
- * Próg jasności oddzielający kształt od cieniowania.
- *
- * Obrys ma trzy pasma: kształt poniżej 0,3, stopnie cieniowania między 0,3
- * a 0,5 i tło powyżej. Pasmo środkowe nie wnosi kształtu, a zalane na czarno
- * postrzępia kontur — bez niego krawędzie są gładsze, a pliki o połowę lżejsze.
+ * Próg jasności. Rampa antyaliasingu biegnie od kształtu do tła, więc
+ * krawędź leży w jej połowie — nie przy jednym z końców.
  */
-const SHAPE_BELOW = 0.3;
+const THRESHOLD = 128;
+
+/** Plamki poniżej tylu pikseli to śmieci po trasowaniu, nie kształt. */
+const SPECK = 24;
 
 /**
- * Ścieżki rysujące kształt.
- *
- * Nowsze obrysy malują kształt ciemnymi wypełnieniami na białej płycie, więc
- * bierzemy ciemne. Starsze obrysowywały białą kreskę półprzezroczystymi
- * warstwami i tam liczy się jedna ścieżka o pełnym kryciu.
+ * Obrys wchodzi dopiero tutaj, a nie w nagłówku pliku. `potrace` ciągnie za
+ * sobą trzy megabajty zależności i kilka ostrzeżeń audytu, a potrzebny jest
+ * wyłącznie przy podmianie materiału źródłowego — wynik i tak leży w repo.
+ * Wdrożenie instaluje devDependencies przy każdym budowaniu i tego skryptu
+ * nigdy nie uruchamia, więc nie ma po co go tam trzymać.
  */
-function shapePaths(svg) {
-  const paths = [...svg.matchAll(/<path([^>]*?)d="([\s\S]*?)"/g)].map((m) => ({
-    attrs: m[1],
-    d: m[2],
-  }));
-
-  const fillOf = (attrs) => {
-    const m = /fill="(#[0-9a-fA-F]{3,6})"/.exec(attrs);
-    return m ? m[1] : null;
-  };
-
-  const dark = paths.filter((x) => {
-    const f = fillOf(x.attrs);
-    return f && luminance(f) < SHAPE_BELOW;
-  });
-  if (dark.length) return { ds: dark.map((x) => x.d), kind: `ciemne ścieżki (${dark.length} z ${paths.length})` };
-
-  const solid = paths
-    .filter((x) => {
-      const o = /fill-opacity="([\d.]+)"/.exec(x.attrs);
-      return !o || parseFloat(o[1]) >= 0.999;
-    })
-    .sort((a, b) => b.d.length - a.d.length);
-  if (solid.length) return { ds: [solid[0].d], kind: 'ścieżka o pełnym kryciu' };
-
-  throw new Error('Nie znaleziono ścieżek rysujących kształt');
+async function loadPotrace() {
+  try {
+    return (await import('potrace')).default;
+  } catch {
+    throw new Error(
+      'Do obrysu potrzebny jest potrace. Zainstaluj go na czas przebudowy:\n' +
+        '  npm i --no-save potrace && node scripts/hands-vector.mjs'
+    );
+  }
 }
 
-const viewBoxOf = (svg) => {
-  const m = /viewBox="([\d.\-\s]+)"/.exec(svg);
-  if (!m) throw new Error('Brak viewBox');
-  return m[1].trim().split(/\s+/).map(Number);
-};
+const potrace = await loadPotrace();
 
-/** Prostokąt kreski w jednostkach viewBox, liczony z rastra próbnego. */
-async function inkBox(ds, [vx, vy, vw, vh]) {
-  const W = 1600;
-  const H = Math.round((W * vh) / vw);
-  const probe =
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vx} ${vy} ${vw} ${vh}" width="${W}" height="${H}">` +
-    ds.map((d) => `<path d="${d}" fill="#000"/>`).join('') +
-    '</svg>';
+const trace = (buffer, options) =>
+  new Promise((resolve, reject) =>
+    potrace.trace(buffer, options, (err, svg) => (err ? reject(err) : resolve(svg)))
+  );
 
-  const { data, info } = await sharp(Buffer.from(probe))
-    .ensureAlpha()
-    .extractChannel('alpha')
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-
-  let minX = info.width, maxX = 0, minY = info.height, maxY = 0;
-  for (let y = 0; y < info.height; y++) {
-    for (let x = 0; x < info.width; x++) {
-      if (data[y * info.width + x] > 40) {
+/** Prostokąt kreski i pionowe położenie opuszka, liczone z maski rastra. */
+function inkBox(data, W, H, ch) {
+  let minX = W;
+  let maxX = -1;
+  let minY = H;
+  let maxY = -1;
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      if (data[(y * W + x) * ch] < THRESHOLD) {
         if (x < minX) minX = x;
         if (x > maxX) maxX = x;
         if (y < minY) minY = y;
@@ -112,24 +93,15 @@ async function inkBox(ds, [vx, vy, vw, vh]) {
       }
     }
   }
-
-  const sx = vw / info.width;
-  const sy = vh / info.height;
-  return {
-    x: vx + minX * sx,
-    y: vy + minY * sy,
-    w: (maxX - minX + 1) * sx,
-    h: (maxY - minY + 1) * sy,
-    px: { data, W: info.width, minX, maxX, minY, maxY },
-  };
+  if (maxX < 0) throw new Error('Raster źródła jest pusty');
+  return { minX, maxX, minY, maxY };
 }
 
 /** Pionowe położenie opuszka: skrajna kolumna od strony wskazywania. */
-function tipFraction({ px }, side) {
-  const { data, W, minX, maxX, minY, maxY } = px;
+function tipFraction(data, W, ch, { minX, maxX, minY, maxY }, side) {
   const col = side === 'right' ? maxX : minX;
   for (let y = minY; y <= maxY; y++) {
-    if (data[y * W + col] > 40) return (y - minY) / (maxY - minY + 1);
+    if (data[(y * W + col) * ch] < THRESHOLD) return (y - minY) / (maxY - minY + 1);
   }
   return 0.5;
 }
@@ -138,23 +110,54 @@ for (const [name, cfg] of Object.entries(HANDS)) {
   const source = cfg.sources.find((f) => existsSync(p(f)));
   if (!source) throw new Error(`Brak źródła dla ${name}`);
 
-  const svg = readFileSync(p(source), 'utf8');
-  const { ds, kind } = shapePaths(svg);
-  const box = await inkBox(ds, viewBoxOf(svg));
+  // Raster na białej płycie: kształt jest ciemny, wnętrza i tło jasne.
+  const png = await sharp(readFileSync(p(source)))
+    .resize({ width: RASTER_W })
+    .flatten({ background: '#ffffff' })
+    .greyscale()
+    .png()
+    .toBuffer();
 
-  const aspect = box.w / box.h;
-  const tip = tipFraction(box, cfg.side);
+  const { data, info } = await sharp(png).raw().toBuffer({ resolveWithObject: true });
+  // Zapisany PNG bywa trójkanałowy mimo `greyscale`, więc krok w buforze
+  // bierze się z metadanych, a nie z założenia „jeden bajt na piksel".
+  const box = inkBox(data, info.width, info.height, info.channels);
+  const w = box.maxX - box.minX + 1;
+  const h = box.maxY - box.minY + 1;
+
+  // Trasowanie idzie po przyciętym kadrze, więc układ współrzędnych ścieżki
+  // od razu zaczyna się w rogu kreski i nie trzeba go potem przesuwać.
+  const cropped = await sharp(png)
+    .extract({ left: box.minX, top: box.minY, width: w, height: h })
+    .png()
+    .toBuffer();
+
+  const traced = await trace(cropped, {
+    threshold: THRESHOLD,
+    blackOnWhite: true,
+    turdSize: SPECK,
+    optCurve: true,
+    optTolerance: 0.35,
+    color: 'currentColor',
+    background: 'transparent',
+  });
+
+  const d = /<path[^>]*\sd="([^"]+)"/.exec(traced);
+  if (!d) throw new Error(`Trasowanie ${source} nie zwróciło ścieżki`);
 
   const out =
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.x.toFixed(2)} ${box.y.toFixed(2)} ${box.w.toFixed(2)} ${box.h.toFixed(2)}" fill="currentColor">` +
-    ds.map((d) => `<path d="${d.replace(/\s+/g, ' ').trim()}"/>`).join('') +
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" fill="currentColor">` +
+    `<path fill-rule="evenodd" d="${d[1]}"/>` +
     '</svg>\n';
 
   const file = `src/assets/hand-${name}.svg`;
   writeFileSync(p(file), out);
 
+  const aspect = w / h;
+  const tip = tipFraction(data, info.width, info.channels, box, cfg.side);
+
   console.log(
-    `${file}  ${(out.length / 1024).toFixed(0)} kB  ← ${source}, ${kind}\n` +
+    `${file}  ${(statSync(p(file)).size / 1024).toFixed(0)} kB  ← ${source}, obrys z rastra ${w}×${h}\n` +
       `   proporcja ${aspect.toFixed(3)} (układ zakłada ${cfg.aspect}, różnica ${((aspect / cfg.aspect - 1) * 100).toFixed(2)}%)\n` +
       `   opuszek na ${(tip * 100).toFixed(2)}% wysokości (układ zakłada ${(cfg.tip * 100).toFixed(2)}%, różnica ${((tip - cfg.tip) * 100).toFixed(2)} pkt proc.)`
   );

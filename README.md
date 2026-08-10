@@ -62,28 +62,39 @@ public/media/           wideo
 
 Obowiązują `robot_better.svg` i `human_better.svg`; starsze `hand_*.svg` zostają
 jako zapas i skrypt sięga po nie, gdy nowszych nie ma. Żaden z nich nie nadaje
-się do użycia wprost — to obrysy bitmapy, które niosą płytę tła, stopnie
-cieniowania jako osobne ścieżki i kolor wpisany na sztywno.
-
-`scripts/hands-vector.mjs` zostawia same ścieżki rysujące kształt, przycina
-kadr do kreski i zapisuje z `fill="currentColor"`:
+się do użycia wprost — to obrysy bitmapy, które niosą płytę tła, kolor wpisany
+na sztywno i rozmytą krawędź rozłożoną na kilkaset osobnych ścieżek.
 
 ```bash
-node scripts/hands-vector.mjs
+npm i --no-save potrace && node scripts/hands-vector.mjs
 ```
 
-Obrys ma trzy pasma jasności: kształt poniżej 0,3, stopnie cieniowania między
-0,3 a 0,5 i tło powyżej. Liczy się tylko pierwsze — pasmo środkowe nie wnosi
-kształtu, a zalane na czarno postrzępia kontur, więc `SHAPE_BELOW` odcina je
-przy 0,3. Bez niego pliki są o połowę lżejsze, a krawędzie gładsze. Z 843 i 741
-ścieżek zostaje 41 i 26.
+Pierwsza wersja skryptu wybierała ścieżki po jasności wypełnienia: brała pasmo
+najciemniejsze, resztę odrzucała. To był błąd w samym założeniu. Pasmo
+najciemniejsze nie jest kształtem, tylko jądrem rozmytej krawędzi — obrys
+bitmapy na najciemniejszym poziomie jest z natury poszarpany, a otaczające go
+jaśniejsze ścieżki właśnie tę granicę wygładzały. Sylwetka wychodziła o 2%
+chudsza od źródła i miała ząbkowany grzbiet palca.
 
-Wynik to `src/assets/hand-robot.svg` i `hand-human.svg`, 74 i 87 kB (34 i 41 kB
-po spakowaniu). Skrypt wypisuje proporcję dłoni i pionowe położenie opuszka
-i porównuje je z wartościami, na których stoi układ nagłówka — po podmianie
-plików źródłowych trzeba sprawdzić, czy się nie rozjechały. Przy obecnych
-różnice to poniżej 1% na proporcji i 0,1 punktu procentowego na opuszku, więc
-stałe w `HeroHands` zostały bez zmian.
+Teraz kształt powstaje inaczej: źródło idzie na raster 4000 px, próg tnie
+w połowie rampy antyaliasingu — czyli tam, gdzie naprawdę biegnie krawędź —
+i dopiero ten kształt obrysowuje potrace jedną gładką ścieżką. Jasne wnętrza
+zostają dziurami, bo trasowanie prowadzi je w przeciwną stronę. Pole sylwetki
+zgadza się ze źródłem w granicach 1%.
+
+`potrace` wchodzi leniwym importem i nie siedzi w `package.json`: ciągnie za
+sobą trzy megabajty zależności i kilka ostrzeżeń audytu, a potrzebny jest
+wyłącznie przy podmianie materiału źródłowego. Wynik i tak leży w repo,
+a wdrożenie instaluje devDependencies przy każdym budowaniu i tego skryptu
+nigdy nie uruchamia. Bez pakietu skrypt kończy się instrukcją, co doinstalować.
+
+Wynik to `src/assets/hand-robot.svg` i `hand-human.svg`, 45 i 72 kB. Skrypt
+wypisuje proporcję dłoni i pionowe położenie opuszka i porównuje je
+z wartościami, na których stoi układ nagłówka — po podmianie plików źródłowych
+trzeba sprawdzić, czy się nie rozjechały. Przy obecnych różnice to 1,03%
+i 0,04% na proporcji oraz 0,15 i 0,30 punktu procentowego na opuszku, więc
+stałe w `HeroHands` zostały bez zmian; zetknięcie opuszków zmierzone
+w przeglądarce przesunęło się o jeden piksel.
 
 Nagłówek strony używa tych wektorów wstawionych w treść: kolor bierze z CSS,
 a scena nie czeka na osobne żądanie, bo animacja wejścia startuje w zerowej
