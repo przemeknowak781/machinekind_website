@@ -87,15 +87,19 @@ import human from '../assets/hand-human.svg?raw';
   }
 
   /* Wąski kadr nie pomieści przekątnej obok tekstu, więc bryła schodzi pod
-     niego i wychodzi poza obie krawędzie. Środek na 62% wysokości sceny
-     zostawia miejsce na tekst nad nią i przyciski pod nią. */
-  /* W układzie pionowym dłonie leżą pod tekstem, więc nie muszą mu ustępować
-     i zostają na środku także po złożeniu. */
+     niego i wychodzi poza obie krawędzie. Dłonie leżą wtedy pod tekstem,
+     nie muszą mu ustępować i zostają na środku szerokości także po złożeniu.
+
+     W układzie pionowym bryła nie wisi na ułamku wysokości sceny, tylko
+     kotwiczy się od dołu, tuż nad przyciskami. Przy kotwicy na 62% wysokość
+     sceny i wysokość dłoni rosły osobno, więc między dłońmi a przyciskami
+     zostawało kilkadziesiąt pikseli pustki, a nad tekstem drugie tyle. */
   @media (max-width: 779px) {
     .hands__group {
       --shift-final: -53%;
-      --anchor-y: -55%;
-      top: 62%;
+      --anchor-y: 50%;
+      top: auto;
+      bottom: calc(var(--hand-gap) + var(--hand-h) / 2);
       width: var(--hand-w);
     }
   }

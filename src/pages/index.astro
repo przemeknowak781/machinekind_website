@@ -103,10 +103,13 @@ const WORDMARK = 'Machinekind'.split('');
           >
             {WORDMARK.map((ch) => <span class="ch">{ch}</span>)}
           </h1>
-          <p class="lead after-hands">
-            Uczymy maszyny poruszać się w świecie ludzi. Kolektyw inżynierów
-            uczenia maszynowego, robotyków i projektantów. Budujemy warstwę
-            inteligencji razem ze sprzętem, na którym da się ją uruchomić.
+          <p class="hero__claim after-hands">
+            Uczymy maszyny poruszać się w świecie ludzi.
+          </p>
+          <p class="hero__sub after-hands">
+            Kolektyw inżynierów uczenia maszynowego, robotyków i projektantów.
+            Budujemy warstwę inteligencji <strong>razem ze sprzętem</strong>,
+            na którym da się ją uruchomić.
           </p>
         </div>
 
@@ -135,7 +138,11 @@ const WORDMARK = 'Machinekind'.split('');
 
   <!-- ============ KOLEKTYW ============ -->
   <section class="section red has-backdrop" id="kolektyw">
-    <HandsBackdrop hand="human" tone="paper" side="right" size="92%" top="80%" bleed="-22%" opacity={0.085} />
+    {/* Sekcja nazywa się „punkt styku", więc w tle stoją obie dłonie, a nie
+        jedna: maszyna z lewej, człowiek z prawej, obie w górnej części kadru,
+        nad kolumnami zespołów. */}
+    <HandsBackdrop hand="robot" tone="paper" side="left" size="74%" top="26%" bleed="-26%" opacity={0.075} duration="30s" />
+    <HandsBackdrop hand="human" tone="paper" side="right" size="72%" top="27%" bleed="-18%" opacity={0.085} />
     <div class="wrap">
       <div class="head">
         <h2 class="h1">Punkt styku.</h2>
@@ -469,13 +476,26 @@ const WORDMARK = 'Machinekind'.split('');
   /* Ułożenie pionowe. Bryła ma twardy sufit w rem, bo przy 700px sama
      proporcja do szerokości robiła z niej kolos na dwa ekrany. Wysokość
      sceny liczy się z tej samej szerokości, więc nic się nie przycina. */
+  /* Układ pionowy: tekst, pod nim dłonie, pod nimi przyciski. Wysokość
+     bierze się z tych trzech rzeczy, a nie z osobnego minimum — stąd odstęp
+     równy dokładnie wysokości dłoni plus światło, a nie „jakieś 21rem".
+     `--hand-gap` mówi, ile zostaje pod bryłą: dolne dopełnienie sceny,
+     przyciski i światło nad nimi. */
   @media (max-width: 779px) {
     .hero__stage {
-      --hand-w: min(calc(126 * var(--hand-u)), 34rem);
+      /* Bryła ma dwa ograniczenia: 160% szerokości okna, żeby dłonie
+         wychodziły poza obie krawędzie, i 44% jego wysokości, żeby na
+         tablecie nie zjadły całego ekranu. Sufit w `rem` tego nie umiał —
+         przy 768px zatrzymywał bryłę w środku kadru z marginesami po bokach,
+         przez co przekątna traciła cały impet. */
+      --hand-h: min(calc(160vw / 1.6296), 44vh);
+      --hand-w: calc(var(--hand-h) * 1.6296);
+      --hand-gap: 6.5rem;
     }
 
     .hero__grid {
-      min-height: calc(var(--hand-w) / 1.63 + 21rem);
+      min-height: 0;
+      gap: calc(var(--hand-h) + 2.25rem);
     }
   }
 
@@ -565,16 +585,33 @@ const WORDMARK = 'Machinekind'.split('');
 
   /* Podtytuł nagłówka czyta się inaczej niż akapit w środku strony: stoi
      sam na bieli, pod sygnaturą wysoką na kilkanaście centymetrów, i to on
-     mówi, czym kolektyw jest. Dlatego stopień wyżej niż zwykły `.lead`,
-     atrament przygaszony zamiast szarego i interlinia ściągnięta do 1,45 —
-     przy 1,5 i szarości rozłaził się na pięć luźnych wierszy. Miara 38
-     znaków trzyma cztery wiersze o zbliżonej długości. */
-  .hero__text .lead {
-    max-width: 38ch;
-    font-size: clamp(1.15rem, 0.92rem + 0.62vw, 1.5rem);
-    line-height: 1.45;
-    color: var(--ink-1);
-    letter-spacing: -0.005em;
+     mówi, czym kolektyw jest. Jednym blokiem rozłaził się na pięć luźnych
+     wierszy, w których nic nie było ważniejsze od reszty, więc rozpada się
+     na dwa takty: twierdzenie i to, co je uzasadnia. */
+  .hero__claim {
+    max-width: 22ch;
+    font-size: clamp(1.45rem, 1rem + 1.45vw, 2.35rem);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .hero__sub {
+    margin-top: clamp(0.9rem, 1.4vw, 1.35rem);
+    max-width: 42ch;
+    font-size: clamp(1rem, 0.9rem + 0.3vw, 1.16rem);
+    line-height: 1.55;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  /* Jedno wyróżnienie, bo jedna rzecz odróżnia kolektyw od pracowni AI:
+     warstwa inteligencji powstaje razem ze sprzętem, na którym ma chodzić. */
+  .hero__sub strong {
+    font-weight: 500;
+    color: var(--ink);
+    box-shadow: inset 0 -0.32em 0 var(--red-wash);
   }
 
   .hero__actions {

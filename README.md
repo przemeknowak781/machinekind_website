@@ -163,6 +163,28 @@ Dłonie wracają jako tło sekcji (`HandsBackdrop`), w różnym stopniu skadrowa
 z paralaksą sterowaną przewijaniem tam, gdzie przeglądarka to obsługuje, i
 powolnym dryfem tam, gdzie nie.
 
+## Nagłówek strony na wąskim ekranie
+
+W układzie pionowym bryła dłoni nie wisi na ułamku wysokości sceny, tylko
+kotwiczy się od dołu, tuż nad przyciskami. Przy kotwicy na 62% wysokość sceny
+i wysokość dłoni rosły osobno, więc między dłońmi a przyciskami zostawało
+kilkadziesiąt pikseli pustki, a nad tekstem drugie tyle. Odstęp w siatce jest
+teraz równy dokładnie wysokości bryły plus światło, a nie stałemu minimum.
+
+Rozmiar bryły ma dwa ograniczenia i bierze mniejsze: 160% szerokości okna,
+żeby dłonie wychodziły poza obie krawędzie, i 44% jego wysokości, żeby na
+tablecie nie zjadły całego ekranu. Sufit w `rem` tego nie umiał — przy 768px
+zatrzymywał bryłę w środku kadru z marginesami po bokach i przekątna traciła
+cały impet. Przy 390×844 cały nagłówek — sygnatura, tekst, dłonie i przyciski —
+mieści się nad zgięciem.
+
+Tekst pod sygnaturą stoi w dwóch taktach zamiast jednego bloku: twierdzenie
+(`.hero__claim`, stopień wyżej, pełny atrament) i to, co je uzasadnia
+(`.hero__sub`, mniejszy, przygaszony). Jednym akapitem rozłaził się na pięć
+wierszy, w których nic nie było ważniejsze od reszty. Wyróżnienie jest jedno,
+bo jedna rzecz odróżnia kolektyw od pracowni AI: warstwa inteligencji powstaje
+razem ze sprzętem, na którym ma chodzić.
+
 ## Punkt styku i cztery domeny
 
 Obie sekcje stały wcześniej na ścianie tekstu. „Punkt styku" otwierały dwa
@@ -172,8 +194,10 @@ co robi. Sekcja domen to były cztery jednakowe wiersze przez całą
 szerokość: sekcja na 1508 px z pustą prawą połową, a oznaczenia domen lądowały
 tysiąc pikseli od zdania, którego dotyczyły.
 
-Teraz „Punkt styku" pokazuje styk dosłownie: dwie kolumny rozdzielone jedną
-pionową kreską, po jednym zespole na kolumnę, z licznością, podziałem pracy
+Teraz „Punkt styku" pokazuje styk dosłownie — i w tle, i w układzie. W tle
+stoją obie dłonie, a nie jedna: maszyna z lewej, człowiek z prawej, obie
+w górnej części kadru, nad kolumnami zespołów. W treści dwie kolumny
+rozdzielone jedną pionową kreską, po jednym zespole na kolumnę, z licznością, podziałem pracy
 i składem grup. Skład i liczności idą z `data/team`, więc opis nie rozjedzie
 się z zespołem, a liczebnik odmienia się po polsku (`osoba` / `osoby` / `osób`).
 Notka o pochodzeniu nazwy zeszła na dół prawej kolumny — jest myślą
