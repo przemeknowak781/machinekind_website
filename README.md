@@ -45,9 +45,11 @@ BASE_PATH=/machinekind_website npm run preview   # → /machinekind_website/
 hand_human.png          materiał źródłowy — dłoń człowieka (biała kreska, alfa)
 hand_robot.png          materiał źródłowy — dłoń maszyny
 logo.png                materiał źródłowy — znak marki
+przemek.jpg             materiał źródłowy — portret do siatki zespołu
 machinekind_logo.svg    logotyp
 scripts/brand.mjs       generator materiałów pochodnych
 scripts/logo.mjs        znak marki: nawigacja, stopka, glifikon
+scripts/portret.mjs     portret do siatki zespołu
 src/
   assets/               obrazy przechodzące przez optymalizację Astro
   components/           Nav, Footer, HandsScene, HandsBackdrop, TeamGrid
@@ -124,6 +126,23 @@ Glifikony idą w palecie, bo znak ma dwie barwy — w pełnym kolorze ważyły
 dziesięć razy więcej. Kafelek dla iOS jest na papierze, bo tam alfa wychodzi
 czarnym tłem.
 
+## Portrety zespołu
+
+Siatka zespołu kadruje portrety w proporcji 4:5 i przycina je `cover`, więc
+materiał wchodzi w tej samej proporcji — inaczej przeglądarka obcięłaby go po
+swojemu i głowa wypadłaby z kadru:
+
+```bash
+node scripts/portret.mjs przemek.jpg przemyslaw-nowak 0.53 0.22 0.66
+```
+
+Dwa pierwsze argumenty po slugu to punkt ostrości (udział szerokości
+i wysokości źródła), trzeci to zbliżenie — ułamek największego kadru 4:5, jaki
+mieści się w źródle. Portret całej sylwetki wymaga ciaśniejszego kadru niż
+popiersie, bo w siatce liczy się twarz, a nie kurtka. Nazwa pliku musi się
+zgadzać ze slugiem w `data/team.ts`; brak pliku to nie błąd — wtedy w kafelku
+stoją inicjały.
+
 ## Materiały marki
 
 `scripts/brand.mjs` składa z dwóch plików źródłowych scenę „Stworzenia" — dłoń
@@ -196,7 +215,11 @@ tysiąc pikseli od zdania, którego dotyczyły.
 
 Teraz „Punkt styku" pokazuje styk dosłownie — i w tle, i w układzie. W tle
 stoją obie dłonie, a nie jedna: maszyna z lewej, człowiek z prawej, obie
-w górnej części kadru, nad kolumnami zespołów. W treści dwie kolumny
+w górnej części kadru, nad kolumnami zespołów. Opuszki mijają się z przerwą
+około 2% szerokości sekcji — wysunięcie poza krawędź (`bleed`) liczy się
+w procentach, więc ta przerwa trzyma się na każdej szerokości. Przy pierwszym
+ustawieniu dłonie zachodziły na siebie o 4,7% szerokości, czyli mniej więcej
+o grubość opuszka. W treści dwie kolumny
 rozdzielone jedną pionową kreską, po jednym zespole na kolumnę, z licznością, podziałem pracy
 i składem grup. Skład i liczności idą z `data/team`, więc opis nie rozjedzie
 się z zespołem, a liczebnik odmienia się po polsku (`osoba` / `osoby` / `osób`).
