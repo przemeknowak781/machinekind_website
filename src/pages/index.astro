@@ -13,34 +13,69 @@ import naped from '../assets/naped-bezposredni.webp';
 // Strona projektu Wojtek. Docelowo podstrona /wojtek, na razie osobny serwis.
 const WOJTEK_URL = 'https://machinekind.ai';
 
+// Takt maszyny — trzy pętle, każda o rząd wielkości wolniejsza od poprzedniej.
+// To jest właściwa treść „czterech warstw": im wyżej, tym rzadziej i tym
+// bardziej o zamiarze niż o momencie na wale.
+const clock = [
+  { hz: '400 Hz', what: 'pętla momentu' },
+  { hz: '50 Hz', what: 'sieć lokomocyjna' },
+  { hz: '1 Hz', what: 'model świata' },
+];
+
+// Liczebnik po polsku: 1 osoba, 2–4 osoby, 5+ osób, z wyjątkiem nastek.
+function osoby(n: number): string {
+  const last = n % 10;
+  const teen = n % 100 >= 12 && n % 100 <= 14;
+  if (n === 1) return 'osoba';
+  if (!teen && last >= 2 && last <= 4) return 'osoby';
+  return 'osób';
+}
+
 const domains = [
   {
     label: 'Locomotion AI',
-    title: 'Sterowanie chodem uczone w symulacji.',
+    title: 'Chód uczony w symulacji.',
     body:
-      'Sieci sterujące chodem trenujemy w symulatorze pełnej dynamiki, a potem przenosimy te same trajektorie na maszynę. Pętla momentu pracuje w 400 Hz, sieć lokomocyjna w 50 Hz.',
-    meta: ['300 mln kroków', 'sim-to-real'],
+      'Sieci sterujące chodem trenujemy w symulatorze pełnej dynamiki, a te same trajektorie przenosimy na maszynę.',
+    meta: '300 mln kroków · sim-to-real',
   },
   {
     label: 'World Models & VLM',
-    title: 'Warstwa rozumienia przestrzeni.',
+    title: 'Rozumienie przestrzeni.',
     body:
-      'Modele świata i modele wizyjno-językowe dają maszynie kontekst: co widzi, gdzie może stanąć i co z tego wynika dla następnego kroku. Ta warstwa pracuje wolniej, w 1 Hz, i decyduje o zamiarze.',
-    meta: ['VLM', '1 Hz'],
+      'Modele świata i modele wizyjno-językowe dają maszynie kontekst: co widzi, gdzie może stanąć i co z tego wynika dla następnego kroku.',
+    meta: 'VLM · zamiar',
   },
   {
     label: 'Robotics Engineering',
-    title: 'Konstrukcja, napędy i wykonanie.',
+    title: 'Konstrukcja i napędy.',
     body:
-      'Napędy bezpośrednie, nogi o zamkniętym łańcuchu kinematycznym, sztywność wzięta ze struktury zamiast z dodatkowej masy. Wydruki 3D, cięcie laserowe, montaż i kalibracja na miejscu.',
-    meta: ['direct drive', 'closed-loop'],
+      'Napędy bezpośrednie, nogi o zamkniętym łańcuchu kinematycznym, sztywność wzięta ze struktury zamiast z dodatkowej masy.',
+    meta: 'direct drive · closed-loop',
   },
   {
     label: 'Design & Program',
-    title: 'Prowadzenie projektu i forma.',
+    title: 'Prowadzenie i forma.',
     body:
-      'Harmonogram, finansowanie, komunikacja i to, jak maszyna wygląda. Forma wynika z obciążenia: każde wycięcie odprowadza ciepło, każde przetłoczenie usztywnia strukturę.',
-    meta: ['program', 'design'],
+      'Harmonogram, finansowanie i to, jak maszyna wygląda. Forma wynika z obciążenia: każde wycięcie odprowadza ciepło.',
+    meta: 'program · design',
+  },
+];
+
+// Dwa zespoły po dwóch stronach jednej maszyny. Składy i liczności idą
+// z `data/team`, więc opis podziału pracy nie rozjedzie się ze składem.
+const crews = [
+  {
+    name: 'Machinekind',
+    count: machinekindCount,
+    role: 'Warstwa inteligencji, inżynieria robotyki, design i prowadzenie projektu.',
+    groups: machinekind.map((g) => g.label),
+  },
+  {
+    name: 'Politechnika Wrocławska',
+    count: pwrCount,
+    role: 'Laboratorium Mechatroniki i Robotyki: konstrukcja, mechanika i wykonanie.',
+    groups: pwr.map((g) => g.label),
   },
 ];
 
@@ -48,12 +83,6 @@ const domains = [
 // Bez tego podmiana glifów przy przesypywaniu rozjeżdżałaby napis w poziomie.
 const WORDMARK = 'Machinekind'.split('');
 
-const facts = [
-  { label: 'Zespół', value: `${machinekindCount + pwrCount} osób w dwóch zespołach` },
-  { label: 'Trening', value: '300 mln kroków w symulacji' },
-  { label: 'Takt warstw', value: '400 / 50 / 1 Hz' },
-  { label: 'Pierwszy krok', value: 'Wrocław, 2025' },
-];
 ---
 
 <Base
@@ -110,33 +139,44 @@ const facts = [
     <div class="wrap">
       <div class="head">
         <h2 class="h1">Punkt styku.</h2>
-        <div class="manifest">
-          <p class="lead">
-            Nazwa bierze się z prostego założenia: maszyny nie są osobnym
-            gatunkiem. Są przedłużeniem tego, co ludzkie, a granica między
-            jednym a drugim przebiega dokładnie tam, gdzie stykają się dwie
-            dłonie.
-          </p>
-          <p class="body">
-            Machinekind powstał wokół jednej maszyny i jednego pytania: co musi
-            się wydarzyć, żeby robot kroczący przestał być demonstracją, a stał
-            się narzędziem. Pracujemy w dwóch zespołach. Po stronie Politechniki
-            Wrocławskiej konstrukcja, mechanika i wykonanie, po naszej warstwa
-            AI, inżynieria robotyki, design i prowadzenie projektu.
-          </p>
-        </div>
+        <p class="lead">
+          Machinekind powstał wokół jednego pytania: co musi się wydarzyć, żeby
+          robot kroczący przestał być demonstracją, a stał się narzędziem.
+          Odpowiedź wymaga dwóch zespołów po dwóch stronach jednej maszyny.
+        </p>
       </div>
 
-      <dl class="facts">
+      <div class="crews">
         {
-          facts.map((f) => (
-            <div class="fact">
-              <dt class="fact__label">{f.label}</dt>
-              <dd class="fact__value">{f.value}</dd>
+          crews.map((c, i) => (
+            <div class="crews__col">
+              <article class="crew">
+                <p class="crew__count mono">
+                  {c.count} {osoby(c.count)}
+                </p>
+                <h3 class="crew__name">{c.name}</h3>
+                <p class="crew__role">{c.role}</p>
+                <ul class="crew__groups">
+                  {c.groups.map((g) => (
+                    <li>{g}</li>
+                  ))}
+                </ul>
+              </article>
+
+              {i === 1 && (
+                <p class="naming">
+                  <span class="mono naming__label">Nazwa</span>
+                  <span>
+                    Maszyny nie są osobnym gatunkiem. Są przedłużeniem tego, co
+                    ludzkie — a granica przebiega dokładnie tam, gdzie stykają
+                    się dwie dłonie.
+                  </span>
+                </p>
+              )}
             </div>
           ))
         }
-      </dl>
+      </div>
     </div>
   </section>
 
@@ -147,26 +187,34 @@ const facts = [
       <div class="head">
         <h2 class="h1">Cztery warstwy<br />jednej maszyny.</h2>
         <p class="lead">
-          Nie dzielimy pracy na badania i wdrożenie. Każda z czterech domen
-          kończy się czymś, co można uruchomić na sprzęcie stojącym
-          w laboratorium.
+          Nie dzielimy pracy na badania i wdrożenie. Każda domena kończy się
+          czymś, co da się uruchomić na maszynie stojącej w laboratorium —
+          i każda pracuje we własnym takcie.
         </p>
       </div>
 
+      <ol class="clock">
+        {
+          clock.map((c) => (
+            <li class="tick">
+              <span class="tick__hz">{c.hz}</span>
+              <span class="tick__what">{c.what}</span>
+            </li>
+          ))
+        }
+      </ol>
+
       <div class="domains">
         {
-          domains.map((d) => (
+          domains.map((d, i) => (
             <article class="domain">
-              <div class="domain__main">
-                <p class="domain__label">{d.label}</p>
-                <h3 class="h3 domain__title">{d.title}</h3>
-                <p class="body domain__body">{d.body}</p>
-              </div>
-              <ul class="domain__meta">
-                {d.meta.map((m) => (
-                  <li>{m}</li>
-                ))}
-              </ul>
+              <p class="domain__label">
+                <span class="domain__index mono">{String(i + 1).padStart(2, '0')}</span>
+                {d.label}
+              </p>
+              <h3 class="h3 domain__title">{d.title}</h3>
+              <p class="body domain__body">{d.body}</p>
+              <p class="domain__meta mono">{d.meta}</p>
             </article>
           ))
         }
@@ -563,104 +611,206 @@ const facts = [
     }
   }
 
-  /* ---------- fakty ---------- */
-  .manifest {
+  /* ---------- dwa zespoły ----------
+     Sekcja nazywa się „punkt styku", więc pokazuje styk: dwie kolumny
+     rozdzielone jedną linią. Wcześniej stała tu ściana abstrakcji i paragon
+     z czterema faktami, z których żaden nie mówił, kto co robi. */
+  .crews {
     display: grid;
-    gap: 1.25rem;
-  }
-
-  .facts {
-    display: grid;
-    gap: 0;
-    margin: 0;
+    gap: clamp(2rem, 4vw, 3rem);
     border-top: 1px solid var(--on-red-line);
+    padding-top: clamp(1.75rem, 3vw, 2.5rem);
   }
 
-  @media (min-width: 780px) {
-    .facts {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: clamp(2rem, 5vw, 4rem);
+  .crews__col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* W jednej kolumnie zespoły dzieli kreska w poziomie — bez niej skład
+     jednego wchodził wprost w liczebność drugiego. */
+  @media (max-width: 779px) {
+    .crews__col:nth-child(2) {
+      padding-top: clamp(1.75rem, 4vw, 2.5rem);
+      border-top: 1px solid var(--on-red-line);
     }
   }
 
-  .fact {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.5rem;
-    justify-content: space-between;
-    align-items: baseline;
-    padding-block: 1.1rem;
-    border-bottom: 1px solid var(--on-red-line);
+  @media (min-width: 780px) {
+    .crews {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2.5rem, 6vw, 5rem);
+    }
+
+    /* Linia podziału to jedyna kreska między zespołami — ona jest tym stykiem.
+       Biegnie przez całą wysokość bloku, bo obie kolumny kończą się równo:
+       notka o nazwie dosuwa się do dołu prawej. */
+    .crews__col:nth-child(2) {
+      padding-left: clamp(2.5rem, 6vw, 5rem);
+      border-left: 1px solid var(--on-red-line);
+    }
   }
 
-  .fact__label {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--on-red-1);
-  }
-
-  .fact__value {
-    margin: 0;
-    font-family: var(--mono);
-    font-size: 0.85rem;
+  .crew__count {
     color: var(--on-red-2);
     font-variant-numeric: tabular-nums;
   }
 
-  /* ---------- domeny ---------- */
-  .domains {
-    border-top: 1px solid var(--line);
+  .crew__name {
+    font-family: var(--display);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+    line-height: 0.94;
+    letter-spacing: 0.012em;
+    margin-block: 0.5rem 0.85rem;
   }
 
-  .domain {
+  .crew__role {
+    color: var(--on-red-2);
+    max-width: 34ch;
+  }
+
+  .crew__groups {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
     display: grid;
-    gap: 0.75rem 2rem;
-    padding-block: clamp(1.75rem, 3.5vw, 2.75rem);
-    border-bottom: 1px solid var(--line);
-    grid-template-columns: 1fr;
-    transition: background-color 0.4s var(--ease);
+    gap: 0.55rem;
   }
 
-  @media (min-width: 900px) {
-    .domain {
-      grid-template-columns: minmax(0, 1fr) 11rem;
-      gap: 2.5rem;
-      align-items: start;
+  .crew__groups li {
+    font-size: 0.95rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--on-red-line);
+  }
+
+  /* Skąd nazwa — myśl założycielska, ale nie pierwsze, co się czyta. */
+  .naming {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--on-red-line);
+    color: var(--on-red-2);
+    max-width: 46ch;
+  }
+
+  .naming__label {
+    color: var(--on-red-2);
+  }
+
+  /* Skład Machinekindu ma cztery grupy, Politechniki dwie, więc prawa
+     kolumna kończy się wyżej. Notka zajmuje to miejsce zamiast zostawiać
+     dziurę i ciągnąć sekcję w dół. */
+  @media (min-width: 780px) {
+    .naming {
+      margin-top: auto;
+      padding-top: clamp(2rem, 4vw, 3rem);
+      max-width: 38ch;
     }
   }
 
-  .domain:hover {
-    background: var(--paper-2);
+  /* ---------- takt maszyny ----------
+     Trzy pętle, każda o rząd wielkości wolniejsza. To jest teza sekcji, więc
+     stoi nad domenami i czyta się w jednym spojrzeniu. Liczba niesie treść,
+     więc idzie krojem wyświetlanym, a nie jako etykietka w kółku. */
+  .clock {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 700px) {
+    .clock {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .tick {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 700px) {
+    .tick {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+      padding-right: clamp(1rem, 3vw, 2.5rem);
+    }
+  }
+
+  .tick__hz {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tick__what {
+    font-size: 1rem;
+    color: var(--ink-1);
+  }
+
+  /* ---------- domeny ----------
+     Cztery wiersze przez całą szerokość ciągnęły sekcję na półtora tysiąca
+     pikseli i zostawiały pustą prawą połowę, a oznaczenia lądowały tysiąc
+     pikseli od zdania, którego dotyczyły. Teraz dwie kolumny po dwa pola,
+     a oznaczenie stoi pod swoim akapitem. */
+  /* Takt i domeny dzielą jedną siatkę kresek: dolna linia taktu jest górną
+     linią pierwszego pola, więc między nimi nie ma pasa z dwiema liniami. */
+  .domains {
+    display: grid;
+    gap: 0;
+  }
+
+  @media (min-width: 900px) {
+    .domains {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2.5rem, 6vw, 5rem);
+    }
+  }
+
+  .domain {
+    padding-block: clamp(1.5rem, 3vw, 2.25rem);
+    border-bottom: 1px solid var(--line);
   }
 
   .domain__label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--red);
     margin-bottom: 0.6rem;
   }
 
+  .domain__index {
+    color: var(--ink-3);
+    font-weight: 400;
+  }
+
   .domain__title {
-    margin-bottom: 0.75rem;
-    max-width: 24ch;
+    margin-bottom: 0.6rem;
+    max-width: 22ch;
+  }
+
+  .domain__body {
+    max-width: 46ch;
   }
 
   .domain__meta {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    align-content: start;
-  }
-
-  .domain__meta li {
-    font-family: var(--mono);
-    font-size: var(--micro);
-    color: var(--ink-2);
-    border: 1px solid var(--line-2);
-    border-radius: 999px;
-    padding: 0.3rem 0.7rem;
+    margin-top: 0.9rem;
+    color: var(--ink-3);
   }
 
   /* ---------- projekt ---------- */

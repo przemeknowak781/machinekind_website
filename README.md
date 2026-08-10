@@ -129,6 +129,32 @@ Dłonie wracają jako tło sekcji (`HandsBackdrop`), w różnym stopniu skadrowa
 z paralaksą sterowaną przewijaniem tam, gdzie przeglądarka to obsługuje, i
 powolnym dryfem tam, gdzie nie.
 
+## Punkt styku i cztery warstwy
+
+Obie sekcje stały wcześniej na ścianie tekstu. „Punkt styku" otwierały dwa
+akapity abstrakcji, a zamykał pasek czterech faktów w układzie paragonu —
+etykieta z lewej, wartość monospace z prawej — z których żaden nie mówił, kto
+co robi. „Cztery warstwy" to były cztery jednakowe wiersze przez całą
+szerokość: sekcja na 1508 px z pustą prawą połową, a oznaczenia domen lądowały
+tysiąc pikseli od zdania, którego dotyczyły.
+
+Teraz „Punkt styku" pokazuje styk dosłownie: dwie kolumny rozdzielone jedną
+pionową kreską, po jednym zespole na kolumnę, z licznością, podziałem pracy
+i składem grup. Skład i liczności idą z `data/team`, więc opis nie rozjedzie
+się z zespołem, a liczebnik odmienia się po polsku (`osoba` / `osoby` / `osób`).
+Notka o pochodzeniu nazwy zeszła na dół prawej kolumny — jest myślą
+założycielską, ale nie pierwszym, co się czyta. Dosuwa ją `margin-top: auto`,
+dzięki czemu obie kolumny kończą się równo i kreska styku biegnie przez całą
+wysokość bloku.
+
+„Cztery warstwy" zaczyna się od taktu maszyny: 400 Hz pętli momentu, 50 Hz
+sieci lokomocyjnej, 1 Hz modelu świata. To jest teza sekcji i czyta się ją
+w jednym spojrzeniu, a liczba idzie krojem wyświetlanym, bo niesie treść.
+Domeny stoją pod nią w dwóch kolumnach po dwa pola, każde z numerem,
+jednozdaniowym opisem i własnym oznaczeniem tuż pod akapitem. Dolna linia
+taktu jest górną linią pierwszego pola, więc całość czyta się jak jedna
+tabela. Sekcja zeszła z 1508 do 1198 px.
+
 ## Nagłówek strony
 
 `HeroHands` układa dwie dłonie na przekątnej: maszyna wchodzi z dołu po lewej,
