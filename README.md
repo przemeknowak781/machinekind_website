@@ -287,6 +287,33 @@ node <ścieżka>/impeccable/skill/scripts/detect.mjs http://localhost:4321/
 wraz z uzasadnieniem: warstwa dłoni w nagłówku ma się przycinać, bo dłonie mają
 wychodzić poza kadr sekcji. To jedyne odstępstwo.
 
+## Zgodność z machinekind.ai
+
+Treść o maszynie pochodzi z `machinekind.ai` i musi się z nią zgadzać, bo to
+ten sam projekt opisany dwa razy. Sprawdzone i zgodne: współrzędne, adres
+kontaktowy, `12 miesięcy` budowy, `300 mln kroków` w symulacji, takt
+`400 / 50 / 1 Hz`, pierwszy krok 2025 i pełne sterowanie AI od 2026, nazwy
+i składy obu zespołów (8 + 4 osoby), katedra, laboratorium, finansowanie
+z projektu zespołu prof. Zimroza, AMICOS, własność maszyny i pochodzenie
+imienia.
+
+Cztery rzeczy się rozjeżdżały i zostały poprawione:
+
+- warstwa 1 Hz nazywała się u nas „model świata"; na `machinekind.ai` to
+  „warstwa rozumienia przestrzeni",
+- domena `Robotics Engineering` nie miała członu `& Manufacturing`, choć skład
+  zespołu niżej na tej samej stronie już go miał,
+- `Design & Program` odpowiadał u nas za „finansowanie", a finansowanie
+  konstrukcji idzie z projektu zespołu prof. Zimroza — zostaje „prowadzenie
+  projektu",
+- nagłówek „Cztery warstwy jednej maszyny" zderzał się z „trzema warstwami"
+  sterowania z `machinekind.ai`. Warstwy sterowania są trzy i mają takt,
+  domeny są cztery — stąd „Cztery domeny jednej maszyny".
+
+Jedna rzecz zostaje bez pokrycia w źródle: `Est. 2025` w nagłówku strony mówi
+o kolektywie, a `machinekind.ai` datuje rok 2025 tylko przy pierwszym kroku
+maszyny.
+
 ## Projekt Wojtek
 
 Strona projektu W01-TEK żyje na razie osobno pod `machinekind.ai`. Docelowo ma

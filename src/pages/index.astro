@@ -13,13 +13,13 @@ import naped from '../assets/naped-bezposredni.webp';
 // Strona projektu Wojtek. Docelowo podstrona /wojtek, na razie osobny serwis.
 const WOJTEK_URL = 'https://machinekind.ai';
 
-// Takt maszyny — trzy pętle, każda o rząd wielkości wolniejsza od poprzedniej.
-// To jest właściwa treść „czterech warstw": im wyżej, tym rzadziej i tym
-// bardziej o zamiarze niż o momencie na wale.
+// Takt maszyny — trzy warstwy sterowania, każda o rząd wielkości wolniejsza
+// od poprzedniej: im wyżej, tym rzadziej i tym bardziej o zamiarze niż
+// o momencie na wale. Nazwy warstw i częstotliwości za machinekind.ai.
 const clock = [
   { hz: '400 Hz', what: 'pętla momentu' },
   { hz: '50 Hz', what: 'sieć lokomocyjna' },
-  { hz: '1 Hz', what: 'model świata' },
+  { hz: '1 Hz', what: 'rozumienie przestrzeni' },
 ];
 
 // Liczebnik po polsku: 1 osoba, 2–4 osoby, 5+ osób, z wyjątkiem nastek.
@@ -47,7 +47,7 @@ const domains = [
     meta: 'VLM · zamiar',
   },
   {
-    label: 'Robotics Engineering',
+    label: 'Robotics Engineering & Manufacturing',
     title: 'Konstrukcja i napędy.',
     body:
       'Napędy bezpośrednie, nogi o zamkniętym łańcuchu kinematycznym, sztywność wzięta ze struktury zamiast z dodatkowej masy.',
@@ -57,7 +57,7 @@ const domains = [
     label: 'Design & Program',
     title: 'Prowadzenie i forma.',
     body:
-      'Harmonogram, finansowanie i to, jak maszyna wygląda. Forma wynika z obciążenia: każde wycięcie odprowadza ciepło.',
+      'Harmonogram, prowadzenie projektu i to, jak maszyna wygląda. Forma wynika z obciążenia: każde wycięcie odprowadza ciepło.',
     meta: 'program · design',
   },
 ];
@@ -185,11 +185,12 @@ const WORDMARK = 'Machinekind'.split('');
     <HandsBackdrop hand="robot" tone="ink" side="left" size="72%" top="18%" bleed="-30%" opacity={0.045} duration="32s" />
     <div class="wrap">
       <div class="head">
-        <h2 class="h1">Cztery warstwy<br />jednej maszyny.</h2>
+        <h2 class="h1">Cztery domeny<br />jednej maszyny.</h2>
         <p class="lead">
           Nie dzielimy pracy na badania i wdrożenie. Każda domena kończy się
-          czymś, co da się uruchomić na maszynie stojącej w laboratorium —
-          i każda pracuje we własnym takcie.
+          czymś, co da się uruchomić na maszynie stojącej w laboratorium.
+          Samo sterowanie idzie w trzech warstwach, każda o rząd wielkości
+          wolniejsza od poprzedniej.
         </p>
       </div>
 
