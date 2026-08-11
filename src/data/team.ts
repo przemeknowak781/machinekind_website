@@ -65,7 +65,12 @@ export const machinekind: Group[] = [
   },
 ];
 
-/** Politechnika Wrocławska — Laboratorium Mechatroniki i Robotyki. */
+/**
+ * Politechnika Wrocławska — Laboratorium Mechatroniki i Robotyki.
+ *
+ * Skład po stronie uczelni należy do projektu W01-TEK, a nie do kolektywu,
+ * więc strona główna go nie pokazuje. Zostaje tutaj dla podstrony projektu.
+ */
 export const pwr: Group[] = [
   {
     label: 'Kierownictwo naukowe',

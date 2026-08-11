@@ -204,173 +204,33 @@ wierszy, w których nic nie było ważniejsze od reszty. Wyróżnienie jest jedn
 bo jedna rzecz odróżnia kolektyw od pracowni AI: warstwa inteligencji powstaje
 razem ze sprzętem, na którym ma chodzić.
 
-## Punkt styku i cztery domeny
+## Treść strony głównej
 
-Obie sekcje stały wcześniej na ścianie tekstu. „Punkt styku" otwierały dwa
-akapity abstrakcji, a zamykał pasek czterech faktów w układzie paragonu —
-etykieta z lewej, wartość monospace z prawej — z których żaden nie mówił, kto
-co robi. Sekcja domen to były cztery jednakowe wiersze przez całą
-szerokość: sekcja na 1508 px z pustą prawą połową, a oznaczenia domen lądowały
-tysiąc pikseli od zdania, którego dotyczyły.
+Strona jest o kolektywie, nie o jednym projekcie i nie o współpracy z uczelnią.
+Wcześniej czytało się ją odwrotnie: „Punkt styku" stawiał obok siebie dwie
+kolumny — Machinekind i Politechnikę — sekcja domen nazywała się „cztery
+warstwy jednej maszyny", siatka zespołu pokazywała dwanaście osób z dwóch
+instytucji, a osobna sekcja opisywała laboratorium uczelni. Wychodziło z tego,
+że kolektyw jest połową cudzego projektu.
 
-Teraz „Punkt styku" pokazuje styk dosłownie — i w tle, i w układzie. W tle
-stoją obie dłonie, a nie jedna: maszyna z lewej, człowiek z prawej, obie
-w górnej części kadru, nad kolumnami zespołów. Opuszki mijają się z przerwą
-około 2% szerokości sekcji — wysunięcie poza krawędź (`bleed`) liczy się
-w procentach, więc ta przerwa trzyma się na każdej szerokości. Przy pierwszym
-ustawieniu dłonie zachodziły na siebie o 4,7% szerokości, czyli mniej więcej
-o grubość opuszka. W treści dwie kolumny
-rozdzielone jedną pionową kreską, po jednym zespole na kolumnę, z licznością, podziałem pracy
-i składem grup. Skład i liczności idą z `data/team`, więc opis nie rozjedzie
-się z zespołem, a liczebnik odmienia się po polsku (`osoba` / `osoby` / `osób`).
-Notka o pochodzeniu nazwy zeszła na dół prawej kolumny — jest myślą
-założycielską, ale nie pierwszym, co się czyta. Dosuwa ją `margin-top: auto`,
-dzięki czemu obie kolumny kończą się równo i kreska styku biegnie przez całą
-wysokość bloku.
+Teraz układ idzie tak:
 
-„Cztery domeny" zaczyna się od taktu maszyny: 400 Hz pętli momentu, 50 Hz
-sieci lokomocyjnej, 1 Hz rozumienia przestrzeni. To jest teza sekcji i czyta się ją
-w jednym spojrzeniu, a liczba idzie krojem wyświetlanym, bo niesie treść.
-Domeny stoją pod nią w dwóch kolumnach po dwa pola, każde z numerem,
-jednozdaniowym opisem i własnym oznaczeniem tuż pod akapitem. Dolna linia
-taktu jest górną linią pierwszego pola, więc całość czyta się jak jedna
-tabela. Sekcja zeszła z 1508 do 1198 px.
-
-## Nagłówek strony
-
-`HeroHands` układa dwie dłonie na przekątnej: maszyna wchodzi z dołu po lewej,
-człowiek schodzi z góry po prawej, opuszki mijają się w prawej połowie kadru.
-Przekątna wychodzi poza prawą krawędź — przedramię człowieka jest ucięte
-kadrem. Bez tego kompozycja kończyła się dwieście pikseli przed krawędzią,
-a prawa dolna ćwiartka nagłówka stała pusta.
-
-Szerokość bryły ma dwa ograniczenia i bierze mniejsze: `104 × --hand-u` rządzi
-na dużym ekranie, a sufit `82vw` wchodzi tam, gdzie okno jest niskie albo
-wąskie. Bez sufitu bryła bywała szersza od kadru i z dłoni człowieka zostawały
-przy 1024px same opuszki.
-Położenia są liczone z geometrii obrazów — dla każdej dłoni znane jest
-położenie opuszka w kadrze i kąt obrotu, więc `left` i `top` wynikają z tego,
-gdzie opuszek ma wypaść po obrocie. Wszystko w udziałach bryły, więc
-kompozycja skaluje się sztywno. Dwa zakresy: przekątna obok tekstu powyżej
-780px, a poniżej dłonie schodzą pod tekst, bo wąski kadr ich obok nie
-pomieści.
-
-Obrót siedzi w osobnej własności `rotate`, dzięki czemu przewijanie może
-animować `translate` bez deptania kąta.
-
-## Wejście na stronę
-
-Strona zaczyna się od bieli, samych dłoni i przesypującej się sygnatury.
-Sekwencja ma trzy takty i trwa niecałe 4 sekundy:
-
-| Czas | Co się dzieje |
+| Sekcja | Co mówi |
 | --- | --- |
-| 0 – 1,5 s | dłonie wjeżdżają poziomo z lewej i prawej, bez obrotu, w powiększeniu 1,9× |
-| 0 – 1,5 s | sygnatura stoi na środku i przez cały ten lot składa się z liter |
-| 1,5 – 1,71 s | opuszki zatrzymują się naprzeciw siebie, na środku szerokości ekranu, słowo jest już gotowe |
-| 1,71 – 3,0 s | obrót w skos, oddalenie kadru i przesunięcie na miejsce docelowe — sygnatura jedzie razem z dłońmi |
-| 3,05 – 3,78 s | odsłania się nawigacja, akapit, przyciski i pasek pod nimi |
+| Punkt styku | kim jesteśmy i co z tego wynika — trzy zasady zamiast podziału pracy z kimkolwiek |
+| Cały stos, jeden zespół | komplementarność: cztery domeny, po dwie osoby, cała droga od modelu do przegubu |
+| Pierwsza maszyna | W01-TEK jako projekt kolektywu, z Politechniką wymienioną jako partner tego projektu |
+| Kto to robi | osiem osób w czterech parach |
+| Kontakt | pokaz maszyny |
 
-Opuszki się nie stykają — zatrzymują się naprzeciw siebie z przerwą około
-1,8% szerokości bryły, czyli 10–26 px zależnie od kadru. Wcześniej wchodziły
-jedna w drugą na 30–76 px i zamiast zetknięcia wychodziło zlepienie.
+Współpraca z Politechniką Wrocławską dotyczy wyłącznie W01-TEK, więc na stronie
+głównej zostaje z niej jedno zdanie drobnym drukiem w karcie projektu —
+prowadzenie projektu i własność maszyny — a szczegóły idą na podstronę
+projektu. Skład uczelniany zostaje w `data/team.ts` z komentarzem, że należy do
+projektu, a nie do kolektywu.
 
-Sygnatura formuje się od zerowej sekundy, w tym samym czasie, w którym dłonie
-lecą ku sobie, i rusza z miejsca dopiero przy zetknięciu opuszków — czyli
-dokładnie tam, gdzie zaczyna się obrót dłoni. Krycia nie ma w ogóle: napis
-albo stoi w pełnym atramencie, albo nie ma w nim jeszcze liter.
-
-Droga na miejsce docelowe liczy się z układu (`--title-x` to odległość od lewej
-krawędzi kolumny tekstu do środka okna), więc wyśrodkowanie wychodzi samo na
-każdej szerokości. W układzie pionowym kolumna zajmuje całą szerokość i napis
-i tak stoi na środku, więc przejazdu nie ma — słowo po prostu składa się
-w miejscu.
-
-Tekst wchodzi odsłoną kadru (`clip-path`), a nie przenikaniem. Przenikanie
-zostawiało pół sekundy, w której litera stoi na częściowej przezroczystości —
-detektor łapał tam kontrast 1,1:1. Przy odsłonie litera albo stoi w pełnym
-atramencie, albo jej jeszcze nie widać.
-
-Przesypywanie sygnatury to jedyny efekt na stronie wymagający skryptu.
-Losuje wyłącznie ze zbioru liter samego słowa, więc szerokości zostają
-w tym samym zakresie, a napis nie zamienia się w przypadkowy szum. Każda
-litera siedzi w kratce o szerokości zablokowanej po wczytaniu krojów —
-bez tego podmiana glifów rozjeżdżałaby napis w poziomie. Szerokość mierzy
-się na literze docelowej, nie na losowej. Zanim kroje dojadą, litery już się
-przesypują, tylko bez blokady — dzięki temu gotowe słowo nie mignie na starcie.
-
-Bez skryptu w nagłówku stoi po prostu gotowe słowo. Nazwa dostępnościowa
-siedzi w `aria-label`, więc czytnik ekranu nigdy nie przeczyta
-przesypywanych liter.
-
-Zetknięcie i pozycja docelowa to dwa różne miejsca: w chwili styku bryła stoi
-wyśrodkowana (`--shift-meet`), a po złożeniu przesuwa się w prawo
-(`--shift-final`), żeby zrobić miejsce nagłówkowi i akapitowi. W układzie
-pionowym dłonie leżą pod tekstem, więc oba ustawienia są tam takie same.
-
-Obrót jest animowany od zera, a nie tylko ustawiony statycznie. Wymusza to
-`animation-fill-mode: backwards` na dłoniach: po animacji `translate` musi
-wrócić pod kontrolę przewijania, a `rotate` do kąta z układu. Przy `both`
-obie własności zostałyby zamrożone na ostatniej klatce i paralaksa
-przestałaby działać.
-
-Sekwencja jest krótka także dlatego, że w dłuższej wersji detektor łapał
-stronę w trakcie przenikania tekstu i zgłaszał kontrast liczony na częściowej
-przezroczystości.
-
-## Ruch i zależność od skryptu
-
-Poza wejściem strona nie ma animacji sekcji w kadrze. Drugi ruch to rozsuwanie
-dłoni w miarę przewijania pierwszego ekranu. Steruje tym jedna dziedziczona liczba `--p` od 0 do 1, którą wypełnia
-oś czasu przewijania (`scroll()`); tam gdzie przeglądarka jej nie zna, ustawia
-ją kilkanaście linii skryptu zapasowego w `Base.astro`.
-
-**Żadna treść nie zależy od JavaScriptu** — przy wyłączonym skrypcie strona
-jest kompletna, a dłonie po prostu stoją. Drugi skrypt uruchamia film w karcie
-projektu po wejściu w kadr; bez niego zostaje plakat.
-
-Ruch wygasza się przy `prefers-reduced-motion`.
-
-## Kontrola jakości
-
-Projekt przechodzi detektor [impeccable](https://impeccable.style/slop/) na zero
-trafień, statycznie i w przeglądarce, na 1440 i 390px:
-
-```bash
-node <ścieżka>/impeccable/skill/scripts/detect.mjs dist/index.html dist/_astro/*.css
-node <ścieżka>/impeccable/skill/scripts/detect.mjs http://localhost:4321/
-```
-
-`.impeccable/config.json` wycisza jedną regułę, `clipped-overflow-container`,
-wraz z uzasadnieniem: warstwa dłoni w nagłówku ma się przycinać, bo dłonie mają
-wychodzić poza kadr sekcji. To jedyne odstępstwo.
-
-## Zgodność z machinekind.ai
-
-Treść o maszynie pochodzi z `machinekind.ai` i musi się z nią zgadzać, bo to
-ten sam projekt opisany dwa razy. Sprawdzone i zgodne: współrzędne, adres
-kontaktowy, `12 miesięcy` budowy, `300 mln kroków` w symulacji, takt
-`400 / 50 / 1 Hz`, pierwszy krok 2025 i pełne sterowanie AI od 2026, nazwy
-i składy obu zespołów (8 + 4 osoby), katedra, laboratorium, finansowanie
-z projektu zespołu prof. Zimroza, AMICOS, własność maszyny i pochodzenie
-imienia.
-
-Cztery rzeczy się rozjeżdżały i zostały poprawione:
-
-- warstwa 1 Hz nazywała się u nas „model świata"; na `machinekind.ai` to
-  „warstwa rozumienia przestrzeni",
-- domena `Robotics Engineering` nie miała członu `& Manufacturing`, choć skład
-  zespołu niżej na tej samej stronie już go miał,
-- `Design & Program` odpowiadał u nas za „finansowanie", a finansowanie
-  konstrukcji idzie z projektu zespołu prof. Zimroza — zostaje „prowadzenie
-  projektu",
-- nagłówek „Cztery warstwy jednej maszyny" zderzał się z „trzema warstwami"
-  sterowania z `machinekind.ai`. Warstwy sterowania są trzy i mają takt,
-  domeny są cztery — stąd „Cztery domeny jednej maszyny".
-
-Jedna rzecz zostaje bez pokrycia w źródle: `Est. 2025` w nagłówku strony mówi
-o kolektywie, a `machinekind.ai` datuje rok 2025 tylko przy pierwszym kroku
-maszyny.
+Liczności domen w sekcji „Cały stos" biorą się ze składu zespołu, więc zdanie
+„po dwie osoby w każdej" nie rozjedzie się z siatką niżej.
 
 ## Projekt Wojtek
 
