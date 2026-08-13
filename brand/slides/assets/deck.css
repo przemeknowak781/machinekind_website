@@ -162,6 +162,14 @@ img {
   font-size: 132px;
 }
 
+/* Tytuły wystąpień bywają zdaniem, nie hasłem — schodzą o stopień niżej.
+   Wersaliki z ogonkami i kreskami potrzebują przy tym luźniejszej interlinii;
+   przy 0,86 „Ó" z trzeciego wiersza siadało na „Ą" z drugiego. */
+.title--talk {
+  font-size: 116px;
+  line-height: 0.96;
+}
+
 .title--red {
   color: var(--red);
 }
@@ -294,7 +302,7 @@ img {
 }
 
 .slide--ink .wm {
-  opacity: 0.2;
+  opacity: 0.15;
 }
 
 /* ---------- Plansza ze znakiem ---------- */
@@ -324,10 +332,111 @@ img {
 .hands {
   position: absolute;
   left: 50%;
-  top: 41%;
+  top: 44%;
   transform: translate(-50%, -50%);
   width: 1660px;
   z-index: 1;
+}
+
+/* ---------- Program wydarzenia ----------
+   Wiersz niesie trzy rzeczy: numer punktu, kto mówi i o czym. Kolumny stoją
+   na stałej siatce, więc nazwiska i tytuły wystąpień trzymają pion. */
+.program {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.program__row {
+  display: grid;
+  grid-template-columns: 84px 476px minmax(0, 1fr);
+  column-gap: 36px;
+  align-items: baseline;
+  padding-block: 16px;
+  border-top: 1px solid var(--hair);
+}
+
+.program__row:last-child {
+  border-bottom: 1px solid var(--hair);
+}
+
+.program__num {
+  color: var(--accent);
+}
+
+.program__name {
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.program__org {
+  margin: 6px 0 0;
+}
+
+.program__what {
+  font-size: 27px;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: var(--dim);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ---------- Organizatorzy ---------- */
+.orgs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 72px;
+  row-gap: 26px;
+}
+
+.orgs__name {
+  font-size: 29px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.orgs__sub {
+  font-size: 21px;
+  line-height: 1.34;
+  color: var(--dim);
+  margin: 5px 0 0;
+  max-width: 44ch;
+}
+
+/* ---------- Logotypy instytucji ----------
+   Znaki niosą własny kolor, więc stoją wyłącznie na białych planszach.
+   Wysokość, nie szerokość, wyrównuje je optycznie. */
+.logos {
+  display: flex;
+  align-items: center;
+  gap: 76px;
+}
+
+.logos img {
+  width: auto;
+}
+
+.logos__pwr {
+  height: 84px;
+}
+
+.logos__uew {
+  height: 60px;
+}
+
+.partner-logo {
+  width: 640px;
 }
 
 /* ---------- Kontakt ---------- */
@@ -335,7 +444,7 @@ img {
    wartość i podpisy stałyby w nierównych odstępach. */
 .contact {
   display: grid;
-  grid-template-columns: repeat(3, 420px);
+  grid-template-columns: repeat(4, 400px);
   align-items: start;
 }
 

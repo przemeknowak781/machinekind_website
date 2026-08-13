@@ -15,9 +15,17 @@
       Pojedyncza plansza w pełnym kadrze: `index.html?only=6`.
       Eksport do PNG / PDF / PPTX: `node build.mjs`.
 
-      Ramę (sygnatura u góry, pomiar u dołu) niosą `.lockup` i `.foot`.
-      Stopka po prawej trzyma adres, nie numer slajdu — plansza wchodzi
-      w cudzą prezentację i własna numeracja byłaby tam nieprawdziwa.
+      Ramę niosą `.lockup` i `.foot`. Stopka po prawej trzyma adres, nie
+      numer slajdu — plansza wchodzi w cudzą prezentację i własna numeracja
+      byłaby tam nieprawdziwa.
+
+      Nadtytuł (`.kicker`) i stopka po lewej (`.foot--l`) stoją tylko tam,
+      gdzie mają co nieść: nazwę domeny, oznaczenie, pomiar. Na planszach
+      ceremonialnych — znak, pytania, przerwa, podziękowanie — zostaje sam
+      tytuł, bo dopisany tam nadtytuł niósłby ton zamiast treści.
+
+      Logotypy instytucji i partnera niosą własny kolor, więc stoją wyłącznie
+      na białych planszach (19, 20). Na czerwieni biłyby się z marką.
     -->
 
     <div class="deck">
@@ -35,15 +43,39 @@
             <p class="lead">Uczymy maszyny poruszać się w świecie ludzi.</p>
           </div>
 
-          <p class="mono foot foot--l">51.1079° N / 17.0385° E · Est. 2025</p>
           <p class="mono foot foot--r">machinekind.ai</p>
         </section>
       </div>
 
-      <!-- ============ 02 · ZNAK ============
+      <!-- ============ 02 · ZAPROSZENIE ============ -->
+      <p class="caption">02 · Zaproszenie</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="wm wm--right" src="assets/mark-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Pierwsze wydarzenie</p>
+            <h2 class="title title--wide">
+              Łączymy robotykę i AI,<br />budując humanoida<span class="dot">!</span>
+            </h2>
+            <p class="lead">
+              Zapraszamy na pierwsze wydarzenie projektu i&nbsp;społeczności Machinekind.
+            </p>
+          </div>
+
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 03 · ZNAK ============
            Plansza postojowa: stoi na ekranie między wystąpieniami,
            kiedy nie ma nic do powiedzenia poza tym, czyj to ekran. -->
-      <p class="caption">02 · Znak — plansza postojowa</p>
+      <p class="caption">03 · Znak — plansza postojowa</p>
       <div class="frame">
         <section class="slide slide--red">
           <div class="stack stack--center">
@@ -53,35 +85,84 @@
             </div>
           </div>
 
-          <p class="mono foot foot--l">Kolektyw robotyki i AI</p>
           <p class="mono foot foot--r">machinekind.ai</p>
         </section>
       </div>
 
-      <!-- ============ 03 · PUNKT STYKU ============ -->
-      <p class="caption">03 · Punkt styku</p>
+      <!-- ============ 04 · PROGRAM ============ -->
+      <p class="caption">04 · Program wydarzenia</p>
       <div class="frame">
-        <section class="slide slide--red">
-          <img class="hands" src="assets/hands-white.png" alt="" />
-
+        <section class="slide slide--paper">
           <div class="lockup">
-            <img src="assets/mark-white.png" alt="" />
+            <img src="assets/mark-red.png" alt="" />
             <span>Machinekind</span>
           </div>
 
-          <div class="stack" style="bottom: 252px">
-            <p class="kicker">Człowiek i maszyna</p>
-            <h2 class="title title--wide">Punkt styku<span class="dot">.</span></h2>
+          <div class="stack" style="top: 244px; bottom: auto; gap: 32px">
+            <p class="kicker">Program wydarzenia</p>
+
+            <ol class="program">
+              <li class="program__row">
+                <p class="mono program__num">01</p>
+                <div>
+                  <p class="program__name">Spyrosoft</p>
+                  <p class="mono program__org">Partner wydarzenia</p>
+                </div>
+                <p class="program__what">Kilka słów od partnera</p>
+              </li>
+
+              <li class="program__row">
+                <p class="mono program__num">02</p>
+                <div>
+                  <p class="program__name">Michał Pogoda-Rosikoń</p>
+                  <p class="mono program__org">bards.ai</p>
+                </div>
+                <p class="program__what">
+                  Dlaczego teraz jest najlepszy czas na budowanie humanoidów. Założenia
+                  projektu i społeczności Machinekind
+                </p>
+              </li>
+
+              <li class="program__row">
+                <p class="mono program__num">03</p>
+                <div>
+                  <p class="program__name">Grzegorz Piotrowski</p>
+                  <p class="mono program__org">Politechnika Wrocławska</p>
+                </div>
+                <p class="program__what">Podaj mi piwo — podstawy autonomicznych robotów</p>
+              </li>
+
+              <li class="program__row">
+                <p class="mono program__num">04</p>
+                <div>
+                  <p class="program__name">Marcin Wysocki</p>
+                  <p class="mono program__org">Positive Surfer</p>
+                </div>
+                <p class="program__what">
+                  Jak AI obniża barierę wejścia, pozostawiając pole dla nauki
+                </p>
+              </li>
+
+              <li class="program__row">
+                <p class="mono program__num">05</p>
+                <div>
+                  <p class="program__name">Łukasz Janiec</p>
+                  <p class="mono program__org">Politechnika Wrocławska</p>
+                </div>
+                <p class="program__what">
+                  Od jednego do wielu robotów — różne podejścia i różnice w autonomii
+                </p>
+              </li>
+            </ol>
           </div>
 
-          <p class="mono foot foot--l">Inteligencja powstaje razem ze sprzętem</p>
           <p class="mono foot foot--r">machinekind.ai</p>
         </section>
       </div>
 
-      <!-- ============ 04 · ZA CHWILĘ ============
+      <!-- ============ 05 · ZA CHWILĘ ============
            Szablon między wystąpieniami. Podmień tytuł i prowadzącego. -->
-      <p class="caption">04 · Za chwilę — szablon zapowiedzi</p>
+      <p class="caption">05 · Za chwilę — szablon zapowiedzi</p>
       <div class="frame">
         <section class="slide slide--paper">
           <img class="wm wm--right" src="assets/mark-red.png" alt="" />
@@ -94,7 +175,7 @@
           <div class="stack stack--narrow">
             <p class="kicker">Za chwilę</p>
             <h2 class="title">Tytuł wystąpienia<span class="dot">.</span></h2>
-            <p class="lead slot">Imię Nazwisko · rola w zespole</p>
+            <p class="lead slot">Imię Nazwisko · organizacja</p>
           </div>
 
           <p class="mono foot foot--l">Program dnia</p>
@@ -102,9 +183,9 @@
         </section>
       </div>
 
-      <!-- ============ 05 · ROZDZIAŁ ============
+      <!-- ============ 06 · ROZDZIAŁ ============
            Szablon przerywnika sekcyjnego. Podmień numer, nadtytuł i tytuł. -->
-      <p class="caption">05 · Rozdział — szablon przerywnika</p>
+      <p class="caption">06 · Rozdział — szablon przerywnika</p>
       <div class="frame">
         <section class="slide slide--red">
           <p class="num">00</p>
@@ -125,8 +206,144 @@
         </section>
       </div>
 
-      <!-- ============ 06 · LOCOMOTION AI ============ -->
-      <p class="caption">06 · Domena 01 — Locomotion AI</p>
+      <!-- ============ 07 · SPYROSOFT ============ -->
+      <p class="caption">07 · Wystąpienie 01 — Spyrosoft</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="wm wm--right" src="assets/mark-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Za chwilę</p>
+            <h2 class="title">Kilka słów<br />od partnera<span class="dot">.</span></h2>
+            <p class="lead">Spyrosoft</p>
+          </div>
+
+          <p class="mono foot foot--l">Partner wydarzenia</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 08 · MICHAŁ POGODA-ROSIKOŃ ============ -->
+      <p class="caption">08 · Wystąpienie 02 — Michał Pogoda-Rosikoń</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <img class="wm wm--right" src="assets/mark-red.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Za chwilę</p>
+            <h2 class="title title--talk">
+              Dlaczego teraz jest<br />najlepszy czas na<br />budowanie
+              humanoidów<span class="dot">.</span>
+            </h2>
+            <p class="lead">Michał Pogoda-Rosikoń · bards.ai</p>
+          </div>
+
+          <p class="mono foot foot--l">Założenia projektu i społeczności</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 09 · GRZEGORZ PIOTROWSKI ============ -->
+      <p class="caption">09 · Wystąpienie 03 — Grzegorz Piotrowski</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="wm wm--right" src="assets/mark-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Za chwilę</p>
+            <h2 class="title">Podaj mi piwo<span class="dot">.</span></h2>
+            <p class="lead">Grzegorz Piotrowski · Politechnika Wrocławska</p>
+          </div>
+
+          <p class="mono foot foot--l">Podstawy autonomicznych robotów</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 10 · MARCIN WYSOCKI ============ -->
+      <p class="caption">10 · Wystąpienie 04 — Marcin Wysocki</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <img class="wm wm--right" src="assets/mark-red.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Za chwilę</p>
+            <h2 class="title title--talk">
+              Jak AI obniża barierę wejścia,<br />pozostawiając pole dla
+              nauki<span class="dot">.</span>
+            </h2>
+            <p class="lead">Marcin Wysocki · Positive Surfer</p>
+          </div>
+
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 11 · ŁUKASZ JANIEC ============ -->
+      <p class="caption">11 · Wystąpienie 05 — Łukasz Janiec</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="wm wm--right" src="assets/mark-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Za chwilę</p>
+            <h2 class="title title--talk">
+              Od jednego<br />do wielu robotów<span class="dot">.</span>
+            </h2>
+            <p class="lead">Łukasz Janiec · Politechnika Wrocławska</p>
+          </div>
+
+          <p class="mono foot foot--l">Różne podejścia i różnice w autonomii</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 12 · PUNKT STYKU ============ -->
+      <p class="caption">12 · Punkt styku</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="hands" src="assets/hands-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack" style="bottom: 268px">
+            <h2 class="title title--wide">Punkt styku<span class="dot">.</span></h2>
+          </div>
+
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 13 · LOCOMOTION AI ============ -->
+      <p class="caption">13 · Domena 01 — Locomotion AI</p>
       <div class="frame">
         <section class="slide slide--red">
           <p class="num">01</p>
@@ -150,8 +367,8 @@
         </section>
       </div>
 
-      <!-- ============ 07 · WORLD MODELS & VLM ============ -->
-      <p class="caption">07 · Domena 02 — World Models &amp; VLM</p>
+      <!-- ============ 14 · WORLD MODELS & VLM ============ -->
+      <p class="caption">14 · Domena 02 — World Models &amp; VLM</p>
       <div class="frame">
         <section class="slide slide--paper">
           <p class="num">02</p>
@@ -175,8 +392,8 @@
         </section>
       </div>
 
-      <!-- ============ 08 · ROBOTICS ENGINEERING ============ -->
-      <p class="caption">08 · Domena 03 — Robotics Engineering &amp; Manufacturing</p>
+      <!-- ============ 15 · ROBOTICS ENGINEERING ============ -->
+      <p class="caption">15 · Domena 03 — Robotics Engineering &amp; Manufacturing</p>
       <div class="frame">
         <section class="slide slide--red">
           <p class="num">03</p>
@@ -200,8 +417,8 @@
         </section>
       </div>
 
-      <!-- ============ 09 · DESIGN & PROGRAM ============ -->
-      <p class="caption">09 · Domena 04 — Design &amp; Program</p>
+      <!-- ============ 16 · DESIGN & PROGRAM ============ -->
+      <p class="caption">16 · Domena 04 — Design &amp; Program</p>
       <div class="frame">
         <section class="slide slide--paper">
           <p class="num">04</p>
@@ -225,8 +442,8 @@
         </section>
       </div>
 
-      <!-- ============ 10 · W01-TEK ============ -->
-      <p class="caption">10 · W01-TEK</p>
+      <!-- ============ 17 · WOJTEK ============ -->
+      <p class="caption">17 · Wojtek</p>
       <div class="frame">
         <section class="slide slide--red">
           <div class="shot"><img src="assets/korpus.webp" alt="" /></div>
@@ -239,17 +456,19 @@
 
           <div class="stack">
             <p class="kicker">Pierwsza maszyna</p>
-            <h2 class="title title--giant">W01-TEK</h2>
-            <p class="lead">Czworonóg. Chodzi we Wrocławiu. Baza platformy, nie wizualizacja.</p>
+            <h2 class="title title--giant">Wojtek</h2>
+            <p class="lead">
+              Pies-robot z Politechniki Wrocławskiej. Poznacie go na miejscu.
+            </p>
           </div>
 
-          <p class="mono foot foot--l">CFRP-IP67 · korpus nośny</p>
+          <p class="mono foot foot--l">W01-TEK · CFRP-IP67</p>
           <p class="mono foot foot--r">machinekind.ai</p>
         </section>
       </div>
 
-      <!-- ============ 11 · TEZA ============ -->
-      <p class="caption">11 · Teza</p>
+      <!-- ============ 18 · TEZA ============ -->
+      <p class="caption">18 · Teza</p>
       <div class="frame">
         <section class="slide slide--ink">
           <img class="wm wm--right" src="assets/mark-red.png" alt="" />
@@ -260,20 +479,18 @@
           </div>
 
           <div class="stack stack--mid stack--narrow">
-            <p class="kicker">Zasada</p>
             <h2 class="title">Budujemy,<br />nie doradzamy<span class="dot">.</span></h2>
             <p class="lead">
               Każda domena kończy się czymś, co się uruchamia. Nie oddajemy prezentacji.
             </p>
           </div>
 
-          <p class="mono foot foot--l">Kolektyw · Wrocław</p>
           <p class="mono foot foot--r">machinekind.ai</p>
         </section>
       </div>
 
-      <!-- ============ 12 · PRZERWA ============ -->
-      <p class="caption">12 · Przerwa</p>
+      <!-- ============ 19 · PARTNER ============ -->
+      <p class="caption">19 · Partner wydarzenia</p>
       <div class="frame">
         <section class="slide slide--paper">
           <img class="wm wm--right" src="assets/mark-red.png" alt="" />
@@ -283,10 +500,79 @@
             <span>Machinekind</span>
           </div>
 
-          <div class="stack">
-            <p class="kicker">Przerwa w programie</p>
+          <div class="stack stack--mid" style="gap: 56px">
+            <p class="kicker">Partner wydarzenia</p>
+            <img class="partner-logo" src="assets/logos/spyrosoft.png" alt="Spyrosoft" />
+            <p class="lead">spyro-soft.com</p>
+          </div>
+
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 20 · ORGANIZATORZY ============ -->
+      <p class="caption">20 · Organizatorzy</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--mid" style="gap: 52px">
+            <h2 class="title title--wide">Organizatorzy<span class="dot">.</span></h2>
+
+            <ul class="orgs">
+              <li>
+                <p class="orgs__name">Laboratorium Mechatroniki i Robotyki</p>
+                <p class="orgs__sub">
+                  Katedra Podstaw Konstrukcji Maszyn i Układów Mechatronicznych, Wydział
+                  Mechaniczny Politechniki Wrocławskiej
+                </p>
+              </li>
+              <li>
+                <p class="orgs__name">Katedra Sztucznej Inteligencji</p>
+                <p class="orgs__sub">Politechnika Wrocławska</p>
+              </li>
+              <li>
+                <p class="orgs__name">AI HUB @ UEW</p>
+                <p class="orgs__sub">Uniwersytet Ekonomiczny we Wrocławiu</p>
+              </li>
+              <li>
+                <p class="orgs__name">Bards.ai</p>
+              </li>
+              <li>
+                <p class="orgs__name">Centrum Zastosowań Sztucznej Inteligencji</p>
+              </li>
+            </ul>
+
+            <div class="logos">
+              <img class="logos__pwr" src="assets/logos/pwr.png" alt="Politechnika Wrocławska" />
+              <img
+                class="logos__uew"
+                src="assets/logos/uew.png"
+                alt="Uniwersytet Ekonomiczny we Wrocławiu"
+              />
+            </div>
+          </div>
+
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 21 · PRZERWA ============ -->
+      <p class="caption">21 · Przerwa</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <img class="wm wm--right" src="assets/mark-red.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--mid">
             <h2 class="title title--giant title--red">Przerwa</h2>
-            <p class="lead slot">Wracamy o 00:00.</p>
           </div>
 
           <p class="mono foot foot--l">15 minut</p>
@@ -294,8 +580,8 @@
         </section>
       </div>
 
-      <!-- ============ 13 · PYTANIA ============ -->
-      <p class="caption">13 · Pytania</p>
+      <!-- ============ 22 · PYTANIA ============ -->
+      <p class="caption">22 · Pytania</p>
       <div class="frame">
         <section class="slide slide--red">
           <img class="wm wm--right" src="assets/mark-white.png" alt="" />
@@ -305,19 +591,16 @@
             <span>Machinekind</span>
           </div>
 
-          <div class="stack">
-            <p class="kicker">Sala ma głos</p>
+          <div class="stack stack--mid">
             <h2 class="title title--giant">Pytania</h2>
-            <p class="lead">Odpowiadamy na to, co widzieliście — i na to, czego nie pokazaliśmy.</p>
           </div>
 
-          <p class="mono foot foot--l">Q &amp; A</p>
           <p class="mono foot foot--r">machinekind.ai</p>
         </section>
       </div>
 
-      <!-- ============ 14 · DZIĘKUJEMY ============ -->
-      <p class="caption">14 · Dziękujemy — kontakt</p>
+      <!-- ============ 23 · DZIĘKUJEMY ============ -->
+      <p class="caption">23 · Dziękujemy — kontakt</p>
       <div class="frame">
         <section class="slide slide--red">
           <img class="wm wm--right" src="assets/mark-white.png" alt="" />
@@ -330,7 +613,6 @@
           <!-- Ogonek w „Ę" schodzi poniżej linii pisma, więc odstęp pod
                sygnaturą jest tu większy niż domyślny. -->
           <div class="stack" style="bottom: 188px; gap: 64px">
-            <p class="kicker">Zbudujmy następny</p>
             <h2 class="title title--giant">Dziękujemy</h2>
 
             <div class="contact">
@@ -343,13 +625,16 @@
                 <p class="contact__val">machinekind.ai</p>
               </div>
               <div class="contact__col">
+                <p class="mono">LinkedIn</p>
+                <p class="contact__val">machinekindai</p>
+              </div>
+              <div class="contact__col">
                 <p class="mono">Gdzie</p>
-                <p class="contact__val">Wrocław, Polska</p>
+                <p class="contact__val">Wrocław</p>
               </div>
             </div>
           </div>
 
-          <p class="mono foot foot--l">51.1079° N / 17.0385° E</p>
           <p class="mono foot foot--r">machinekind.ai</p>
         </section>
       </div>
