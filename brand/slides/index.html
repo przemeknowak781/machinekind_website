@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Machinekind — plansze przerywnikowe</title>
+    <link rel="stylesheet" href="assets/deck.css" />
+  </head>
+  <body>
+    <!--
+      Zestaw plansz przerywnikowych marki Machinekind.
+      Jedna plansza = jeden blok `.frame > .slide`. Kadr 1920 × 1080.
+
+      Podgląd: otwórz ten plik w przeglądarce.
+      Pojedyncza plansza w pełnym kadrze: `index.html?only=6`.
+      Eksport do PNG / PDF / PPTX: `node build.mjs`.
+
+      Ramę (sygnatura u góry, pomiar u dołu) niosą `.lockup` i `.foot`.
+      Stopka po prawej trzyma adres, nie numer slajdu — plansza wchodzi
+      w cudzą prezentację i własna numeracja byłaby tam nieprawdziwa.
+    -->
+
+    <div class="deck">
+      <!-- ============ 01 · OTWARCIE ============ -->
+      <p class="caption">01 · Otwarcie</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="wm wm--right" src="assets/mark-white.png" alt="" />
+
+          <div class="lockup"><img src="assets/mark-white.png" alt="" /></div>
+
+          <div class="stack">
+            <p class="kicker">Kolektyw robotyki i AI · Wrocław</p>
+            <h1 class="title title--giant">Machinekind</h1>
+            <p class="lead">Uczymy maszyny poruszać się w świecie ludzi.</p>
+          </div>
+
+          <p class="mono foot foot--l">51.1079° N / 17.0385° E · Est. 2025</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 02 · ZNAK ============
+           Plansza postojowa: stoi na ekranie między wystąpieniami,
+           kiedy nie ma nic do powiedzenia poza tym, czyj to ekran. -->
+      <p class="caption">02 · Znak — plansza postojowa</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <div class="stack stack--center">
+            <div class="sig">
+              <img src="assets/mark-white.png" alt="" />
+              <p class="sig__word">Machinekind</p>
+            </div>
+          </div>
+
+          <p class="mono foot foot--l">Kolektyw robotyki i AI</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 03 · PUNKT STYKU ============ -->
+      <p class="caption">03 · Punkt styku</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="hands" src="assets/hands-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack" style="bottom: 252px">
+            <p class="kicker">Człowiek i maszyna</p>
+            <h2 class="title title--wide">Punkt styku<span class="dot">.</span></h2>
+          </div>
+
+          <p class="mono foot foot--l">Inteligencja powstaje razem ze sprzętem</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 04 · ZA CHWILĘ ============
+           Szablon między wystąpieniami. Podmień tytuł i prowadzącego. -->
+      <p class="caption">04 · Za chwilę — szablon zapowiedzi</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <img class="wm wm--right" src="assets/mark-red.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--narrow">
+            <p class="kicker">Za chwilę</p>
+            <h2 class="title">Tytuł wystąpienia<span class="dot">.</span></h2>
+            <p class="lead slot">Imię Nazwisko · rola w zespole</p>
+          </div>
+
+          <p class="mono foot foot--l">Program dnia</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 05 · ROZDZIAŁ ============
+           Szablon przerywnika sekcyjnego. Podmień numer, nadtytuł i tytuł. -->
+      <p class="caption">05 · Rozdział — szablon przerywnika</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <p class="num">00</p>
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--narrow">
+            <p class="kicker">Nadtytuł rozdziału</p>
+            <h2 class="title">Tytuł rozdziału<span class="dot">.</span></h2>
+            <p class="lead slot">Jedno zdanie o tym, co się za chwilę wydarzy.</p>
+          </div>
+
+          <p class="mono foot foot--l">Oznaczenie · pomiar</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 06 · LOCOMOTION AI ============ -->
+      <p class="caption">06 · Domena 01 — Locomotion AI</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <p class="num">01</p>
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--narrow">
+            <p class="kicker">Locomotion AI</p>
+            <h2 class="title">Chód uczony<br />w symulacji<span class="dot">.</span></h2>
+            <p class="lead">
+              Sieci sterujące chodem trenujemy w symulatorze pełnej dynamiki. Te same
+              trajektorie przenosimy na maszynę.
+            </p>
+          </div>
+
+          <p class="mono foot foot--l">300 mln kroków · sim-to-real</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 07 · WORLD MODELS & VLM ============ -->
+      <p class="caption">07 · Domena 02 — World Models &amp; VLM</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <p class="num">02</p>
+
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--narrow">
+            <p class="kicker">World Models &amp; VLM</p>
+            <h2 class="title">Rozumienie<br />przestrzeni<span class="dot">.</span></h2>
+            <p class="lead">
+              Modele świata i modele wizyjno-językowe dają maszynie kontekst: co widzi,
+              gdzie może stanąć i co z tego wynika dla następnego kroku.
+            </p>
+          </div>
+
+          <p class="mono foot foot--l">VLM · zamiar</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 08 · ROBOTICS ENGINEERING ============ -->
+      <p class="caption">08 · Domena 03 — Robotics Engineering &amp; Manufacturing</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <p class="num">03</p>
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--narrow">
+            <p class="kicker">Robotics Engineering &amp; Manufacturing</p>
+            <h2 class="title">Konstrukcja<br />i napędy<span class="dot">.</span></h2>
+            <p class="lead">
+              Napędy bezpośrednie, nogi o zamkniętym łańcuchu kinematycznym, sztywność
+              wzięta ze struktury zamiast z dodatkowej masy.
+            </p>
+          </div>
+
+          <p class="mono foot foot--l">Direct drive · closed-loop</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 09 · DESIGN & PROGRAM ============ -->
+      <p class="caption">09 · Domena 04 — Design &amp; Program</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <p class="num">04</p>
+
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--narrow">
+            <p class="kicker">Design &amp; Program</p>
+            <h2 class="title">Prowadzenie<br />i forma<span class="dot">.</span></h2>
+            <p class="lead">
+              Harmonogram, prowadzenie projektu i to, jak maszyna wygląda. Forma wynika
+              z obciążenia: każde wycięcie odprowadza ciepło.
+            </p>
+          </div>
+
+          <p class="mono foot foot--l">Program · design</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 10 · W01-TEK ============ -->
+      <p class="caption">10 · W01-TEK</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <div class="shot"><img src="assets/korpus.webp" alt="" /></div>
+          <div class="veil"></div>
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Pierwsza maszyna</p>
+            <h2 class="title title--giant">W01-TEK</h2>
+            <p class="lead">Czworonóg. Chodzi we Wrocławiu. Baza platformy, nie wizualizacja.</p>
+          </div>
+
+          <p class="mono foot foot--l">CFRP-IP67 · korpus nośny</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 11 · TEZA ============ -->
+      <p class="caption">11 · Teza</p>
+      <div class="frame">
+        <section class="slide slide--ink">
+          <img class="wm wm--right" src="assets/mark-red.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack stack--mid stack--narrow">
+            <p class="kicker">Zasada</p>
+            <h2 class="title">Budujemy,<br />nie doradzamy<span class="dot">.</span></h2>
+            <p class="lead">
+              Każda domena kończy się czymś, co się uruchamia. Nie oddajemy prezentacji.
+            </p>
+          </div>
+
+          <p class="mono foot foot--l">Kolektyw · Wrocław</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 12 · PRZERWA ============ -->
+      <p class="caption">12 · Przerwa</p>
+      <div class="frame">
+        <section class="slide slide--paper">
+          <img class="wm wm--right" src="assets/mark-red.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-red.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Przerwa w programie</p>
+            <h2 class="title title--giant title--red">Przerwa</h2>
+            <p class="lead slot">Wracamy o 00:00.</p>
+          </div>
+
+          <p class="mono foot foot--l">15 minut</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 13 · PYTANIA ============ -->
+      <p class="caption">13 · Pytania</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="wm wm--right" src="assets/mark-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Sala ma głos</p>
+            <h2 class="title title--giant">Pytania</h2>
+            <p class="lead">Odpowiadamy na to, co widzieliście — i na to, czego nie pokazaliśmy.</p>
+          </div>
+
+          <p class="mono foot foot--l">Q &amp; A</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+
+      <!-- ============ 14 · DZIĘKUJEMY ============ -->
+      <p class="caption">14 · Dziękujemy — kontakt</p>
+      <div class="frame">
+        <section class="slide slide--red">
+          <img class="wm wm--right" src="assets/mark-white.png" alt="" />
+
+          <div class="lockup">
+            <img src="assets/mark-white.png" alt="" />
+            <span>Machinekind</span>
+          </div>
+
+          <!-- Ogonek w „Ę" schodzi poniżej linii pisma, więc odstęp pod
+               sygnaturą jest tu większy niż domyślny. -->
+          <div class="stack" style="bottom: 188px; gap: 64px">
+            <p class="kicker">Zbudujmy następny</p>
+            <h2 class="title title--giant">Dziękujemy</h2>
+
+            <div class="contact">
+              <div class="contact__col">
+                <p class="mono">Kontakt</p>
+                <p class="contact__val">hello@wo1.tech</p>
+              </div>
+              <div class="contact__col">
+                <p class="mono">Strona</p>
+                <p class="contact__val">machinekind.ai</p>
+              </div>
+              <div class="contact__col">
+                <p class="mono">Gdzie</p>
+                <p class="contact__val">Wrocław, Polska</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="mono foot foot--l">51.1079° N / 17.0385° E</p>
+          <p class="mono foot foot--r">machinekind.ai</p>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      // `?only=N` zostawia w dokumencie jedną planszę w pełnym kadrze 1920 × 1080.
+      // Z tego trybu korzysta eksport do PNG; w przeglądarce służy do obejrzenia
+      // pojedynczej planszy w skali 1:1.
+      const only = new URLSearchParams(location.search).get('only');
+      if (only) {
+        document.body.classList.add('single');
+        document.querySelectorAll('.frame').forEach((frame, i) => {
+          if (String(i + 1) !== only) frame.remove();
+        });
+      }
+    </script>
+  </body>
+</html>
