@@ -115,6 +115,13 @@ if (slideCount !== NAMES.length) {
 }
 
 // Zrzut każdej planszy osobno, w podwójnej gęstości (3840 × 2160).
+//
+// `--window-size` podaje rozmiar okna, nie kadru: w trybie bezgłowym część
+// wysokości zjada rama okna (w tej wersji 87 px), więc okno w sam raz 1080
+// obcina dolny margines plansz. Okno idzie z zapasem, a `build-pack.py`
+// przycina zrzut do właściwego kadru.
+const OVERSHOOT = 240;
+
 for (let i = 0; i < slideCount; i++) {
   const out = join(PNG_DIR, `${String(i + 1).padStart(2, '0')}-${NAMES[i]}.png`);
   execFileSync(
@@ -125,7 +132,7 @@ for (let i = 0; i < slideCount; i++) {
       '--no-sandbox',
       '--hide-scrollbars',
       '--force-device-scale-factor=2',
-      '--window-size=1920,1080',
+      `--window-size=1920,${1080 + OVERSHOOT}`,
       '--virtual-time-budget=8000',
       `--screenshot=${out}`,
       `file://${bundlePath}?only=${i + 1}`,

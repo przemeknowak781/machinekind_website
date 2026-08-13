@@ -22,9 +22,24 @@ EXPORT = HERE / "export"
 SLIDE_W = Emu(12192000)
 SLIDE_H = Emu(6858000)
 
+PNG_W, PNG_H = 3840, 2160  # kadr 1920 × 1080 w podwójnej gęstości
+
 pngs = sorted(PNG_DIR.glob("*.png"))
 if not pngs:
     raise SystemExit("Brak PNG-ów w export/png — uruchom najpierw `node build.mjs`.")
+
+# ---- Przycięcie zrzutów do kadru ----
+# Okno przeglądarki jest wyższe niż plansza (patrz `OVERSHOOT` w build.mjs),
+# więc pod planszą zostaje pasek tła strony. Kadr zaczyna się w lewym górnym
+# rogu okna, więc wystarczy odciąć nadmiar z dołu.
+for path in pngs:
+    im = Image.open(path)
+    if (im.width, im.height) == (PNG_W, PNG_H):
+        continue
+    if im.width != PNG_W or im.height < PNG_H:
+        raise SystemExit(f"{path.name}: zrzut {im.width} × {im.height}, oczekiwano co najmniej {PNG_W} × {PNG_H}.")
+    im.crop((0, 0, PNG_W, PNG_H)).save(path)
+    print(f"KADR  → {path.name} ({im.height} → {PNG_H})")
 
 # ---- PDF: jedna plansza na stronę, w kadrze 1920 × 1080 punktów ----
 # Strony liczy się w punktach (1/72 cala), więc zrzut w 2× schodzi do 1920
