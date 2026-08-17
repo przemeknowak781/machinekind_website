@@ -425,7 +425,7 @@ def build_pages() -> list[tuple[str, str]]:
     p.append(('16-obrazowanie', page(
         title('Obrazowanie') +
         '<div class="cols cols--2" style="align-items:center">'
-        '<img src="../slides/assets/hands-ink.png" style="width:100%">'
+        '<img src="../logo/svg/dlonie-ink.svg" style="width:100%">'
         '<div class="stack-sm"><h3 class="h-sub">Dłonie</h3>'
         '<p class="body">Dłoń maszyny i dłoń człowieka, sięgające po sobie. Motyw sygnaturowy '
         '— używamy go na punkt styku między częścią o ludziach a częścią o maszynie. '
@@ -444,7 +444,7 @@ def build_pages() -> list[tuple[str, str]]:
         '<p class="body" style="font-size:13px">Zdjęć stockowych z ludźmi w biurze, ikon '
         'z zestawów, ilustracji „AI" z sieciami neuronowymi i świecącymi mózgami.</p></div>'
         '</div>',
-        head='Obrazowanie', foot_l='slides/assets')))
+        head='Obrazowanie', foot_l='logo/svg/dlonie.svg')))
 
     # ---- 17 głos ----
     p.append(('17-glos', page(

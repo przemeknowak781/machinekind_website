@@ -42,6 +42,7 @@ i tak go nadpisze.
 ```bash
 python3 tokens/build-tokens.py     # tokeny z global.css → json, css, scss, js
 python3 logo/build-logo.py         # sygnatura słowna i lockupy z pliku kroju
+python3 logo/build-hands.py        # scena dłoni z wektorów używanych przez stronę
 python3 logo/build-raster.py       # PNG, favikony, Open Graph, awatar
 node    slides/build.mjs           # plansze → PNG, PDF, PPTX
 python3 templates/build.py         # sieć, papier firmowy, podpis
@@ -56,12 +57,19 @@ Potrzebne: Node, Chromium lub Chrome (szukany w `CHROME_BIN`, potem w zestawie
 Playwrighta, potem w `PATH`), Python z `pillow`, `python-pptx`, `fonttools`
 i `potracer`.
 
-## Dwie rzeczy do podmiany
+## Co warto wiedzieć, zanim się coś podmieni
 
-1. **Znak jest obrysem bitmapy**, nie plikiem od autora — wierność 0,999
-   względem `logo.png`, ale jeśli gdzieś leży oryginał wektorowy, podmień go
-   i przelicz resztę. Szczegóły w `logo/README.md`.
-2. **Logotypy uczelni**: PWr mamy w wersji angielskiej, UEW w 362 px.
+1. **Obecny znak nie ma nigdzie wersji wektorowej.** Sprawdzone w plikach,
+   w historii gita i w metadanych — jedynym źródłem jest `logo.png`, zrzut
+   z programu graficznego, i tak traktuje go też `scripts/logo.mjs` w repo.
+   Wektor w paczce jest obrysem tej bitmapy o wierności 0,999. Jeśli
+   u autora znaku leży plik źródłowy, podmiana jest jednym poleceniem.
+2. **`machinekind_logo.svg` w korzeniu repo to poprzedni logotyp**, nie
+   obecny — dłonie w czerwonym polu, wgrane dzień przed zmianą znaku.
+   To samo dotyczy `public/mark.svg` z historii. Nie używać.
+3. **Dłonie idą z wektora**, nie z rastra: `logo/svg/dlonie.svg` składa się
+   z tych samych plików, które strona wstawia w nagłówek.
+4. **Logotypy uczelni**: PWr mamy w wersji angielskiej, UEW w 362 px.
    Oba działają, oba warto wymienić na lepsze. Szczegóły
    w `slides/assets/logos/README.md`.
 

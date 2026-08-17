@@ -50,6 +50,7 @@ const MIME = {
   '.png': 'image/png',
   '.webp': 'image/webp',
   '.jpg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
 };
 
 const dataUri = (path) => {
