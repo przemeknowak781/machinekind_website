@@ -491,7 +491,9 @@ def build_pages() -> list[tuple[str, str]]:
     # ---- 19 pliki ----
     files = [
         ('brandbook/', 'Ta księga: źródło, strony w PNG i PDF.'),
-        ('logo/svg/', 'Znak, sygnatura słowna i lockupy w wektorze, po cztery warianty barwne.'),
+        ('logo/svg/', 'Znak, sygnet, sygnatura słowna, lockupy i dłonie w wektorze.'),
+        ('logo/arkusz-znaku.pdf', 'Wszystkie warianty znaku na jednej stronie A4.'),
+        ('design-system/', 'system.css do wrzucenia w projekt i żywa dokumentacja komponentów.'),
         ('logo/png/', 'Rastry znaku i lockupów, 128–2048 px.'),
         ('logo/favicon/', 'Ikony przeglądarki i aplikacji, z .ico i wariantem maskowalnym.'),
         ('logo/social/', 'Open Graph, baner LinkedIn, awatar.'),

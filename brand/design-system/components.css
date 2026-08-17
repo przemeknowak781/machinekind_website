@@ -1,0 +1,698 @@
+/* ============================================================
+   Machinekind — warstwa komponentów
+   Doklejana do tokenów przez `build-system.py`; nie używaj tego pliku
+   samodzielnie, bo nie niesie zmiennych.
+
+   Co jest skąd:
+   — `.wrap`, `.section`, `.rule`, `.head`, typografia, `.btn`, `.dark`,
+     `.red`, pominięcie nawigacji i pierścień skupienia stoją już
+     w `src/styles/global.css` i są tu przepisane bez zmian;
+   — reszta (formularz, karta, lista, tabela, znacznik, notka, figura)
+     dochodzi tutaj — strona ich jeszcze nie potrzebowała, a projekt,
+     który weźmie ten plik, potrzebuje.
+   ============================================================ */
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--red);
+  color: #fff;
+}
+
+/* Pierścień skupienia jest wspólny dla wszystkiego, co da się dojść
+   klawiaturą. Nie zdejmuj go bez podstawienia własnego. */
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Układ ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--section-y);
+  position: relative;
+}
+
+.section--tight {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+/* Podziały niesie włos, nie ramka i nie cień. Zawsze 1 px, w każdej skali. */
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+}
+
+/* Nagłówek sekcji: tytuł i tekst poboczny, obie kolumny od góry. */
+.head {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  grid-template-columns: 1fr;
+  align-items: start;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+@media (min-width: 900px) {
+  .head {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .head > :nth-child(2) {
+    padding-top: 0.6em;
+  }
+}
+
+/* Pion i poziom bez marginesów na elementach — odstęp niesie rodzic. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap, 1.25rem);
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-gap, 1rem);
+}
+
+.grid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col, 17rem)), 1fr));
+}
+
+/* ---------- Typografia ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 0.92;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.h-display {
+  font-size: clamp(3.6rem, 13.5vw, 12.5rem);
+  line-height: 0.84;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+.h1 {
+  font-size: clamp(2.9rem, 8vw, 6.8rem);
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+}
+
+.h2 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 0.9;
+  letter-spacing: 0.012em;
+}
+
+/* Małe tytuły zostają w kroju tekstowym — kondensowany przy 20 px gubi
+   czytelność. */
+.h3 {
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: clamp(1.2rem, 1.9vw, 1.6rem);
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+
+/* Tytuł wyświetlany łamany na dwa wiersze i więcej. Polskie wersaliki
+   z ogonkami przy ciasnym wierszu wchodzą na siebie — 0,96 to podłoga. */
+.h-wrapped {
+  line-height: 0.96;
+}
+
+.lead {
+  font-size: clamp(1.05rem, 1.5vw, 1.32rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+.body-text {
+  color: var(--ink-2);
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+/* Monospace niesie pomiar: współrzędne, takty, liczności, oznaczenia.
+   Nie służy za kostium „technicznego" pod zwykłe etykiety. */
+.mono {
+  font-family: var(--mono);
+  font-size: var(--micro);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Nadtytuł prowadzony włosem — ten sam gest co linie sekcji. */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: var(--micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.kicker::before {
+  content: '';
+  flex: none;
+  width: 3.5rem;
+  height: 1px;
+  background: var(--line-2);
+}
+
+.accent {
+  color: var(--red);
+}
+
+/* ---------- Przycisk ---------- */
+.btn {
+  --btn-bg: var(--ink);
+  --btn-fg: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1.6rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: transform 0.4s var(--ease), background-color 0.3s var(--ease);
+}
+
+.btn:hover {
+  --btn-bg: var(--red);
+  transform: translateY(-2px);
+}
+
+.btn__arrow {
+  transition: transform 0.4s var(--ease);
+}
+
+.btn:hover .btn__arrow {
+  transform: translate(3px, -3px);
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  border: 1px solid var(--line-2);
+}
+
+.btn--ghost:hover {
+  --btn-fg: #fff;
+  border-color: var(--red);
+}
+
+.btn--sm {
+  padding: 0.6rem 1.1rem;
+  font-size: 0.85rem;
+}
+
+.btn[disabled],
+.btn[aria-disabled='true'] {
+  --btn-bg: var(--paper-3);
+  --btn-fg: var(--ink-3);
+  border-color: var(--line);
+  pointer-events: none;
+  transform: none;
+}
+
+/* ---------- Odsyłacz w tekście ---------- */
+.link {
+  color: var(--red);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color 0.2s var(--ease);
+}
+
+.link:hover {
+  color: var(--red-deep);
+}
+
+/* ---------- Formularz ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: var(--micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* Pole ma jedną kreskę u dołu, nie ramkę dookoła — ten sam włos co reszta
+   systemu. Ramka robiłaby z formularza siatkę prostokątów. */
+.input,
+.textarea,
+.select {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-2);
+  border-radius: 0;
+  padding: 0.7rem 0 0.6rem;
+  transition: border-color 0.2s var(--ease);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--ink-3);
+}
+
+.input:hover,
+.textarea:hover,
+.select:hover {
+  border-color: var(--ink-3);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: 0;
+  border-color: var(--red);
+}
+
+.input:focus-visible,
+.textarea:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 4px;
+}
+
+.textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.select {
+  appearance: none;
+  padding-right: 1.6rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%),
+    linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: right 0.55rem center, right 0.2rem center;
+  background-size: 0.36rem 0.36rem;
+  background-repeat: no-repeat;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--ink-3);
+}
+
+.field[data-invalid] .input,
+.field[data-invalid] .textarea,
+.field[data-invalid] .select {
+  border-color: var(--red);
+}
+
+.error {
+  font-size: 0.85rem;
+  color: var(--red-deep);
+}
+
+/* Znacznik wyboru: kwadrat, bo system nie ma zaokrągleń poza przyciskiem. */
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  cursor: pointer;
+}
+
+.check input {
+  appearance: none;
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.22rem;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  transition: background-color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.check input[type='radio'] {
+  border-radius: 999px;
+}
+
+/* Ptaszek i kropka idą obrazkiem, nie składaniem gradientów: gradienty
+   przy różnych stopniach tekstu rozjeżdżały się o pół piksela. */
+.check input:checked {
+  background-color: var(--red);
+  border-color: var(--red);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.check input[type='checkbox']:checked {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' \
+viewBox='0 0 12 12'%3E%3Cpath d='M2.2 6.3 4.7 8.8 9.8 3.3' fill='none' stroke='%23fff' \
+stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 0.72rem;
+}
+
+.check input[type='radio']:checked {
+  background-image: radial-gradient(circle, #fff 0 34%, transparent 35%);
+  background-size: auto;
+}
+
+/* ---------- Karta ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.card__meta {
+  font-family: var(--mono);
+  font-size: var(--micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.card__title {
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+.card__body {
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* Karta klikalna: cała powierzchnia jest celem, akcent bierze tytuł. */
+a.card {
+  transition: border-color 0.25s var(--ease);
+}
+
+a.card:hover {
+  border-color: var(--red);
+}
+
+a.card:hover .card__title {
+  color: var(--red);
+}
+
+/* ---------- Lista pozycji ----------
+   Wiersze rozdzielone włosem: program, spis, wykaz plików. */
+.list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.list__row {
+  display: grid;
+  grid-template-columns: var(--list-cols, 4rem minmax(0, 1fr) auto);
+  gap: 0.4rem 1.5rem;
+  align-items: baseline;
+  padding-block: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.list__row:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---------- Tabela ---------- */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.7rem 1.25rem 0.7rem 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: baseline;
+}
+
+.table th {
+  font-family: var(--mono);
+  font-size: var(--micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.table td {
+  color: var(--ink-2);
+}
+
+.table .num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Znacznik ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: var(--micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line-2);
+  color: var(--ink-2);
+}
+
+.tag--red {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.tag--ink {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+/* ---------- Notka ---------- */
+.note {
+  border-left: 2px solid var(--line-2);
+  padding: 0.15rem 0 0.15rem 1.25rem;
+  color: var(--ink-2);
+}
+
+.note--red {
+  border-color: var(--red);
+}
+
+/* ---------- Figura ---------- */
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.figure__cap {
+  font-family: var(--mono);
+  font-size: var(--micro);
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+/* ---------- Pominięcie nawigacji ---------- */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 6px 0;
+}
+
+.skip:focus {
+  left: 0;
+}
+
+/* ============================================================
+   Konteksty barwne
+   Blok ustawia własny atrament, włos i akcent, więc komponenty w środku
+   nie muszą wiedzieć, na czym stoją. Nie dopisuj kolorów w komponencie —
+   dopisz je tutaj.
+   ============================================================ */
+.dark {
+  background: var(--ink);
+  color: #fff;
+  --ink: #fff;
+  --ink-2: var(--on-dark-2);
+  --ink-3: var(--on-dark-3);
+  --line: var(--on-dark-line);
+  --line-2: rgba(255, 255, 255, 0.28);
+}
+
+.red {
+  background: var(--red);
+  color: #fff;
+  --ink: #fff;
+  --ink-2: var(--on-red-2);
+  --ink-3: rgba(255, 255, 255, 0.62);
+  --line: var(--on-red-line);
+  --line-2: rgba(255, 255, 255, 0.44);
+}
+
+/* Tło kontekstu musi iść wartością wprost: `--ink` i `--red` są w tej samej
+   regule podmieniane, a własność czyta wartość po podmianie. */
+.dark {
+  background: #0d0f10;
+}
+
+.red {
+  background: #bd3e3e;
+}
+
+.dark .btn,
+.red .btn {
+  --btn-bg: #fff;
+  --btn-fg: #0d0f10;
+}
+
+.dark .btn:hover {
+  --btn-bg: #bd3e3e;
+  --btn-fg: #fff;
+}
+
+.red .btn:hover {
+  --btn-bg: #0d0f10;
+  --btn-fg: #fff;
+}
+
+.dark .btn--ghost,
+.red .btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: #fff;
+  border-color: var(--line-2);
+}
+
+/* Na czerwieni akcentem jest atrament, na atramencie — czerwień jasna.
+   Czerwień marki na atramencie daje 3,59:1 i nie nadaje się na tekst. */
+.red .accent,
+.red .link {
+  color: #0d0f10;
+}
+
+.dark .accent,
+.dark .link {
+  color: var(--red-soft);
+}
+
+.red ::selection {
+  background: #fff;
+  color: var(--red-deep);
+}
+
+.paper-2 {
+  background: var(--paper-2);
+}

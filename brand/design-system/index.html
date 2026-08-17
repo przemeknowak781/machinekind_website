@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Machinekind — design system</title>
+    <link rel="stylesheet" href="../slides/assets/fonts.css" />
+    <link rel="stylesheet" href="system.css" />
+    <style>
+      /* Chrom dokumentacji — wszystko poniżej dotyczy tylko tej strony,
+         nie systemu. Próbki są zbudowane wyłącznie z klas systemu. */
+      body { padding-bottom: 6rem; }
+      .top { border-bottom: 1px solid var(--line); }
+      .top__inner { display: flex; flex-wrap: wrap; gap: 1.5rem 2.5rem;
+                     align-items: baseline; justify-content: space-between;
+                     padding-block: 1.75rem; }
+      .lockup { display: flex; align-items: center; gap: .8rem; }
+      .lockup img { width: 2rem; }
+      .lockup span { font-family: var(--display); font-weight: 500; font-size: 1.5rem;
+                      letter-spacing: .055em; text-transform: uppercase; line-height: 1; }
+      .toc { display: flex; flex-wrap: wrap; gap: .35rem 1.4rem; }
+      .toc a { font-family: var(--mono); font-size: var(--micro); letter-spacing: .12em;
+                text-transform: uppercase; color: var(--ink-3); }
+      .toc a:hover { color: var(--red); }
+      .hero { padding-block: clamp(3rem, 7vw, 6rem) clamp(2rem, 4vw, 3.5rem); }
+      .block { padding-block: clamp(2.5rem, 5vw, 4rem); border-top: 1px solid var(--line); }
+      .block__head { display: grid; gap: 1rem; margin-bottom: 2rem; }
+      @media (min-width: 900px) {
+        .block__head { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+                        gap: 2.5rem; align-items: start; }
+        .block__head .lead { padding-top: .55em; }
+      }
+      .demo { padding: clamp(1.5rem, 3vw, 2.5rem); background: var(--paper-2);
+               display: flex; flex-direction: column; gap: 1.25rem; }
+      .demo--plain { padding: 0; background: none; }
+      .code { margin-top: 1rem; padding: 1.25rem 1.5rem; background: var(--ink);
+               color: rgba(255,255,255,.86); font-family: var(--mono); font-size: .8rem;
+               line-height: 1.65; overflow-x: auto; white-space: pre; }
+      .files { margin-top: 1.5rem; }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap top__inner">
+        <div class="lockup">
+          <img src="../logo/svg/mark-red.svg" alt="" />
+          <span>Machinekind</span>
+        </div>
+        <nav class="toc"><a href="#typografia">Typografia</a><a href="#uklad">Układ</a><a href="#przycisk">Przycisk</a><a href="#odsylacz">Odsyłacz</a><a href="#formularz">Formularz</a><a href="#karta">Karta</a><a href="#lista">Lista pozycji</a><a href="#tabela">Tabela</a><a href="#znacznik">Znacznik i notka</a><a href="#konteksty">Konteksty barwne</a></nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="hero">
+        <p class="kicker">Design system</p>
+        <h1 class="h1 h-wrapped" style="margin:1.5rem 0 1.25rem">
+          Jeden plik<br />do wrzucenia<span class="accent">.</span>
+        </h1>
+        <p class="lead">
+          <code>system.css</code> niesie tokeny i komponenty. Tokeny są generowane
+          z <code>src/styles/global.css</code>, więc system nie może rozjechać się
+          ze stroną. Ta dokumentacja stoi na tym samym pliku, który opisuje — każda
+          próbka niżej jest zbudowana z klas systemu.
+        </p>
+        <div class="table-scroll files">
+          <table class="table">
+            <thead><tr><th>Plik</th><th>Co to</th></tr></thead>
+            <tbody>
+              <tr><td><code>system.css</code></td><td>Tokeny i komponenty w jednym.
+                Tego pliku używa projekt.</td></tr>
+              <tr><td><code>components.css</code></td><td>Sama warstwa komponentów.
+                Tu się edytuje.</td></tr>
+              <tr><td><code>../tokens/</code></td><td>Tokeny osobno, w JSON, CSS, SCSS i JS.</td></tr>
+              <tr><td><code>../fonts/</code></td><td>Pliki krojów i licencje. Podzbiór
+                latin-ext jest obowiązkowy.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <section class="block" id="typografia"><div class="block__head"><h2 class="h2 h-wrapped">Typografia</h2><p class="lead">Krój wyświetlany niesie sygnaturę i tytuły, tekstowy — zdania, monospace — pomiar. Tytuł łamany na dwa wiersze i więcej bierze <code>.h-wrapped</code>: polskie wersaliki przy ciaśniejszym wierszu wchodzą na siebie.</p></div><div class="demo"><p class="kicker">Nadtytuł</p>
+<h2 class="h2 h-wrapped">Chód uczony<br>w symulacji</h2>
+<p class="lead">Sieci sterujące chodem trenujemy w symulatorze pełnej dynamiki.</p>
+<p class="body-text">Tekst akapitowy trzyma miarę 68 znaków, więc wiersz da się przeczytać bez gubienia linii.</p>
+<p class="mono">300 mln kroków · sim-to-real</p></div><pre class="code"><code>&lt;p class="kicker"&gt;Nadtytuł&lt;/p&gt;
+&lt;h2 class="h2 h-wrapped"&gt;Chód uczony&lt;br&gt;w symulacji&lt;/h2&gt;
+&lt;p class="lead"&gt;Sieci sterujące chodem trenujemy w symulatorze pełnej dynamiki.&lt;/p&gt;
+&lt;p class="body-text"&gt;Tekst akapitowy trzyma miarę 68 znaków, więc wiersz da się przeczytać bez gubienia linii.&lt;/p&gt;
+&lt;p class="mono"&gt;300 mln kroków · sim-to-real&lt;/p&gt;</code></pre></section><section class="block" id="uklad"><div class="block__head"><h2 class="h2 h-wrapped">Układ</h2><p class="lead">Treść trzyma miarę <code>--wrap</code>, podziały niesie włos. <code>.stack</code> i <code>.cluster</code> odpowiadają za odstępy, żeby komponenty nie nosiły własnych marginesów.</p></div><div class="demo"><div class="stack">
+  <div class="cluster">
+    <span class="tag">jeden</span><span class="tag">dwa</span><span class="tag">trzy</span>
+  </div>
+  <hr class="rule">
+  <div class="grid" style="--col:11rem">
+    <p class="body-text">Kolumna</p><p class="body-text">Kolumna</p><p class="body-text">Kolumna</p>
+  </div>
+</div></div><pre class="code"><code>&lt;div class="stack"&gt;
+  &lt;div class="cluster"&gt;
+    &lt;span class="tag"&gt;jeden&lt;/span&gt;&lt;span class="tag"&gt;dwa&lt;/span&gt;&lt;span class="tag"&gt;trzy&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;hr class="rule"&gt;
+  &lt;div class="grid" style="--col:11rem"&gt;
+    &lt;p class="body-text"&gt;Kolumna&lt;/p&gt;&lt;p class="body-text"&gt;Kolumna&lt;/p&gt;&lt;p class="body-text"&gt;Kolumna&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></section><section class="block" id="przycisk"><div class="block__head"><h2 class="h2 h-wrapped">Przycisk</h2><p class="lead">Jedyne zaokrąglenie w systemie — pełna pigułka. Wersja domyślna na atramencie, <code>.btn--ghost</code> na włosie. Stan wyłączony nie reaguje na wskaźnik.</p></div><div class="demo"><div class="cluster">
+  <a class="btn" href="#">Projekt Wojtek <svg class="btn__arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a class="btn btn--ghost" href="#">Kontakt</a>
+  <button class="btn btn--sm">Mniejszy</button>
+  <button class="btn" disabled>Wyłączony</button>
+</div></div><pre class="code"><code>&lt;div class="cluster"&gt;
+  &lt;a class="btn" href="#"&gt;Projekt Wojtek &lt;svg class="btn__arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"&gt;&lt;path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/&gt;&lt;/svg&gt;&lt;/a&gt;
+  &lt;a class="btn btn--ghost" href="#"&gt;Kontakt&lt;/a&gt;
+  &lt;button class="btn btn--sm"&gt;Mniejszy&lt;/button&gt;
+  &lt;button class="btn" disabled&gt;Wyłączony&lt;/button&gt;
+&lt;/div&gt;</code></pre></section><section class="block" id="odsylacz"><div class="block__head"><h2 class="h2 h-wrapped">Odsyłacz</h2><p class="lead">W tekście ciągłym odsyłacz jest czerwony i podkreślony. Na czerwieni i na atramencie kolor podmienia kontekst — czerwień marki na atramencie daje 3,59:1 i nie nadaje się na tekst.</p></div><div class="demo"><p class="body-text">Maszyna chodzi we Wrocławiu — <a class="link" href="#">zobacz projekt</a>.</p></div><pre class="code"><code>&lt;p class="body-text"&gt;Maszyna chodzi we Wrocławiu — &lt;a class="link" href="#"&gt;zobacz projekt&lt;/a&gt;.&lt;/p&gt;</code></pre></section><section class="block" id="formularz"><div class="block__head"><h2 class="h2 h-wrapped">Formularz</h2><p class="lead">Pole ma jedną kreskę u dołu, nie ramkę dookoła. Ramka robiłaby z formularza siatkę prostokątów, a system stoi na włosie. Błąd oznacza atrybut <code>data-invalid</code> na <code>.field</code>.</p></div><div class="demo"><div class="stack" style="--stack-gap:1.75rem;max-width:32rem">
+  <div class="field">
+    <label class="label" for="e">Adres</label>
+    <input class="input" id="e" type="email" placeholder="hello@wo1.tech">
+  </div>
+  <div class="field">
+    <label class="label" for="t">Wiadomość</label>
+    <textarea class="textarea" id="t" placeholder="Napisz, co budujecie"></textarea>
+  </div>
+  <div class="field" data-invalid>
+    <label class="label" for="r">Rola</label>
+    <select class="select" id="r"><option>Wybierz</option></select>
+    <p class="error">Pole wymagane.</p>
+  </div>
+  <label class="check"><input type="checkbox" checked><span class="body-text">Zgoda na kontakt</span></label>
+</div></div><pre class="code"><code>&lt;div class="stack" style="--stack-gap:1.75rem;max-width:32rem"&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="label" for="e"&gt;Adres&lt;/label&gt;
+    &lt;input class="input" id="e" type="email" placeholder="hello@wo1.tech"&gt;
+  &lt;/div&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="label" for="t"&gt;Wiadomość&lt;/label&gt;
+    &lt;textarea class="textarea" id="t" placeholder="Napisz, co budujecie"&gt;&lt;/textarea&gt;
+  &lt;/div&gt;
+  &lt;div class="field" data-invalid&gt;
+    &lt;label class="label" for="r"&gt;Rola&lt;/label&gt;
+    &lt;select class="select" id="r"&gt;&lt;option&gt;Wybierz&lt;/option&gt;&lt;/select&gt;
+    &lt;p class="error"&gt;Pole wymagane.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;label class="check"&gt;&lt;input type="checkbox" checked&gt;&lt;span class="body-text"&gt;Zgoda na kontakt&lt;/span&gt;&lt;/label&gt;
+&lt;/div&gt;</code></pre></section><section class="block" id="karta"><div class="block__head"><h2 class="h2 h-wrapped">Karta</h2><p class="lead">Kreska u góry, oznaczenie, tytuł, treść. Karta klikalna zabiera akcent na tytuł i na kreskę — cała powierzchnia jest celem.</p></div><div class="demo"><div class="grid" style="--col:15rem">
+  <a class="card" href="#">
+    <p class="card__meta">Domena 01</p>
+    <h3 class="card__title">Chód uczony w symulacji</h3>
+    <p class="card__body">Trajektorie z symulatora przenosimy na maszynę.</p>
+  </a>
+  <div class="card">
+    <p class="card__meta">Domena 02</p>
+    <h3 class="card__title">Rozumienie przestrzeni</h3>
+    <p class="card__body">Modele świata dają maszynie kontekst.</p>
+  </div>
+</div></div><pre class="code"><code>&lt;div class="grid" style="--col:15rem"&gt;
+  &lt;a class="card" href="#"&gt;
+    &lt;p class="card__meta"&gt;Domena 01&lt;/p&gt;
+    &lt;h3 class="card__title"&gt;Chód uczony w symulacji&lt;/h3&gt;
+    &lt;p class="card__body"&gt;Trajektorie z symulatora przenosimy na maszynę.&lt;/p&gt;
+  &lt;/a&gt;
+  &lt;div class="card"&gt;
+    &lt;p class="card__meta"&gt;Domena 02&lt;/p&gt;
+    &lt;h3 class="card__title"&gt;Rozumienie przestrzeni&lt;/h3&gt;
+    &lt;p class="card__body"&gt;Modele świata dają maszynie kontekst.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></section><section class="block" id="lista"><div class="block__head"><h2 class="h2 h-wrapped">Lista pozycji</h2><p class="lead">Wiersze rozdzielone włosem. Kolumny ustawia <code>--list-cols</code>, więc ta sama lista niesie program wydarzenia i wykaz plików.</p></div><div class="demo"><ol class="list">
+  <li class="list__row">
+    <span class="mono">01</span>
+    <span><strong>Spyrosoft</strong><br><span class="mono">Partner</span></span>
+    <span class="body-text">Kilka słów od partnera</span>
+  </li>
+  <li class="list__row">
+    <span class="mono">02</span>
+    <span><strong>Michał Pogoda-Rosikoń</strong><br><span class="mono">bards.ai</span></span>
+    <span class="body-text">Dlaczego teraz jest czas na humanoidy</span>
+  </li>
+</ol></div><pre class="code"><code>&lt;ol class="list"&gt;
+  &lt;li class="list__row"&gt;
+    &lt;span class="mono"&gt;01&lt;/span&gt;
+    &lt;span&gt;&lt;strong&gt;Spyrosoft&lt;/strong&gt;&lt;br&gt;&lt;span class="mono"&gt;Partner&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="body-text"&gt;Kilka słów od partnera&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li class="list__row"&gt;
+    &lt;span class="mono"&gt;02&lt;/span&gt;
+    &lt;span&gt;&lt;strong&gt;Michał Pogoda-Rosikoń&lt;/strong&gt;&lt;br&gt;&lt;span class="mono"&gt;bards.ai&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="body-text"&gt;Dlaczego teraz jest czas na humanoidy&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</code></pre></section><section class="block" id="tabela"><div class="block__head"><h2 class="h2 h-wrapped">Tabela</h2><p class="lead">Bez linii pionowych i bez tła wierszy. Liczby biorą <code>.num</code> — monospace z cyframi tej samej szerokości, żeby kolumna stała w pionie. Szeroka tabela idzie w <code>.table-scroll</code>, żeby to ona przewijała się w bok, a nie strona.</p></div><div class="demo"><div class="table-scroll">
+  <table class="table">
+    <thead><tr><th>Warstwa</th><th>Takt</th><th>Co robi</th></tr></thead>
+    <tbody>
+      <tr><td>Pętla momentu</td><td class="num">400 Hz</td><td>moment na wale</td></tr>
+      <tr><td>Sieć lokomocyjna</td><td class="num">50 Hz</td><td>krok</td></tr>
+      <tr><td>Rozumienie sceny</td><td class="num">1 Hz</td><td>zamiar</td></tr>
+    </tbody>
+  </table>
+</div></div><pre class="code"><code>&lt;div class="table-scroll"&gt;
+  &lt;table class="table"&gt;
+    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Warstwa&lt;/th&gt;&lt;th&gt;Takt&lt;/th&gt;&lt;th&gt;Co robi&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;Pętla momentu&lt;/td&gt;&lt;td class="num"&gt;400 Hz&lt;/td&gt;&lt;td&gt;moment na wale&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;Sieć lokomocyjna&lt;/td&gt;&lt;td class="num"&gt;50 Hz&lt;/td&gt;&lt;td&gt;krok&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;Rozumienie sceny&lt;/td&gt;&lt;td class="num"&gt;1 Hz&lt;/td&gt;&lt;td&gt;zamiar&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre></section><section class="block" id="znacznik"><div class="block__head"><h2 class="h2 h-wrapped">Znacznik i notka</h2><p class="lead">Znacznik niesie stan albo kategorię, notka — uwagę na marginesie treści. Oba stoją na włosie, nie na wypełnieniu.</p></div><div class="demo"><div class="stack">
+  <div class="cluster">
+    <span class="tag">domyślny</span>
+    <span class="tag tag--red">czerwony</span>
+    <span class="tag tag--ink">atrament</span>
+  </div>
+  <p class="note note--red">Maszyna jest własnością Politechniki Wrocławskiej.</p>
+</div></div><pre class="code"><code>&lt;div class="stack"&gt;
+  &lt;div class="cluster"&gt;
+    &lt;span class="tag"&gt;domyślny&lt;/span&gt;
+    &lt;span class="tag tag--red"&gt;czerwony&lt;/span&gt;
+    &lt;span class="tag tag--ink"&gt;atrament&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;p class="note note--red"&gt;Maszyna jest własnością Politechniki Wrocławskiej.&lt;/p&gt;
+&lt;/div&gt;</code></pre></section><section class="block" id="konteksty"><div class="block__head"><h2 class="h2 h-wrapped">Konteksty barwne</h2><p class="lead">Blok <code>.dark</code> albo <code>.red</code> podmienia atrament, włos i akcent, więc komponenty w środku nie wiedzą, na czym stoją. Nie dopisuj kolorów w komponencie — dopisz je w kontekście.</p></div><div class="demo demo--plain"><div class="red" style="padding:2rem">
+  <p class="kicker">Nadtytuł</p>
+  <h3 class="card__title" style="margin:.6rem 0">Punkt styku</h3>
+  <p class="body-text">Ten sam akapit, ta sama klasa.</p>
+  <div class="cluster" style="margin-top:1.25rem">
+    <a class="btn" href="#">Przycisk</a>
+    <a class="btn btn--ghost" href="#">Ghost</a>
+  </div>
+</div>
+<div class="dark" style="padding:2rem;margin-top:1rem">
+  <p class="kicker">Nadtytuł</p>
+  <h3 class="card__title" style="margin:.6rem 0">Budujemy, nie doradzamy</h3>
+  <p class="body-text">Akcent na atramencie bierze <a class="link" href="#">czerwień jasną</a>.</p>
+</div></div><pre class="code"><code>&lt;div class="red" style="padding:2rem"&gt;
+  &lt;p class="kicker"&gt;Nadtytuł&lt;/p&gt;
+  &lt;h3 class="card__title" style="margin:.6rem 0"&gt;Punkt styku&lt;/h3&gt;
+  &lt;p class="body-text"&gt;Ten sam akapit, ta sama klasa.&lt;/p&gt;
+  &lt;div class="cluster" style="margin-top:1.25rem"&gt;
+    &lt;a class="btn" href="#"&gt;Przycisk&lt;/a&gt;
+    &lt;a class="btn btn--ghost" href="#"&gt;Ghost&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="dark" style="padding:2rem;margin-top:1rem"&gt;
+  &lt;p class="kicker"&gt;Nadtytuł&lt;/p&gt;
+  &lt;h3 class="card__title" style="margin:.6rem 0"&gt;Budujemy, nie doradzamy&lt;/h3&gt;
+  &lt;p class="body-text"&gt;Akcent na atramencie bierze &lt;a class="link" href="#"&gt;czerwień jasną&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;</code></pre></section>
+    </main>
+  </body>
+</html>

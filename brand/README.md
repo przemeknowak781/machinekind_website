@@ -13,9 +13,10 @@ Nic w tej paczce nie jest osobnym pomysłem obok strony.
 **Robisz nowy materiał** → otwórz `brandbook/export/machinekind-ksiega-znaku.pdf`.
 Dwadzieścia jeden stron: znak, kolor, typografia, układ, obrazowanie, głos.
 
-**Potrzebujesz pliku znaku** → `logo/svg/`. Wektor, cztery warianty barwne.
+**Potrzebujesz pliku znaku** → `logo/svg/`, a na szybko `logo/arkusz-znaku.pdf`
+— wszystkie warianty na jednej stronie.
 
-**Wchodzisz w kod** → `tokens/tokens.css` albo `tokens.json`.
+**Wchodzisz w kod** → `design-system/system.css`. Jeden plik: tokeny i komponenty.
 
 **Składasz prezentację** → `slides/export/` (PPTX, PDF, PNG).
 
@@ -26,6 +27,7 @@ Dwadzieścia jeden stron: znak, kolor, typografia, układ, obrazowanie, głos.
 | `brandbook/` | Księga znaku: źródło, 21 stron w PNG, PDF i wersja jednoplikowa HTML. |
 | `logo/` | Znak, sygnatura słowna, lockupy. SVG, PNG, favikony, grafiki do sieci. |
 | `tokens/` | Tokeny w JSON, CSS, SCSS i JS. Skrypt liczący kontrast WCAG. |
+| `design-system/` | `system.css` do wrzucenia w projekt i żywa dokumentacja komponentów. |
 | `slides/` | 23 plansze przerywnikowe 16:9. Źródło, PNG, PDF, PPTX. |
 | `templates/` | Sieć (post, relacja), papier firmowy A4, podpis mailowy. |
 | `fonts/` | Pliki krojów i licencje OFL. |
@@ -44,6 +46,8 @@ python3 tokens/build-tokens.py     # tokeny z global.css → json, css, scss, js
 python3 logo/build-logo.py         # sygnatura słowna i lockupy z pliku kroju
 python3 logo/build-hands.py        # scena dłoni z wektorów używanych przez stronę
 python3 logo/build-raster.py       # PNG, favikony, Open Graph, awatar
+python3 logo/build-sheet.py        # arkusz znaku A4
+python3 design-system/build-system.py   # system.css i dokumentacja komponentów
 node    slides/build.mjs           # plansze → PNG, PDF, PPTX
 python3 templates/build.py         # sieć, papier firmowy, podpis
 python3 brandbook/build.py         # księga znaku → PNG, PDF, HTML

@@ -23,7 +23,12 @@ FONT = HERE.parent / 'slides/assets/fonts/big-shoulders-display-latin-wght-norma
 SVG_DIR = HERE / 'svg'
 
 WORD = 'Machinekind'.upper()
+DESCRIPTOR = 'Kolektyw robotyki i AI · Wrocław'.upper()
 WEIGHT = 500          # ta sama waga co w systemie strony
+
+MONO = HERE.parent / 'slides/assets/fonts'
+MONO_FILES = ['ibm-plex-mono-latin-400-normal.woff2',
+              'ibm-plex-mono-latin-ext-400-normal.woff2']
 
 # Znak: kadr obrysu z build-mark (viewBox 1118 × 956).
 MARK_W, MARK_H = 1118.0, 956.0
@@ -41,6 +46,40 @@ V_SIZE, V_GAP, V_TRACK = 104 / 300, 52 / 300, 0.16
 def load_font():
     return instantiateVariableFont(TTFont(FONT), {'wght': WEIGHT}, inplace=True,
                                    updateFontNames=False)
+
+
+def load_mono():
+    """Monospace przychodzi w dwóch podzbiorach — polskie znaki siedzą w latin-ext."""
+    return [TTFont(MONO / f) for f in MONO_FILES]
+
+
+def mono_text(fonts, text, size, tracking):
+    """Podpis w monospace, złożony z krzywych. Znak bierze ten podzbiór, który go ma."""
+    parts, x, cap = [], 0.0, 0.0
+    for ch in text:
+        if ch == ' ':
+            # Monospace ma stałą szerokość — spacja idzie tą samą miarą co litera.
+            font = fonts[0]
+            upem = font['head'].unitsPerEm
+            glyphs = font.getGlyphSet()
+            width = glyphs[font.getBestCmap()[ord('A')]].width
+            x += width + tracking * upem
+            continue
+        font = next((f for f in fonts if ord(ch) in f.getBestCmap()), None)
+        if font is None:
+            raise SystemExit(f'Brak glifu dla „{ch}" w monospace')
+        upem = font['head'].unitsPerEm
+        scale = size / upem
+        cap = font['OS/2'].sCapHeight * scale
+        glyphs = font.getGlyphSet()
+        gid = font.getBestCmap()[ord(ch)]
+        pen = SVGPathPen(glyphs, ntos=lambda v: f'{v:.2f}')
+        glyphs[gid].draw(TransformPen(pen, Transform(scale, 0, 0, -scale, x * scale, cap)))
+        if pen.getCommands():
+            parts.append(pen.getCommands())
+        x += glyphs[gid].width + tracking * upem
+    width = (x - tracking * upem) * scale
+    return ' '.join(parts), width, cap
 
 
 def kern_pairs(font, gids):
@@ -105,6 +144,7 @@ def svg(body, w, h, extra=''):
 
 def main():
     font = load_font()
+    mono = load_mono()
     SVG_DIR.mkdir(parents=True, exist_ok=True)
 
     # ---- sama sygnatura słowna ----
@@ -144,6 +184,52 @@ def main():
                 f'<path fill="{fill}" d="{path}"/></g>')
         (SVG_DIR / f'lockup-pionowy-{name}.svg').write_text(svg(body, total_w, total_h))
     print(f'lockup pionowy  {total_w:.0f} × {total_h:.0f}')
+
+    # ---- sygnet: znak wpisany w kwadrat ----
+    # Do awatarów, kafelków i wszędzie tam, gdzie kadr jest kwadratowy.
+    side, pad = MARK_H * 1.6, 0.16
+    inner = side * (1 - 2 * pad)
+    s = inner / MARK_W
+    for name, field, ink in (('czerwony', '#bd3e3e', '#ffffff'),
+                             ('atrament', '#0d0f10', '#ffffff'),
+                             ('bialy', '#ffffff', '#bd3e3e')):
+        rect = (f'<rect width="{side:.0f}" height="{side:.0f}" fill="{field}"/>'
+                if field != '#ffffff'
+                else f'<rect x="0.5" y="0.5" width="{side - 1:.0f}" height="{side - 1:.0f}" '
+                     f'fill="#ffffff" stroke="#d2d7d9"/>')
+        body = (f'{rect}<g transform="translate({side * pad:.1f} '
+                f'{(side - MARK_H * s) / 2:.1f}) scale({s:.4f})">'
+                f'<path fill="{ink}" fill-rule="evenodd" d="{MARK_PATH}"/></g>')
+        (SVG_DIR / f'sygnet-{name}.svg').write_text(svg(body, side, side))
+    print(f'sygnet          {side:.0f} × {side:.0f}')
+
+    # ---- lockup poziomy z podpisem ----
+    size = MARK_W * H_SIZE
+    word_path, word_w, cap = wordmark(font, size, H_TRACK)
+    # Podpis dociągany do szerokości sygnatury: obie krawędzie stoją w jednym
+    # pionie, więc lockup ma jeden prostokąt, a nie dwa różnej długości.
+    trial = size * 0.2
+    _, trial_w, _ = mono_text(mono, DESCRIPTOR, trial, 0.14)
+    desc_size = trial * word_w / trial_w
+    desc_path, desc_w, desc_cap = mono_text(mono, DESCRIPTOR, desc_size, 0.14)
+    gap = MARK_W * H_GAP
+    lead = size * 0.20                      # odstęp między sygnaturą a podpisem
+    block_h = cap + lead + desc_cap
+    # Kadr bierze wyższy z dwóch elementów, żeby podpis nie wychodził poza viewBox.
+    height = max(MARK_H, block_h)
+    mark_y = (height - MARK_H) / 2
+    y = (height - block_h) / 2
+    total_w = MARK_W + gap + max(word_w, desc_w)
+    for name, fill in COLORS.items():
+        body = (f'<g transform="translate(0 {mark_y:.2f})">'
+                f'<path fill="{fill}" fill-rule="evenodd" d="{MARK_PATH}"/></g>'
+                f'<g transform="translate({MARK_W + gap:.2f} {y:.2f})">'
+                f'<path fill="{fill}" d="{word_path}"/></g>'
+                f'<g transform="translate({MARK_W + gap:.2f} {y + cap + lead:.2f})">'
+                f'<path fill="{fill}" d="{desc_path}"/></g>')
+        (SVG_DIR / f'lockup-z-podpisem-{name}.svg').write_text(svg(body, total_w, height))
+    print(f'lockup z podpisem  {total_w:.0f} × {height:.0f} '
+          f'(sygnatura {word_w:.0f}, podpis {desc_w:.0f})')
 
 
 if __name__ == '__main__':
