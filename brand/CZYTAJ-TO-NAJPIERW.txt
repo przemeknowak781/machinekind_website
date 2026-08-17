@@ -1,0 +1,90 @@
+BRANDING MACHINEKIND
+Materiały marki: znak, kolor, typografia, prezentacje i szablony.
+
+
+OD CZEGO ZACZĄĆ
+
+Robisz nowy materiał            → 01 Ksiega znaku / machinekind-ksiega-znaku.pdf
+Potrzebujesz pliku znaku        → 02 Logotypy / SVG (wektor)
+Chcesz zobaczyć wszystko naraz  → 02 Logotypy / arkusz-znaku.pdf
+Wchodzisz w kod                 → 03 Design system / system.css
+Składasz prezentację            → 05 Plansze prezentacyjne
+
+
+CO GDZIE LEŻY
+
+01 Ksiega znaku
+    machinekind-ksiega-znaku.pdf     21 stron: znak, kolor, typografia,
+                                     układ, obrazowanie, głos
+    machinekind-ksiega-znaku.html    to samo w przeglądarce, działa bez internetu
+
+02 Logotypy
+    arkusz-znaku.pdf                 wszystkie warianty na jednej stronie A4
+    SVG (wektor)/                    do nowych materiałów bierz stąd
+    PNG/                             128–2048 px, gdy SVG nie wchodzi
+    Favicon i ikony/                 favicon.ico, PNG 16–512, apple-touch, maskowalna
+    Social (OG, banery, awatar)/     OG 1200x630, LinkedIn 1128x191, awatar
+
+    Warianty barwne w nazwach plików: -red na bieli, -white na czerwieni
+    i atramencie, -ink do druku jednobarwnego, -current dziedziczy kolor
+    z otoczenia przez currentColor.
+
+03 Design system
+    system.css                       tokeny i komponenty w jednym pliku,
+                                     to wrzuca się do projektu
+    components.css                   sama warstwa komponentów, tu się edytuje
+    index.html                       żywa dokumentacja — otwórz w przeglądarce
+    machinekind-design-system.html   to samo w jednym pliku, z krojami w środku
+
+04 Tokeny
+    tokens.json / .css / .scss / .js  te same wartości w czterech formatach
+
+05 Plansze prezentacyjne
+    machinekind-plansze.pptx         23 plansze, kadr panoramiczny 16:9
+    machinekind-plansze.pdf          to samo do druku i podglądu
+    machinekind-plansze.html         wszystko w jednym pliku, bez internetu
+    Plansze PNG/                     3840x2160, po jednej na planszę
+
+06 Szablony
+    Posty i relacje/                 kwadrat 1080 i pion 1080x1920
+    Papier firmowy/                  A4: HTML do edycji, PDF do wydruku
+    Podpis mailowy/                  wariant ze znakiem i bez, plus podgląd
+
+07 Kroje
+    pliki/                           Big Shoulders Display, IBM Plex Sans,
+                                     IBM Plex Mono — pliki woff2
+    licencje/                        SIL Open Font License 1.1 dla każdego
+
+    Podzbiór latin-ext jest obowiązkowy — niesie polskie znaki diakrytyczne.
+    Bez niego „ą", „ę", „ł", „ś", „ż" wypadną na zamiennik z systemu.
+
+
+TRZY RZECZY, O KTÓRYCH WARTO WIEDZIEĆ
+
+1. Znak nie ma nigdzie wersji wektorowej od autora. Sprawdzone: pliki, cała
+   historia repozytorium i metadane. Jedynym źródłem jest logo.png, zrzut
+   z programu graficznego — tak traktuje go też skrypt w repozytorium. SVG
+   w tej paczce to obrys tej bitmapy o wierności 0,999 (mierzonej ponownym
+   zrasteryzowaniem i porównaniem ze źródłem). Jeśli u autora leży plik
+   źródłowy, podmiana to jedno polecenie.
+
+2. Plik machinekind_logo.svg w repozytorium to POPRZEDNI logotyp — dłonie
+   w czerwonym polu z sygnaturą pod spodem, wgrany dzień przed zmianą znaku.
+   Nie używać.
+
+3. Logotypy uczelni w planszach są tymczasowe: PWr mamy w wersji angielskiej,
+   UEW w 362 px. Oba działają, oba warto wymienić, gdy przyjdą lepsze pliki.
+
+
+SKĄD TO POCHODZI
+
+Repozytorium machinekind_website, katalog brand/, gałąź
+claude/machinekind-branding-slides-wmlr73.
+
+Materiały są generowane skryptami, nie rysowane ręcznie: tokeny wychodzą
+z src/styles/global.css, paleta i tabela kontrastu w księdze wychodzą
+z tokenów, a numery stron w spisie liczą się z listy rozdziałów. Po zmianie
+treści uruchamia się skrypt — nie poprawia się wyeksportowanego pliku, bo
+następne złożenie i tak go nadpisze.
+
+Kontakt: hello@wo1.tech · machinekind.ai · Wrocław
