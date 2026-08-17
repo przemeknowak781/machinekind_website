@@ -83,9 +83,6 @@ def main():
             + cell('sygnet-bialy.svg', 54)) +
         row('Lockup poziomy',
             cell('lockup-poziomy-red.svg', 190) + cell('lockup-poziomy-white.svg', 190, 'red')) +
-        row('Z podpisem',
-            cell('lockup-z-podpisem-red.svg', 190)
-            + cell('lockup-z-podpisem-white.svg', 190, 'red')) +
         row('Lockup pionowy',
             cell('lockup-pionowy-red.svg', 74) + cell('lockup-pionowy-white.svg', 74, 'red')) +
         row('Dłonie', cell('dlonie-ink.svg', 200) + cell('dlonie-white.svg', 200, 'red'))
