@@ -1,0 +1,277 @@
+/* ============================================================
+   Machinekind — szablony do sieci
+   Kadry 1080 × 1080 i 1080 × 1920. Ten sam system co plansze:
+   tokeny z brand/tokens, kroje ze strony, hairline zamiast ramek.
+   ============================================================ */
+
+@import '../../slides/assets/fonts.css';
+@import '../../tokens/tokens.css';
+
+:root {
+  --display: 'Big Shoulders Display Variable', 'Arial Narrow', sans-serif;
+  --body-font: 'IBM Plex Sans Variable', system-ui, sans-serif;
+  --mono-font: 'IBM Plex Mono', ui-monospace, monospace;
+  --m: 88px; /* margines kadru 1080 */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper-2);
+  font-family: var(--body-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: none;
+}
+
+.card {
+  position: relative;
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.card--story {
+  height: 1920px;
+}
+
+.card--red {
+  background: var(--red);
+  color: #fff;
+  --dim: var(--on-red-2);
+  --faint: rgba(255, 255, 255, 0.62);
+  --hair: var(--on-red-line);
+  --accent: var(--ink);
+}
+
+.card--paper {
+  background: var(--paper);
+  color: var(--ink);
+  --dim: var(--ink-2);
+  --faint: var(--ink-3);
+  --hair: var(--line-2);
+  --accent: var(--red);
+}
+
+.card--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Rama ---------- */
+.lockup {
+  position: absolute;
+  top: var(--m);
+  left: var(--m);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 3;
+}
+
+.lockup img {
+  width: 38px;
+}
+
+.lockup span {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+
+.foot {
+  position: absolute;
+  left: var(--m);
+  bottom: var(--m);
+  z-index: 3;
+  margin: 0;
+}
+
+.mono {
+  font-family: var(--mono-font);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Treść ---------- */
+.body {
+  position: absolute;
+  left: var(--m);
+  right: var(--m);
+  bottom: 184px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 34px;
+}
+
+.card--story .body {
+  bottom: 280px;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+  font-family: var(--mono-font);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.kicker::before {
+  content: '';
+  flex: none;
+  width: 62px;
+  height: 1px;
+  background: var(--hair);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 132px;
+  line-height: 0.88;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+}
+
+/* Wersaliki z ogonkami i kreskami potrzebują luźniejszego wiersza —
+   przy 0,88 „Ś" z ostatniej linii siadało na „Ę" z poprzedniej. */
+.card--story .title {
+  font-size: 146px;
+  line-height: 0.98;
+}
+
+.dot {
+  color: var(--accent);
+}
+
+.lead {
+  margin: 0;
+  font-size: 31px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--dim);
+  max-width: 21em;
+  text-wrap: pretty;
+}
+
+.slot {
+  color: var(--faint);
+}
+
+/* Znak w tle wchodzi kadrowany krawędzią, jak backdropy na stronie. */
+.wm {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  right: -230px;
+  bottom: -150px;
+  width: 860px;
+  opacity: 0.09;
+}
+
+.card--paper .wm {
+  opacity: 0.05;
+}
+
+.card--story .wm {
+  width: 1000px;
+  bottom: -220px;
+}
+
+.sig {
+  width: 520px;
+}
+
+/* ============================================================
+   Podgląd w przeglądarce — kadr skaluje się do szerokości ramki.
+   ============================================================ */
+.deck {
+  display: grid;
+  gap: 44px;
+  padding: 44px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.frame {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(13, 15, 16, 0.06), 0 16px 40px rgba(13, 15, 16, 0.1);
+}
+
+.frame--story {
+  aspect-ratio: 9 / 16;
+}
+
+.frame > .card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  transform: scale(calc(100cqi / 1080));
+}
+
+.caption {
+  margin: 0 0 10px;
+  font-family: var(--mono-font);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+body.single {
+  background: #fff;
+}
+
+body.single .deck {
+  display: block;
+  padding: 0;
+  max-width: none;
+}
+
+body.single .caption {
+  display: none;
+}
+
+body.single .frame {
+  width: 1080px;
+  height: auto;
+  aspect-ratio: auto;
+  box-shadow: none;
+  container-type: normal;
+}
+
+body.single .frame > .card {
+  position: static;
+  transform: none;
+}

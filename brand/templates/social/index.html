@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Machinekind — szablony do sieci</title>
+    <link rel="stylesheet" href="social.css" />
+  </head>
+  <body>
+    <!--
+      Szablony do mediów społecznościowych. Jedna karta = jeden blok
+      `.frame > .card`, a wymiary kadru niesie atrybut `data-w`/`data-h`,
+      z którego korzysta eksport (`python3 ../build.py`).
+
+      Treść jest do podmiany — to szablony, nie gotowe posty. Zostaje układ:
+      sygnatura w rogu, hairline pod nadtytułem, adres u dołu.
+    -->
+
+    <div class="deck">
+      <p class="caption">01 · Post kwadratowy — cytat</p>
+      <div class="frame">
+        <section class="card card--red" data-name="post-cytat" data-w="1080" data-h="1080">
+          <img class="wm" src="../../logo/svg/mark-white.svg" alt="" />
+          <div class="lockup">
+            <img src="../../logo/svg/mark-white.svg" alt="" />
+            <span>Machinekind</span>
+          </div>
+          <div class="body">
+            <p class="kicker">Zasada</p>
+            <h2 class="title">Budujemy,<br />nie doradzamy<span class="dot">.</span></h2>
+            <p class="lead">
+              Każda domena kończy się czymś, co się uruchamia. Nie oddajemy prezentacji.
+            </p>
+          </div>
+          <p class="mono foot">machinekind.ai</p>
+        </section>
+      </div>
+
+      <p class="caption">02 · Post kwadratowy — zapowiedź</p>
+      <div class="frame">
+        <section class="card card--paper" data-name="post-zapowiedz" data-w="1080" data-h="1080">
+          <img class="wm" src="../../logo/svg/mark-red.svg" alt="" />
+          <div class="lockup">
+            <img src="../../logo/svg/mark-red.svg" alt="" />
+            <span>Machinekind</span>
+          </div>
+          <div class="body">
+            <p class="kicker">Za chwilę</p>
+            <h2 class="title">Tytuł<br />wystąpienia<span class="dot">.</span></h2>
+            <p class="lead slot">Imię Nazwisko · organizacja</p>
+          </div>
+          <p class="mono foot">machinekind.ai</p>
+        </section>
+      </div>
+
+      <p class="caption">03 · Post kwadratowy — znak</p>
+      <div class="frame">
+        <section class="card card--red card--center" data-name="post-znak" data-w="1080" data-h="1080">
+          <img class="sig" src="../../logo/svg/lockup-pionowy-white.svg" alt="" />
+        </section>
+      </div>
+
+      <p class="caption">04 · Relacja pionowa 9:16</p>
+      <div class="frame frame--story">
+        <section class="card card--red card--story" data-name="story" data-w="1080" data-h="1920">
+          <img class="wm" src="../../logo/svg/mark-white.svg" alt="" />
+          <div class="lockup">
+            <img src="../../logo/svg/mark-white.svg" alt="" />
+            <span>Machinekind</span>
+          </div>
+          <div class="body">
+            <p class="kicker">Kolektyw robotyki i AI</p>
+            <h2 class="title">Uczymy maszyny poruszać się w świecie ludzi<span class="dot">.</span></h2>
+          </div>
+          <p class="mono foot">machinekind.ai</p>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      // `?only=N` zostawia jedną kartę w skali 1:1 — z tego trybu korzysta eksport.
+      const only = new URLSearchParams(location.search).get('only');
+      if (only) {
+        document.body.classList.add('single');
+        document.querySelectorAll('.frame').forEach((frame, i) => {
+          if (String(i + 1) !== only) frame.remove();
+        });
+      }
+    </script>
+  </body>
+</html>

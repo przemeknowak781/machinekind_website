@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Machinekind — papier firmowy</title>
+    <!--
+      Papier firmowy A4. Do wydruku wprost z przeglądarki (Ctrl/Cmd + P,
+      marginesy: brak, grafika tła: włączona) albo przez `python3 ../build.py`,
+      które składa PDF.
+
+      Czerwień jest tu cienką linią, nie plamą: strona ma zostać biała, żeby
+      dokument dało się wydrukować w każdych warunkach i zapisać notatkę na nim.
+    -->
+    <style>
+      @import '../../slides/assets/fonts.css';
+      @import '../../tokens/tokens.css';
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #e9eaeb;
+        font-family: 'IBM Plex Sans Variable', system-ui, sans-serif;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Kadr A4 przy 96 dpi. */
+      .sheet {
+        width: 794px;
+        height: 1123px;
+        margin: 32px auto;
+        padding: 64px 72px 56px;
+        background: #fff;
+        color: var(--ink);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 2px 6px rgba(13, 15, 16, 0.08), 0 20px 50px rgba(13, 15, 16, 0.12);
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+        .sheet {
+          margin: 0;
+          box-shadow: none;
+        }
+      }
+
+      .head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--red);
+      }
+
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+      }
+
+      .lockup img {
+        width: 34px;
+        display: block;
+      }
+
+      .lockup span {
+        font-family: 'Big Shoulders Display Variable', 'Arial Narrow', sans-serif;
+        font-weight: 500;
+        font-size: 26px;
+        line-height: 1;
+        letter-spacing: 0.055em;
+        text-transform: uppercase;
+        padding-top: 2px;
+      }
+
+      .mono {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        margin: 0;
+      }
+
+      .meta {
+        display: flex;
+        gap: 26px;
+      }
+
+      .doc {
+        flex: 1;
+        padding-top: 58px;
+      }
+
+      .doc h1 {
+        font-family: 'Big Shoulders Display Variable', 'Arial Narrow', sans-serif;
+        font-weight: 500;
+        font-size: 54px;
+        line-height: 0.9;
+        letter-spacing: 0.012em;
+        text-transform: uppercase;
+        margin: 0 0 26px;
+      }
+
+      .doc h1 .dot {
+        color: var(--red);
+      }
+
+      .doc p {
+        font-size: 13.5px;
+        line-height: 1.62;
+        color: var(--ink-2);
+        max-width: 62ch;
+        margin: 0 0 14px;
+      }
+
+      .foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .foot__cols {
+        display: flex;
+        gap: 40px;
+      }
+
+      .foot__col p:last-child {
+        font-family: 'IBM Plex Sans Variable', system-ui, sans-serif;
+        font-size: 12px;
+        letter-spacing: -0.01em;
+        color: var(--ink-1);
+        margin: 4px 0 0;
+        text-transform: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <header class="head">
+        <div class="lockup">
+          <img src="../../logo/svg/mark-red.svg" alt="" />
+          <span>Machinekind</span>
+        </div>
+        <div class="meta">
+          <p class="mono">Wrocław</p>
+          <p class="mono">00.00.0000</p>
+        </div>
+      </header>
+
+      <main class="doc">
+        <h1>Tytuł pisma<span class="dot">.</span></h1>
+        <p>
+          Miejsce na treść. Akapit trzyma się miary około sześćdziesięciu znaków, więc
+          wiersz da się przeczytać bez gubienia linii.
+        </p>
+        <p>
+          Drugi akapit. Krój tekstowy, stopień 13,5 px, interlinia 1,62 — te same
+          proporcje co na stronie, przeliczone na kadr A4.
+        </p>
+      </main>
+
+      <footer class="foot">
+        <div class="foot__cols">
+          <div class="foot__col">
+            <p class="mono">Kontakt</p>
+            <p>hello@wo1.tech</p>
+          </div>
+          <div class="foot__col">
+            <p class="mono">Strona</p>
+            <p>machinekind.ai</p>
+          </div>
+          <div class="foot__col">
+            <p class="mono">Gdzie</p>
+            <p>Wrocław, Polska</p>
+          </div>
+        </div>
+        <p class="mono">Kolektyw robotyki i AI</p>
+      </footer>
+    </div>
+  </body>
+</html>

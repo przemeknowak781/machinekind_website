@@ -1,0 +1,478 @@
+/* ============================================================
+   Machinekind — księga znaku
+   Dokument stronicowany: A4 poziomo, 1123 × 794 px przy 96 dpi.
+   Ten sam system, który opisuje: tokeny z brand/tokens, kroje ze
+   strony, hairline zamiast ramek, czerwień prowadzi.
+   ============================================================ */
+
+@import '../slides/assets/fonts.css';
+@import '../tokens/tokens.css';
+
+:root {
+  --display: 'Big Shoulders Display Variable', 'Arial Narrow', sans-serif;
+  --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
+  --mono-font: 'IBM Plex Mono', ui-monospace, monospace;
+  --m: 64px; /* margines strony */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper-3);
+  font-family: var(--sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: none;
+}
+
+/* ---------- Strona ---------- */
+.page {
+  position: relative;
+  width: 1123px;
+  height: 794px;
+  overflow: hidden;
+  background: var(--paper);
+  padding: var(--m);
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+.page--red {
+  background: var(--red);
+  color: #fff;
+  --ink: #fff;
+  --ink-2: var(--on-red-2);
+  --ink-3: rgba(255, 255, 255, 0.62);
+  --line: var(--on-red-line);
+  --line-2: rgba(255, 255, 255, 0.44);
+}
+
+.page--ink {
+  /* Wartość wprost, nie przez token: --ink jest niżej podmieniany na biel,
+     a własność czyta wartość po podmianie i strona wychodziła biała na białym. */
+  background: #0d0f10;
+  color: #fff;
+  --ink: #fff;
+  --ink-2: var(--on-dark-2);
+  --ink-3: var(--on-dark-3);
+  --line: var(--on-dark-line);
+  --line-2: rgba(255, 255, 255, 0.28);
+}
+
+/* ---------- Rama strony ---------- */
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+  flex: none;
+}
+
+.mono {
+  font-family: var(--mono-font);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+/* ---------- Treść ---------- */
+.main {
+  flex: 1;
+  min-height: 0;
+  padding-top: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+.h-cover {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 150px;
+  line-height: 0.96;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.h-page {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 72px;
+  line-height: 0.96;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+}
+
+.dot {
+  color: var(--red);
+}
+
+.page--red .dot,
+.page--ink .dot {
+  color: var(--ink);
+}
+
+.h-sub {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 17px;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.lead {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 62ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.body {
+  font-size: 14px;
+  line-height: 1.58;
+  color: var(--ink-2);
+  max-width: 58ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.cols {
+  display: grid;
+  gap: 26px 40px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.cols--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.stack-sm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---------- Kolor ---------- */
+.swatches {
+  display: grid;
+  gap: 10px 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.sw__chip {
+  height: 56px;
+  border: 1px solid var(--line);
+}
+
+.sw__name {
+  font-size: 13.5px;
+  font-weight: 500;
+  margin: 8px 0 0;
+  letter-spacing: -0.01em;
+}
+
+.sw__meta {
+  margin: 3px 0 0;
+}
+
+.bar {
+  display: flex;
+  height: 46px;
+  border: 1px solid var(--line);
+}
+
+.bar span {
+  display: block;
+}
+
+/* ---------- Tabele ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 7px 14px 7px 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: baseline;
+}
+
+th {
+  font-family: var(--mono-font);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+td.num {
+  font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+td.tok {
+  font-family: var(--mono-font);
+  font-size: 12px;
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.page--red td.tok,
+.page--ink td.tok {
+  color: #fff;
+}
+
+/* ---------- Panele tak / nie ---------- */
+.panels {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel__box {
+  height: 132px;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background: var(--paper-2);
+}
+
+.panel__label {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.panel__label::before {
+  content: '✕';
+  color: var(--red);
+  font-size: 13px;
+  flex: none;
+}
+
+.panel--ok .panel__label::before {
+  content: '✓';
+  color: var(--ink);
+}
+
+/* ---------- Znak: pole ochronne ---------- */
+.clear {
+  display: inline-block;
+  padding: var(--x);
+  background: rgba(189, 62, 62, 0.14);
+  outline: 1px dashed var(--line-2);
+  outline-offset: 0;
+}
+
+.clear__inner {
+  background: var(--paper);
+  padding: 6px;
+  display: flex;
+}
+
+.clear img {
+  width: var(--markw);
+}
+
+.table--tight {
+  font-size: 12px;
+}
+
+.table--tight th,
+.table--tight td {
+  padding: 3.5px 12px 3.5px 0;
+}
+
+.sizes {
+  display: flex;
+  align-items: flex-end;
+  gap: 34px;
+}
+
+.size__label {
+  margin-top: 10px;
+}
+
+/* ---------- Specimen typograficzny ---------- */
+.spec {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+
+.spec__sample {
+  font-family: var(--display);
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: 0.012em;
+  margin: 0 0 6px;
+}
+
+.spec__sample--sans {
+  font-family: var(--sans);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.spec__sample--mono {
+  font-family: var(--mono-font);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+}
+
+/* ---------- Miniatury materiałów ---------- */
+.thumbs {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.thumb img {
+  width: 100%;
+  height: 132px;
+  object-fit: cover;
+  object-position: top left;
+  border: 1px solid var(--line);
+}
+
+.thumb p {
+  margin: 8px 0 0;
+}
+
+/* ---------- Znak w tle ---------- */
+.wm {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  right: -180px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 680px;
+  opacity: 0.06;
+}
+
+.page--red .wm {
+  opacity: 0.1;
+}
+
+.page > *:not(.wm) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Okładka ---------- */
+.cover {
+  justify-content: space-between;
+}
+
+.cover__mark {
+  width: 132px;
+}
+
+/* ============================================================
+   Podgląd: strony jedna pod drugą, skalowane do szerokości ramki.
+   ============================================================ */
+.doc {
+  display: grid;
+  gap: 34px;
+  padding: 34px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.frame {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1123 / 794;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(13, 15, 16, 0.07), 0 14px 36px rgba(13, 15, 16, 0.1);
+}
+
+.frame > .page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  transform: scale(calc(100cqi / 1123));
+}
+
+body.single {
+  background: #fff;
+}
+
+body.single .doc {
+  display: block;
+  padding: 0;
+  max-width: none;
+}
+
+body.single .frame {
+  width: 1123px;
+  height: 794px;
+  aspect-ratio: auto;
+  box-shadow: none;
+  container-type: normal;
+}
+
+body.single .frame > .page {
+  transform: none;
+}
