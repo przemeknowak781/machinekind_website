@@ -4,11 +4,11 @@ import HandsScene from '../components/HandsScene.astro';
 import HeroHands from '../components/HeroHands.astro';
 import HandsBackdrop from '../components/HandsBackdrop.astro';
 import TeamGrid from '../components/TeamGrid.astro';
+import PunktStyku from '../components/PunktStyku.astro';
 import { Image } from 'astro:assets';
 import { machinekind, machinekindCount } from '../data/team';
 import { asset } from '../lib/paths';
 import korpus from '../assets/korpus.webp';
-import naped from '../assets/naped-bezposredni.webp';
 
 // Strona projektu Wojtek. Docelowo podstrona /wojtek, na razie osobny serwis.
 const WOJTEK_URL = 'https://machinekind.ai';
@@ -63,26 +63,6 @@ const domains = [
     body:
       'Harmonogram, prowadzenie projektu i to, jak maszyna wygląda. Forma wynika z obciążenia: każde wycięcie odprowadza ciepło.',
     meta: 'program · design',
-  },
-];
-
-// Trzy zasady, na których stoi kolektyw. Nie opis podziału pracy z kimkolwiek
-// z zewnątrz, tylko to, co robimy sami i czym się to kończy.
-const stance = [
-  {
-    title: 'Budujemy, nie doradzamy.',
-    body:
-      'Każda domena kończy się czymś, co się uruchamia: siecią sterującą, ścieżką na maszynę, częścią, która wychodzi z obróbki. Nie oddajemy prezentacji.',
-  },
-  {
-    title: 'Inteligencja powstaje razem ze sprzętem.',
-    body:
-      'Jeden zespół prowadzi całą drogę, od zamiaru po moment na wale. Model nie jest przerzucany przez mur do integracji, bo po drugiej stronie muru siedzą ci sami ludzie.',
-  },
-  {
-    title: 'Pierwsza maszyna już chodzi.',
-    body:
-      'W01-TEK nie jest wizualizacją. Jest bazą platformy: kolejne wersje powstają na tej samej konstrukcji, a nie od zera.',
   },
 ];
 
@@ -144,44 +124,7 @@ const WORDMARK = 'Machinekind'.split('');
   </section>
 
   <!-- ============ KOLEKTYW ============ -->
-  <section class="section red has-backdrop" id="kolektyw">
-    {/* Sekcja nazywa się „punkt styku", więc w tle stoją obie dłonie, a nie
-        jedna: maszyna z lewej, człowiek z prawej, obie w górnej części kadru,
-        nad kolumnami zespołów. */}
-    <HandsBackdrop hand="robot" tone="paper" side="left" size="74%" top="26%" bleed="-29.5%" opacity={0.075} duration="30s" />
-    <HandsBackdrop hand="human" tone="paper" side="right" size="72%" top="27%" bleed="-21%" opacity={0.085} />
-    <div class="wrap">
-      <div class="head">
-        <h2 class="h1">Punkt styku.</h2>
-        <p class="lead">
-          Machinekind jest niezależnym kolektywem. Powstał wokół jednego
-          pytania: co musi się wydarzyć, żeby robot kroczący przestał być
-          demonstracją, a stał się narzędziem. Odpowiedź wyszła jedna — trzeba
-          go zbudować, całego, u siebie.
-        </p>
-      </div>
-
-      <ol class="stance">
-        {
-          stance.map((r, i) => (
-            <li class="rule-item">
-              <span class="rule-item__no mono">{String(i + 1).padStart(2, '0')}</span>
-              <h3 class="rule-item__title">{r.title}</h3>
-              <p class="rule-item__body">{r.body}</p>
-            </li>
-          ))
-        }
-      </ol>
-
-      <p class="naming">
-        <span class="mono naming__label">Nazwa</span>
-        <span>
-          Maszyny nie są osobnym gatunkiem. Są przedłużeniem tego, co ludzkie —
-          a granica przebiega dokładnie tam, gdzie stykają się dwie dłonie.
-        </span>
-      </p>
-    </div>
-  </section>
+  <PunktStyku />
 
   <!-- ============ DOMENY ============ -->
   <section class="section has-backdrop" id="domeny">
@@ -277,16 +220,6 @@ const WORDMARK = 'Machinekind'.split('');
         </div>
       </a>
 
-      <figure class="detail">
-        <Image
-          src={naped}
-          alt="Napęd bezpośredni maszyny W01-TEK: silnik sprzężony wprost z przegubem"
-          widths={[720, 1440]}
-          sizes="(min-width: 980px) 1180px, 100vw"
-          loading="lazy"
-        />
-        <figcaption>Napęd bezpośredni: silnik sprzężony wprost z przegubem</figcaption>
-      </figure>
     </div>
   </section>
 
@@ -627,72 +560,6 @@ const WORDMARK = 'Machinekind'.split('');
     }
   }
 
-  /* ---------- zasady kolektywu ----------
-     Wcześniej stały tu dwie kolumny: my i uczelnia. Wychodziło z tego, że
-     kolektyw jest połową cudzego projektu. Teraz sekcja mówi, co robimy sami,
-     w trzech taktach — po jednym na zasadę, numerowane, bo to lista twierdzeń,
-     a nie zbiór kafelków. */
-  .stance {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: 0;
-    border-top: 1px solid var(--on-red-line);
-  }
-
-  @media (min-width: 860px) {
-    .stance {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: clamp(2rem, 4vw, 3.5rem);
-    }
-  }
-
-  .rule-item {
-    padding-block: clamp(1.5rem, 3vw, 2.25rem);
-    border-bottom: 1px solid var(--on-red-line);
-  }
-
-  .rule-item__no {
-    color: var(--on-red-2);
-  }
-
-  .rule-item__title {
-    font-family: var(--display);
-    font-weight: 500;
-    text-transform: uppercase;
-    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-    line-height: 0.98;
-    letter-spacing: 0.012em;
-    margin-block: 0.6rem 0.8rem;
-    max-width: 18ch;
-  }
-
-  .rule-item__body {
-    color: var(--on-red-2);
-    max-width: 42ch;
-  }
-
-  /* Skąd nazwa — myśl założycielska, ale nie pierwsze, co się czyta. */
-  .naming {
-    display: grid;
-    gap: 0.5rem;
-    margin-top: clamp(2rem, 4vw, 3rem);
-    color: var(--on-red-2);
-    max-width: 52ch;
-  }
-
-  .naming__label {
-    color: var(--on-red-2);
-  }
-
-  @media (min-width: 780px) {
-    .naming {
-      grid-template-columns: 6rem minmax(0, 1fr);
-      gap: 0.5rem clamp(1.5rem, 3vw, 2.5rem);
-      max-width: 66ch;
-    }
-  }
-
   .clock__label {
     margin-bottom: 0.9rem;
   }
@@ -916,27 +783,6 @@ const WORDMARK = 'Machinekind'.split('');
   }
 
   /* ---------- zespół ---------- */
-  /* Detal maszyny pod kartą projektu. Sekcja o zapleczu uczelni zeszła na
-     podstronę projektu, a to zdjęcie zostaje tu jako dowód, że warstwa
-     sprzętowa nie jest deklaracją. */
-  .detail {
-    margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
-  }
-
-  .detail :global(img) {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 21 / 9;
-    object-fit: cover;
-  }
-
-  .detail figcaption {
-    margin-top: 0.75rem;
-    font-family: var(--mono);
-    font-size: var(--micro);
-    letter-spacing: 0.04em;
-    color: var(--ink-3);
-  }
 
   /* ---------- kontakt ---------- */
   .contact {

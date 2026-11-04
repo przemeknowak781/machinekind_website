@@ -1,0 +1,369 @@
+---
+/**
+ * „Punkt styku” — najważniejsza sekcja strony, więc mówi obrazem, a nie
+ * akapitem. Hierarchia od góry: tytuł, jedno zdanie, zdjęcie maszyny obok
+ * trzech krótkich tez, twarze ludzi, na końcu jedno zdanie o nazwie.
+ *
+ * Zdjęcia siedzą w jednej tablicy `frames`. Pierwsze jest duże, reszta
+ * układa się pod nim w pasie; dołożenie kolejnego prawdziwego zdjęcia to
+ * jeden wpis tutaj, bez ruszania układu. Tylko zdjęcia prawdziwe, bez
+ * renderów i grafik generowanych.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import HandsBackdrop from './HandsBackdrop.astro';
+import { machinekind, machinekindCount } from '../data/team';
+import naped from '../assets/naped-bezposredni.webp';
+
+interface Frame {
+  src: ImageMetadata;
+  alt: string;
+  caption: string;
+}
+
+const frames: Frame[] = [
+  {
+    src: naped,
+    alt: 'Noga maszyny W01-TEK z napędem bezpośrednim: silnik sprzężony wprost z przegubem',
+    caption: 'W01-TEK · napęd bezpośredni',
+  },
+];
+
+const [hero, ...rest] = frames;
+
+// Trzy tezy, po jednym zdaniu. Tytuł niesie myśl, dopisek tylko ją kotwiczy.
+const rules = [
+  { title: 'Budujemy, nie doradzamy.', body: 'Każda domena kończy się czymś, co się uruchamia.' },
+  { title: 'AI razem ze sprzętem.', body: 'Jeden zespół od zamiaru po moment na wale.' },
+  { title: 'Pierwsza maszyna już chodzi.', body: 'W01-TEK jest bazą platformy, nie wizualizacją.' },
+];
+
+const people = machinekind.flatMap((g) => g.members);
+---
+
+<section class="section red has-backdrop styk" id="kolektyw">
+  {/* Obie dłonie w tle: maszyna z lewej, człowiek z prawej. */}
+  <HandsBackdrop hand="robot" tone="paper" side="left" size="74%" top="18%" bleed="-29.5%" opacity={0.075} duration="30s" />
+  <HandsBackdrop hand="human" tone="paper" side="right" size="72%" top="19%" bleed="-21%" opacity={0.085} />
+
+  <div class="wrap">
+    <header class="styk__head">
+      <h2 class="h-display styk__title">Punkt<br />styku.</h2>
+      <p class="styk__lead">
+        Physical AI to sztuczna inteligencja, która widzi, decyduje i porusza
+        prawdziwą maszyną. <strong>Właśnie tym się zajmujemy.</strong>
+      </p>
+    </header>
+
+    <div class="styk__grid">
+      <figure class="styk__photo">
+        <Image
+          src={hero.src}
+          alt={hero.alt}
+          widths={[480, hero.src.width]}
+          sizes="(min-width: 900px) 42vw, 100vw"
+          loading="lazy"
+        />
+        <figcaption class="mono">{hero.caption}</figcaption>
+      </figure>
+
+      <ol class="styk__rules">
+        {
+          rules.map((r, i) => (
+            <li class="styk__rule">
+              <span class="styk__no" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="styk__rule-title">{r.title}</h3>
+                <p class="styk__rule-body">{r.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    {
+      rest.length > 0 && (
+        <div class="styk__strip">
+          {rest.map((f) => (
+            <figure class="styk__frame">
+              <Image src={f.src} alt={f.alt} widths={[400, 800]} sizes="(min-width: 900px) 30vw, 100vw" loading="lazy" />
+              <figcaption class="mono">{f.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )
+    }
+
+    <a class="styk__people" href="#zespol">
+      <ul class="styk__faces" aria-hidden="true">
+        {
+          people.map((m) => (
+            <li class="styk__face">
+              {m.photo ? (
+                <Image src={m.photo} alt="" width={160} height={160} loading="lazy" />
+              ) : (
+                <span class="mono">{m.initials}</span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <span class="styk__people-cap">
+        <span class="styk__count">{machinekindCount}</span>
+        <span class="mono">osób · cztery domeny</span>
+        <span class="styk__go">
+          Zespół
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M1 12 12 1M4 1h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+      </span>
+    </a>
+
+    <p class="styk__naming">
+      Maszyny są przedłużeniem tego, co ludzkie.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* ---------- nagłówek ----------
+     Tytuł jest największym elementem sekcji, zdanie pod nim drugim. Nic
+     więcej nad zdjęciem nie stoi. */
+  .styk__head {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    margin-bottom: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .styk__title {
+    font-size: clamp(4.5rem, 21vw, 13.5rem);
+  }
+
+  .styk__lead {
+    font-size: clamp(1.25rem, 2.2vw, 1.9rem);
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    max-width: 30ch;
+    color: var(--on-red-1);
+  }
+
+  .styk__lead strong {
+    font-weight: 600;
+  }
+
+  @media (min-width: 900px) {
+    .styk__head {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      align-items: end;
+    }
+
+    .styk__lead {
+      padding-bottom: 0.6em;
+    }
+  }
+
+  /* ---------- zdjęcie obok tez ---------- */
+  .styk__grid {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  @media (min-width: 900px) {
+    .styk__grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: stretch;
+    }
+  }
+
+  .styk__photo,
+  .styk__frame {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    background: var(--red-deep);
+  }
+
+  .styk__photo :global(img),
+  .styk__frame :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .styk__photo {
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (min-width: 900px) {
+    .styk__photo {
+      aspect-ratio: auto;
+      min-height: 36rem;
+    }
+  }
+
+  .styk__photo figcaption,
+  .styk__frame figcaption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0.55rem 0.8rem;
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* ---------- trzy tezy ----------
+     Numer jest dużą cyfrą w tle, tytuł krojem wyświetlanym, dopisek jedną
+     linijką. Czyta się same tytuły, dopiski są dla zainteresowanych. */
+  .styk__rules {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    border-top: 1px solid var(--on-red-line);
+  }
+
+  .styk__rule {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(1rem, 2.5vw, 2rem);
+    align-items: center;
+    padding-block: clamp(1.25rem, 2.6vw, 2rem);
+    border-bottom: 1px solid var(--on-red-line);
+  }
+
+  .styk__no {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(3.6rem, 7vw, 6.4rem);
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.7);
+    min-width: 1.15em;
+  }
+
+  .styk__rule-title {
+    font-family: var(--display);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+    line-height: 0.92;
+    letter-spacing: 0.012em;
+    margin: 0 0 0.45rem;
+  }
+
+  .styk__rule-body {
+    margin: 0;
+    color: var(--on-red-2);
+  }
+
+  /* ---------- kolejne zdjęcia ---------- */
+  .styk__strip {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin-top: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  @media (min-width: 700px) {
+    .styk__strip {
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+  }
+
+  .styk__frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* ---------- ludzie ----------
+     Druga strona styku. Twarze w jednym pasie, czarno-białe, w kolorze po
+     najechaniu; cały pas prowadzi do siatki zespołu niżej. */
+  .styk__people {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+    margin-top: clamp(3rem, 7vw, 6rem);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  @media (min-width: 900px) {
+    .styk__people {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: clamp(2rem, 4vw, 3.5rem);
+    }
+  }
+
+  .styk__faces {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  @media (min-width: 600px) {
+    .styk__faces {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+  }
+
+  .styk__face {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--red-deep);
+    display: grid;
+    place-items: center;
+  }
+
+  .styk__face :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.05);
+    transition: filter 0.4s var(--ease);
+  }
+
+  .styk__people:hover .styk__face :global(img),
+  .styk__people:focus-visible .styk__face :global(img) {
+    filter: none;
+  }
+
+  .styk__people-cap {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .styk__count {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(3.4rem, 6vw, 5.2rem);
+    line-height: 0.8;
+  }
+
+  .styk__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.1rem;
+  }
+
+  /* ---------- skąd nazwa ----------
+     Zamknięcie sekcji: jedno zdanie, większe niż tekst, mniejsze niż tytuł. */
+  .styk__naming {
+    margin: clamp(3rem, 7vw, 6rem) 0 0;
+    font-family: var(--display);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(1.9rem, 4.4vw, 3.8rem);
+    line-height: 0.95;
+    letter-spacing: 0.012em;
+    max-width: 26ch;
+  }
+</style>
